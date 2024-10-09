@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "tsiiswARe"
+rootProject.name = "TsiiswARe"
 include(":app")

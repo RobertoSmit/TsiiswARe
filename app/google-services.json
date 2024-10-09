@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "207518994687",
+    "firebase_url": "https://tsiisware-a874d-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "tsiisware-a874d",
+    "storage_bucket": "tsiisware-a874d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207518994687:android:6662ca7d0af0eb6e74fcca",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZHgQCOReO30uScTk3EtVr_Yv4HvsrcJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207518994687:android:58b6b1a5930c116a74fcca",
+        "android_client_info": {
+          "package_name": "com.example.tsiisware"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZHgQCOReO30uScTk3EtVr_Yv4HvsrcJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

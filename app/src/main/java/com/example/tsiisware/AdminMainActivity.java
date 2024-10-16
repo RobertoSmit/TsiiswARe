@@ -8,10 +8,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity {
+public class AdminMainActivity extends AppCompatActivity {
 
     private EditText usernameInput, passwordInput;
     private Button loginButton;
@@ -20,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_admin);
 
 
         usernameInput = findViewById(R.id.username);
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 String enteredPassword = passwordInput.getText().toString().trim();
 
                 if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Vul alle velden in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminMainActivity.this, "Vul alle velden in", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -49,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 QuerySnapshot result = task.getResult();
                                 if (!result.isEmpty()) {
-                                    Toast.makeText(MainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(MainActivity.this, ARView.class);
+                                    Toast.makeText(AdminMainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(AdminMainActivity.this, ARView.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(MainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AdminMainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(MainActivity.this, "Fout bij het inloggen: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AdminMainActivity.this, "Fout bij het inloggen: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
             }

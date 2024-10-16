@@ -49,7 +49,7 @@ public class AdminMainActivity extends AppCompatActivity {
                                 QuerySnapshot result = task.getResult();
                                 if (!result.isEmpty()) {
                                     Toast.makeText(AdminMainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(AdminMainActivity.this, ARView.class);
+                                    Intent intent = new Intent(AdminMainActivity.this, AR_Activity.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(AdminMainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
@@ -60,5 +60,11 @@ public class AdminMainActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    public void onClickStart(View view)
+    {
+        Intent intent = new Intent(AdminMainActivity.this, UserMainActivity.class);
+        startActivity(intent);
     }
 }

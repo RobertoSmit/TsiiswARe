@@ -27,7 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ARView"
+            android:name=".AdminMainActivity"
+            android:exported="true"
+            />
+        <activity
+            android:name=".AR_Activity"
             android:exported="true">
         </activity>
     </application>

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TsiiswARe</string>
+    <string-array name="categories">
+        <item>Quiz</item>
+        <item>Video</item>
+        <item>Text + Video</item>
+    </string-array>
 </resources>

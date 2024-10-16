@@ -15,24 +15,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <EditText
-        android:id="@+id/nameInput2"
-        android:layout_width="484dp"
-        android:layout_height="58dp"
-        android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:drawableStart="@drawable/userr"
-        android:drawablePadding="8dp"
-        android:hint="Vul je naam in"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleImage" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/titleImage"
@@ -43,17 +26,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/nameInput"
+    android:layout_width="0dp"
+    android:layout_height="58dp"
+    android:layout_margin="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/rounded_edittext_background"
+    android:drawableStart="@drawable/userr"
+    android:drawablePadding="8dp"
+    android:hint="Vul je naam in"
+    android:padding="12dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/titleImage" />
+
+    <Spinner
+        android:id="@+id/spinnerCategories"
+        android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:backgroundTint="#F4E909"
+    android:spinnerMode="dropdown"
+    app:layout_constraintBottom_toTopOf="@+id/proceedButton"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/nameInput" />
+
     <Button
         android:id="@+id/proceedButton"
-        android:layout_width="410dp"
-        android:layout_height="98dp"
-        android:layout_marginBottom="760dp"
-        android:backgroundTint="@color/yellow"
-        android:text="Ga verder"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:backgroundTint="@color/yellow"
+    android:text="Ga verder"
+    android:textColor="@android:color/black"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/adminRedirect"
@@ -68,15 +77,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/proceedButton" />
-
-    <Spinner
-        android:id="@+id/spinnerCategories"
-        android:layout_width="169dp"
-        android:layout_height="51dp"
-        android:backgroundTint="#F4E909"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toTopOf="@+id/proceedButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameInput2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

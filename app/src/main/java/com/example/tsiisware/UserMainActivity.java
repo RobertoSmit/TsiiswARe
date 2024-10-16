@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,16 +18,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-
 public class UserMainActivity extends AppCompatActivity {
 
     private EditText nameInput;
     private Spinner spinnerCategories;
     private FirebaseFirestore db;
+    private boolean isQuizSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +36,42 @@ public class UserMainActivity extends AppCompatActivity {
         spinnerCategories = findViewById(R.id.spinnerCategories);
         Button proceedButton = findViewById(R.id.proceedButton);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategories.setAdapter(adapter);
+
+        spinnerCategories.setBackgroundResource(R.drawable.spinner_item_background);
+
+        spinnerCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                isQuizSelected = position != 0;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                isQuizSelected = false;
+            }
+        });
 
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendDataToFirestore();
+                String name = nameInput.getText().toString().trim();
+
+                if (name.length() < 2) {
+                    Toast.makeText(UserMainActivity.this, "Geef een geldige naam op!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!isQuizSelected) {
+                    Toast.makeText(UserMainActivity.this, "Selecteer een geldige categorie!", Toast.LENGTH_SHORT).show();
+                } else {
+                    sendDataToFirestore();
+                }
             }
         });
+
 
         View mainLayout = findViewById(R.id.main);
         mainLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -66,12 +90,11 @@ public class UserMainActivity extends AppCompatActivity {
     private void sendDataToFirestore() {
         String name = nameInput.getText().toString();
         String category = spinnerCategories.getSelectedItem().toString();
-        String createdDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("Name", name);
         userData.put("Category", category);
-        userData.put("Created_date", createdDate);
+        userData.put("CreatedDate", System.currentTimeMillis());
 
         db.collection("bezoekers")
                 .add(userData)

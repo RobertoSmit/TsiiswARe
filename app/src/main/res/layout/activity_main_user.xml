@@ -28,41 +28,45 @@
 
     <EditText
         android:id="@+id/nameInput"
-    android:layout_width="0dp"
-    android:layout_height="58dp"
-    android:layout_margin="16dp"
-    android:layout_marginTop="16dp"
-    android:background="@drawable/rounded_edittext_background"
-    android:drawableStart="@drawable/userr"
-    android:drawablePadding="8dp"
-    android:hint="Vul je naam in"
-    android:padding="12dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/titleImage" />
+        android:layout_width="700dp"
+        android:layout_height="58dp"
+        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:drawableStart="@drawable/userr"
+        android:drawablePadding="8dp"
+        android:hint="Vul je naam in"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleImage" />
+
 
     <Spinner
         android:id="@+id/spinnerCategories"
-        android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:backgroundTint="#F4E909"
-    android:spinnerMode="dropdown"
-    app:layout_constraintBottom_toTopOf="@+id/proceedButton"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/nameInput" />
+        android:layout_width="700dp"
+        android:layout_height="58dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toTopOf="@+id/proceedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameInput"
+        android:hint="Maak een keuze"
+        app:layout_constraintVertical_bias="0.08" />
+
 
     <Button
         android:id="@+id/proceedButton"
         android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:backgroundTint="@color/yellow"
-    android:text="Ga verder"
-    android:textColor="@android:color/black"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/yellow"
+        android:text="Ga verder"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/adminRedirect"

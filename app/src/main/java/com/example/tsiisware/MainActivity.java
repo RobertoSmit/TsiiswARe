@@ -3,32 +3,63 @@ package com.example.tsiisware;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import androidx.activity.EdgeToEdge;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_INFO = "default";
+    private EditText usernameInput, passwordInput;
+    private Button loginButton;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
 
-    public void startARView(View view)
-    {
-        Intent intent = new Intent(this, ARView.class);
-        intent.putExtra(EXTRA_INFO, "Naar de AR View!");
-        startActivity(intent);
+
+        usernameInput = findViewById(R.id.username);
+        passwordInput = findViewById(R.id.password);
+        loginButton = findViewById(R.id.loginButton);
+
+        db = FirebaseFirestore.getInstance();
+
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String enteredUsername = usernameInput.getText().toString().trim();
+                String enteredPassword = passwordInput.getText().toString().trim();
+
+                if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Vul alle velden in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                db.collection("users")
+                        .whereEqualTo("username", enteredUsername)
+                        .whereEqualTo("password", enteredPassword)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot result = task.getResult();
+                                if (!result.isEmpty()) {
+                                    Toast.makeText(MainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(MainActivity.this, ARView.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, "Fout bij het inloggen: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
     }
 }

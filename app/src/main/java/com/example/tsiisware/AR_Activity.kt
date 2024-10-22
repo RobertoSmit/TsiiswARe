@@ -11,31 +11,41 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.view.Surface
 import android.view.TextureView
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.example.tsiisware.ml.SsdMobilenetV11Metadata1
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class AR_Activity : AppCompatActivity() {
 
-    lateinit var labels:List<String>
-    var colors = listOf<Int>(
+    lateinit var labels: List<String>
+    var colors = listOf(
         Color.BLUE, Color.GREEN, Color.RED, Color.CYAN, Color.GRAY, Color.BLACK,
-        Color.DKGRAY, Color.MAGENTA, Color.YELLOW, Color.RED)
+        Color.DKGRAY, Color.MAGENTA, Color.YELLOW, Color.RED
+    )
     val paint = Paint()
     lateinit var imageProcessor: ImageProcessor
-    lateinit var bitmap:Bitmap
+    lateinit var bitmap: Bitmap
     lateinit var imageView: ImageView
     lateinit var cameraDevice: CameraDevice
     lateinit var handler: Handler
     lateinit var cameraManager: CameraManager
     lateinit var textureView: TextureView
-    lateinit var model:SsdMobilenetV11Metadata1
+    lateinit var model: SsdMobilenetV11Metadata1
+
+    private val client = OkHttpClient()
+    private val interval: Long = 500 // 500 milliseconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +62,13 @@ class AR_Activity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
 
         textureView = findViewById(R.id.textureView)
-        textureView.surfaceTextureListener = object:TextureView.SurfaceTextureListener{
+        textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
                 open_camera()
-            }
-            override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
+                startImageUpload() // Start uploading images
             }
 
+            override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {}
             override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
                 return false
             }
@@ -79,30 +89,29 @@ class AR_Activity : AppCompatActivity() {
 
                 val h = mutable.height
                 val w = mutable.width
-                paint.textSize = h/15f
-                paint.strokeWidth = h/85f
+                paint.textSize = h / 15f
+                paint.strokeWidth = h / 85f
                 var x = 0
                 scores.forEachIndexed { index, fl ->
                     x = index
                     x *= 4
 
-                    if(fl > 0.5){
-                        paint.setColor(colors.get(index))
-//                        paint.style = Paint.Style.STROKE
-//                        canvas.drawRect(RectF(locations.get(x+1)*w, locations.get(x)*h, locations.get(x+3)*w, locations.get(x+2)*h), paint)
-//                        paint.style = Paint.Style.FILL
-                        canvas.drawText(labels.get(classes.get(index).toInt())+" "+fl.toString(), locations.get(x+1)*w, locations.get(x)*h, paint)
+                    if (fl > 0.5) {
+                        paint.color = colors[index]
+                        canvas.drawText(
+                            labels[classes[index].toInt()] + " " + fl.toString(),
+                            locations[x + 1] * w,
+                            locations[x] * h,
+                            paint
+                        )
                     }
                 }
 
                 imageView.setImageBitmap(mutable)
-
-
             }
         }
 
         cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
     }
 
     override fun onDestroy() {
@@ -116,44 +125,86 @@ class AR_Activity : AppCompatActivity() {
             override fun onOpened(p0: CameraDevice) {
                 cameraDevice = p0
 
-                var surfaceTexture = textureView.surfaceTexture
-                var surface = Surface(surfaceTexture)
+                val surfaceTexture = textureView.surfaceTexture
+                val surface = Surface(surfaceTexture)
 
-                var captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                val captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                 captureRequest.addTarget(surface)
 
-                cameraDevice.createCaptureSession(listOf(surface), object: CameraCaptureSession.StateCallback(){
+                cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(p0: CameraCaptureSession) {
                         p0.setRepeatingRequest(captureRequest.build(), null, null)
                     }
-                    override fun onConfigureFailed(p0: CameraCaptureSession) {
-                    }
+
+                    override fun onConfigureFailed(p0: CameraCaptureSession) {}
                 }, handler)
             }
 
-            override fun onDisconnected(p0: CameraDevice) {
-
-            }
-
-            override fun onError(p0: CameraDevice, p1: Int) {
-
-            }
+            override fun onDisconnected(p0: CameraDevice) {}
+            override fun onError(p0: CameraDevice, p1: Int) {}
         }, handler)
     }
 
-    fun get_permission(){
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+    fun get_permission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 101)
         }
     }
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
+        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
             get_permission()
         }
+    }
+
+    private fun startImageUpload() {
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                if (::bitmap.isInitialized) {
+                    sendImage(bitmap)
+                }
+                handler.postDelayed(this, interval)
+            }
+        }
+        handler.post(runnable)
+    }
+
+    private fun sendImage(bitmap: Bitmap) {
+        val url = "http://172.20.10.2:8008/img-detect-tsiisware"
+
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "image", "image.jpg",
+                RequestBody.create("image/jpeg".toMediaTypeOrNull(), bitmapToByteArray(bitmap))
+            )
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    println("Image uploaded successfully")
+                } else {
+                    println("Image upload failed: ${response.message}")
+                }
+            }
+        })
+    }
+
+    private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        return stream.toByteArray()
     }
 }

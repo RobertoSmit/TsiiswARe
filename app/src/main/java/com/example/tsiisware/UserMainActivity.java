@@ -1,6 +1,7 @@
 package com.example.tsiisware;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,11 +37,11 @@ public class UserMainActivity extends AppCompatActivity {
         spinnerCategories = findViewById(R.id.spinnerCategories);
         Button proceedButton = findViewById(R.id.proceedButton);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, R.layout.spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategories.setAdapter(adapter);
 
-        spinnerCategories.setBackgroundResource(R.drawable.spinner_item_background);
+        spinnerCategories.setBackgroundResource(R.color.white);
 
         spinnerCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -53,6 +54,7 @@ public class UserMainActivity extends AppCompatActivity {
                 isQuizSelected = false;
             }
         });
+
 
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override

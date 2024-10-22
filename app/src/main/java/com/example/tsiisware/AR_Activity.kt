@@ -7,7 +7,6 @@ import android.graphics.*
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -15,6 +14,8 @@ import android.os.Looper
 import android.view.Surface
 import android.view.TextureView
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.tsiisware.ml.SsdMobilenetV11Metadata1
 import okhttp3.*
@@ -25,7 +26,6 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 class AR_Activity : AppCompatActivity() {
 
@@ -45,7 +45,10 @@ class AR_Activity : AppCompatActivity() {
     lateinit var model: SsdMobilenetV11Metadata1
 
     private val client = OkHttpClient()
+
     private val interval: Long = 500 // 500 milliseconds
+    private var currentDetectionIndex: Int = 0
+    private var detectionCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,44 +77,22 @@ class AR_Activity : AppCompatActivity() {
             }
 
             override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
-                bitmap = textureView.bitmap!!
-                var image = TensorImage.fromBitmap(bitmap)
-                image = imageProcessor.process(image)
-
-                val outputs = model.process(image)
-                val locations = outputs.locationsAsTensorBuffer.floatArray
-                val classes = outputs.classesAsTensorBuffer.floatArray
-                val scores = outputs.scoresAsTensorBuffer.floatArray
-                val numberOfDetections = outputs.numberOfDetectionsAsTensorBuffer.floatArray
-
-                var mutable = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                val canvas = Canvas(mutable)
-
-                val h = mutable.height
-                val w = mutable.width
-                paint.textSize = h / 15f
-                paint.strokeWidth = h / 85f
-                var x = 0
-                scores.forEachIndexed { index, fl ->
-                    x = index
-                    x *= 4
-
-                    if (fl > 0.5) {
-                        paint.color = colors[index]
-                        canvas.drawText(
-                            labels[classes[index].toInt()] + " " + fl.toString(),
-                            locations[x + 1] * w,
-                            locations[x] * h,
-                            paint
-                        )
-                    }
-                }
-
-                imageView.setImageBitmap(mutable)
+                detectAndDraw()
             }
         }
 
         cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+        // Schedule detection switching
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                if (detectionCount > 0) {
+                    currentDetectionIndex = (currentDetectionIndex + 1) % detectionCount
+                }
+                mainHandler.postDelayed(this, 2000)
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -187,19 +168,62 @@ class AR_Activity : AppCompatActivity() {
             .post(requestBody)
             .build()
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
+        // Delay in milliseconds
+        val delayMillis: Long = 2000 // 2 seconds
 
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    println("Image uploaded successfully")
-                } else {
-                    println("Image upload failed: ${response.message}")
+        Handler(Looper.getMainLooper()).postDelayed({
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
                 }
-            }
-        })
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        println("Image upload successful")
+                    } else {
+                        println("Image upload failed")
+                    }
+                }
+            })
+        }, delayMillis)
+    }
+
+    private fun detectAndDraw() {
+        bitmap = textureView.bitmap!!
+        var image = TensorImage.fromBitmap(bitmap)
+        image = imageProcessor.process(image)
+
+        val outputs = model.process(image)
+        val locations = outputs.locationsAsTensorBuffer.floatArray
+        val classes = outputs.classesAsTensorBuffer.floatArray
+        val scores = outputs.scoresAsTensorBuffer.floatArray
+        val numberOfDetections = outputs.numberOfDetectionsAsTensorBuffer.floatArray
+
+        var mutable = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(mutable)
+
+        val h = mutable.height
+        val w = mutable.width
+        paint.strokeWidth = h / 100f
+
+        // Ensure the index is within bounds
+        val index = currentDetectionIndex % scores.size
+        val x = index * 4
+
+        if (scores[index] > 0.5) {
+            paint.color = Color.YELLOW
+            paint.style = Paint.Style.STROKE // Set the paint style to STROKE to draw only the borders
+            // Draw bounding box without labels
+            canvas.drawRect(
+                locations[x + 1] * w,
+                locations[x] * h,
+                locations[x + 3] * w,
+                locations[x + 2] * h,
+                paint
+            )
+        }
+
+        imageView.setImageBitmap(mutable)
     }
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
@@ -208,3 +232,4 @@ class AR_Activity : AppCompatActivity() {
         return stream.toByteArray()
     }
 }
+

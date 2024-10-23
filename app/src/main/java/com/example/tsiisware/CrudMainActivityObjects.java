@@ -1,6 +1,5 @@
 package com.example.tsiisware;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -9,32 +8,27 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.tsiisware.R;
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class CrudMainActivity extends AppCompatActivity {
+public class CrudMainActivityObjects extends AppCompatActivity {
     FirebaseFirestore db;
     EditText etUsername, etPassword;
     Spinner spinnerRole, spinnerUsers;
-    Button btnCreate, btnDelete;
+    Button btnCreate, btnDelete, btnGoToObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_crud);
+        setContentView(R.layout.activity_main_crud_objects);
 
 
         db = FirebaseFirestore.getInstance();
-
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        spinnerRole = findViewById(R.id.spinnerRole);
-        spinnerUsers = findViewById(R.id.spinnerUsers);
-        btnCreate = findViewById(R.id.btnCreate);
-        btnDelete = findViewById(R.id.btnDelete);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.roles_array, android.R.layout.simple_spinner_item);
@@ -59,11 +53,11 @@ public class CrudMainActivity extends AppCompatActivity {
                         .document(username)
                         .set(user)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(CrudMainActivity.this, "Gebruiker succesvol aangemaakt", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CrudMainActivityObjects.this, "Gebruiker succesvol aangemaakt", Toast.LENGTH_SHORT).show();
                             loadUsersIntoSpinner();
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(CrudMainActivity.this, "Fout bij het aanmaken van gebruiker", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CrudMainActivityObjects.this, "Fout bij het aanmaken van gebruiker", Toast.LENGTH_SHORT).show();
                         });
             }
         });
@@ -76,11 +70,11 @@ public class CrudMainActivity extends AppCompatActivity {
                 db.collection("users").document(selectedUser)
                         .delete()
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(CrudMainActivity.this, "Gebruiker succesvol verwijderd", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CrudMainActivityObjects.this, "Gebruiker succesvol verwijderd", Toast.LENGTH_SHORT).show();
                             loadUsersIntoSpinner();
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(CrudMainActivity.this, "Fout bij het verwijderen van gebruiker", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CrudMainActivityObjects.this, "Fout bij het verwijderen van gebruiker", Toast.LENGTH_SHORT).show();
                         });
             }
         });
@@ -99,7 +93,7 @@ public class CrudMainActivity extends AppCompatActivity {
 
                 spinnerUsers.setAdapter(usersAdapter);
             } else {
-                Toast.makeText(CrudMainActivity.this, "Fout bij het ophalen van gebruikers", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CrudMainActivityObjects.this, "Fout bij het ophalen van gebruikers", Toast.LENGTH_SHORT).show();
             }
         });
     }

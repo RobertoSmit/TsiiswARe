@@ -9,7 +9,7 @@
     tools:context=".UserMainActivity">
 
     <ImageView
-        android:id="@+id/backgroundImage"
+        android:id="@+id/backgroundImageUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/titleImage"
+        android:id="@+id/titleImageUsers"
         android:layout_width="382dp"
         android:layout_height="214dp"
         android:src="@drawable/logo"
@@ -39,7 +39,7 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleImage" />
+        app:layout_constraintTop_toBottomOf="@id/titleImageUsers" />
 
 
     <Spinner

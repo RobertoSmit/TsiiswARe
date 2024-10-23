@@ -8,7 +8,7 @@
     tools:context=".AdminMainActivity">
 
     <ImageView
-        android:id="@+id/backgroundImage"
+        android:id="@+id/backgroundImageUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -19,7 +19,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <ImageView
-        android:id="@+id/titleImage"
+        android:id="@+id/titleImageUsers"
         android:layout_width="382dp"
         android:layout_height="214dp"
         android:src="@drawable/logo"
@@ -59,7 +59,7 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleImage" />
+        app:layout_constraintTop_toBottomOf="@id/titleImageUsers" />
 
     <Button
         android:id="@+id/loginButton"
@@ -83,7 +83,7 @@
         android:textColor="@color/blue"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/backgroundImage"
+        app:layout_constraintBottom_toBottomOf="@+id/backgroundImageUsers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

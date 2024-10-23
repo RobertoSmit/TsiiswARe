@@ -1,11 +1,8 @@
 package com.example.tsiisware;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,16 +47,13 @@ public class CrudMainActivityUsers extends AppCompatActivity {
         btnLogoff.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
-                                             Intent intent = new Intent(CrudMainActivityUsers.this, AdminMainActivity.class);
-                                             startActivity(intent);
+                                            setContentView(R.layout.activity_main_admin);
                                          }
                                      });
         btnGoToObjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class);
-                startActivity(intent);
-
+                setContentView(R.layout.activity_main_crud_objects);
             }
         });
 
@@ -88,19 +82,6 @@ public class CrudMainActivityUsers extends AppCompatActivity {
             }
         });
 
-        View mainLayout = findViewById(R.id.crudLayoutUsers);
-        mainLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, android.view.MotionEvent event) {
-                if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-                    if (isKeyboardOpen()) {
-                        hideKeyboard(v);
-                    }
-                }
-                return true;
-            }
-        });
-
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,23 +99,6 @@ public class CrudMainActivityUsers extends AppCompatActivity {
             }
         });
     }
-
-    private boolean isKeyboardOpen() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        return imm != null && imm.isAcceptingText();
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            View currentFocus = getCurrentFocus();
-            if (currentFocus != null) {
-                imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
-                currentFocus.clearFocus();
-            }
-        }
-    }
-
 
     private void loadUsersIntoSpinner() {
         db.collection("users").get().addOnCompleteListener(task -> {

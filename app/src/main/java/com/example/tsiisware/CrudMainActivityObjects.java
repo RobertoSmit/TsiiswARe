@@ -2,10 +2,7 @@ package com.example.tsiisware;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +21,8 @@ import java.util.Map;
 public class CrudMainActivityObjects extends AppCompatActivity {
     FirebaseFirestore db;
     EditText etObjectName, etObjectDescription, etObjectVideoURL, etQuestion, etAnswer1, etAnswer2, etAnswer3, etAnswer4;
-    Spinner spinnerObjects, spinnerAnswers;
-    Button btnCreateObjects, btnDeleteObjects, btnGoToUsers, btnLogoffObjects;
-    String[] answers;
+    Spinner spinnerObjects;
+    Button btnCreateObjects, btnDeleteObjects, btnGoToUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +30,7 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         setContentView(R.layout.activity_main_crud_objects);
 
         db = FirebaseFirestore.getInstance();
+
         etObjectName = findViewById(R.id.etObjectName);
         etObjectDescription = findViewById(R.id.etObjectDescription);
         etObjectVideoURL = findViewById(R.id.etObjectVideoURL);
@@ -46,10 +42,10 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         spinnerObjects = findViewById(R.id.spinnerObjects);
         btnCreateObjects = findViewById(R.id.btnCreateObjects);
         btnDeleteObjects = findViewById(R.id.btnDeleteObjects);
-        btnLogoffObjects = findViewById(R.id.btnLogoffObjects);
         btnGoToUsers = findViewById(R.id.btnGoToUsers);
 
         loadObjectsIntoSpinner();
+
         btnCreateObjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,13 +75,6 @@ public class CrudMainActivityObjects extends AppCompatActivity {
             }
         });
 
-        btnLogoffObjects.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CrudMainActivityObjects.this, AdminMainActivity.class);
-                startActivity(intent);
-            }
-        });
         btnGoToUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,35 +82,6 @@ public class CrudMainActivityObjects extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        View mainLayout = findViewById(R.id.crudLayoutObjects);
-        mainLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (isKeyboardOpen()) {
-                        hideKeyboard(v);
-                    }
-                }
-                return true;
-            }
-        });
-    }
-
-    private boolean isKeyboardOpen() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        return imm != null && imm.isAcceptingText();
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            View currentFocus = getCurrentFocus();
-            if (currentFocus != null) {
-                imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
-                currentFocus.clearFocus();
-            }
-        }
     }
 
     private void addObjectToDatabase(String objectName, String objectDescription, String videoURL, String question, String[] answers) {
@@ -131,7 +91,6 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         object.put("video_url", videoURL);
         object.put("vraag", question);
         object.put("antwoorden", Arrays.asList(answers));
-        object.put("correct_antwoord", spinnerAnswers.getSelectedItem().toString());
 
         db.collection("objects").document(objectName).set(object)
                 .addOnSuccessListener(aVoid -> {
@@ -149,17 +108,6 @@ public class CrudMainActivityObjects extends AppCompatActivity {
                     loadObjectsIntoSpinner();
                 })
                 .addOnFailureListener(e -> Toast.makeText(CrudMainActivityObjects.this, "Fout bij verwijderen object", Toast.LENGTH_SHORT).show());
-    }
-
-    private void loadAnswersIntoSpinner() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(CrudMainActivityObjects.this, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        for (String answer : answers) {
-            adapter.add(answer);
-        }
-
-        spinnerAnswers.setAdapter(adapter);
     }
 
     private void loadObjectsIntoSpinner() {

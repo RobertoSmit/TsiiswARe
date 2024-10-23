@@ -28,26 +28,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="709dp"
-        android:layout_height="584dp"
+        android:layout_width="702dp"
+        android:layout_height="547dp"
         android:layout_marginTop="184dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.642"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <Spinner
-            android:id="@+id/spinnerGoodAnswer"
-            android:layout_width="556dp"
-            android:layout_height="58dp"
-            android:layout_marginBottom="11dp"
-            android:background="@drawable/rounded_edittext_background"
-            app:layout_constraintBottom_toTopOf="@+id/btnCreateObjects"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/textViewDeleteObject2"
@@ -62,23 +49,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <Button
             android:id="@+id/btnCreateObjects"
             android:layout_width="500dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="44dp"
             android:backgroundTint="@color/yellow"
             android:text="Object aanmaken"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.967" />
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
         <EditText
             android:id="@+id/etAnswer3"
-            android:layout_width="135dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_marginTop="16dp"
@@ -86,13 +73,13 @@
             android:hint="Antwoord 3"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.651"
+            app:layout_constraintHorizontal_bias="0.623"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
         <EditText
             android:id="@+id/etAnswer2"
-            android:layout_width="135dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_marginTop="16dp"
@@ -100,42 +87,42 @@
             android:hint="Antwoord 2"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.38"
+            app:layout_constraintHorizontal_bias="0.383"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
         <EditText
             android:id="@+id/etAnswer4"
-            android:layout_width="135dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rounded_edittext_background"
             android:hint="Antwoord 4"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.914"
+            app:layout_constraintHorizontal_bias="0.848"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
         <EditText
             android:id="@+id/etAnswer1"
-            android:layout_width="135dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rounded_edittext_background"
             android:hint="Antwoord 1"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.098"
+            app:layout_constraintHorizontal_bias="0.158"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
         <EditText
             android:id="@+id/etObjectName"
-            android:layout_width="556dp"
-            android:layout_height="54dp"
+            android:layout_width="500dp"
+            android:layout_height="58dp"
             android:layout_margin="16dp"
             android:layout_marginBottom="28dp"
             android:background="@drawable/rounded_edittext_background"
@@ -148,7 +135,7 @@
 
         <EditText
             android:id="@+id/etObjectDescription"
-            android:layout_width="556dp"
+            android:layout_width="500dp"
             android:layout_height="58dp"
             android:layout_margin="16dp"
             android:layout_marginBottom="16dp"
@@ -162,7 +149,7 @@
 
         <EditText
             android:id="@+id/etObjectVideoURL"
-            android:layout_width="556dp"
+            android:layout_width="500dp"
             android:layout_height="58dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_edittext_background"
@@ -174,7 +161,7 @@
 
         <EditText
             android:id="@+id/etQuestion"
-            android:layout_width="556dp"
+            android:layout_width="500dp"
             android:layout_height="58dp"
             android:layout_marginTop="316dp"
             android:background="@drawable/rounded_edittext_background"

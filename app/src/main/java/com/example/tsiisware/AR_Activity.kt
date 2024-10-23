@@ -1,4 +1,6 @@
 package com.example.tsiisware
+import android.app.AlertDialog
+import android.widget.ProgressBar
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -155,40 +157,19 @@ class AR_Activity : AppCompatActivity() {
         handler.post(runnable)
     }
 
-    private fun sendImage(bitmap: Bitmap) {
-        val url = "http://172.20.10.2:8008/img-detect-tsiisware"
 
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                "image", "image.jpg",
-                RequestBody.create("image/jpeg".toMediaTypeOrNull(), bitmapToByteArray(bitmap))
-            )
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
-
-        // Delay in milliseconds
-        val delayMillis: Long = 2000 // 2 seconds
+    private fun showLoadingPopup() {
+        val builder = AlertDialog.Builder(this)
+        val progressBar = ProgressBar(this)
+        builder.setView(progressBar)
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.isSuccessful) {
-                        println("Image upload successful")
-                    } else {
-                        println("Image upload failed")
-                    }
-                }
-            })
-        }, delayMillis)
+            dialog.dismiss()
+            sendImage(bitmap)
+        }, 3000) // 3 seconds delay
     }
 
     private fun detectAndDraw() {
@@ -224,9 +205,45 @@ class AR_Activity : AppCompatActivity() {
                 locations[x + 2] * h,
                 paint
             )
+            showLoadingPopup() // Show the loading popup when an object is detected
         }
 
         imageView.setImageBitmap(mutable)
+    }
+
+    private fun sendImage(bitmap: Bitmap) {
+        val url = "http://172.20.10.2:8008/img-detect-tsiisware"
+
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "image", "image.jpg",
+                RequestBody.create("image/jpeg".toMediaTypeOrNull(), bitmapToByteArray(bitmap))
+            )
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    runOnUiThread {
+                        Toast.makeText(this@AR_Activity, "Object successfully scanned", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(this@AR_Activity, "Failed to scan object", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
     }
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {

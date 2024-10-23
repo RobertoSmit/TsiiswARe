@@ -1,6 +1,8 @@
 package com.example.tsiisware;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -45,15 +47,17 @@ public class CrudMainActivityUsers extends AppCompatActivity {
         loadUsersIntoSpinner();
 
         btnLogoff.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                            setContentView(R.layout.activity_main_admin);
-                                         }
-                                     });
+             @Override
+             public void onClick(View v) {
+                Intent intent = new Intent(CrudMainActivityUsers.this, AdminMainActivity.class);
+                startActivity(intent);
+             }
+         });
         btnGoToObjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.activity_main_crud_objects);
+                Intent intent = new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class);
+                startActivity(intent);
             }
         });
 

@@ -2,6 +2,7 @@ package com.example.tsiisware;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +23,7 @@ public class CrudMainActivityObjects extends AppCompatActivity {
     FirebaseFirestore db;
     EditText etObjectName, etObjectDescription, etObjectVideoURL, etQuestion, etAnswer1, etAnswer2, etAnswer3, etAnswer4;
     Spinner spinnerObjects;
-    Button btnCreateObjects, btnDeleteObjects, btnGoToUsers;
+    Button btnCreateObjects, btnDeleteObjects, btnGoToUsers, btnLogoffObjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         btnCreateObjects = findViewById(R.id.btnCreateObjects);
         btnDeleteObjects = findViewById(R.id.btnDeleteObjects);
         btnGoToUsers = findViewById(R.id.btnGoToUsers);
+        btnLogoffObjects = findViewById(R.id.btnLogoffObjects);
 
         loadObjectsIntoSpinner();
 
@@ -72,6 +74,14 @@ public class CrudMainActivityObjects extends AppCompatActivity {
             public void onClick(View v) {
                 String selectedObject = spinnerObjects.getSelectedItem().toString();
                 deleteObjectFromDatabase(selectedObject);
+            }
+        });
+
+        btnLogoffObjects.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CrudMainActivityObjects.this, AdminMainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -118,7 +128,11 @@ public class CrudMainActivityObjects extends AppCompatActivity {
 
                 for (DocumentSnapshot document : task.getResult()) {
                     String objectName = document.getString("name");
-                    adapter.add(objectName);
+                    if (objectName != null) {
+                        adapter.add(objectName);
+                    } else {
+                        Log.w("CrudMainActivityObjects", "Null object name found in Firestore document: " + document.getId());
+                    }
                 }
 
                 spinnerObjects.setAdapter(adapter);

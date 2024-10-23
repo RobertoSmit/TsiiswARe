@@ -46,44 +46,35 @@ public class CrudMainActivityUsers extends AppCompatActivity {
 
         loadUsersIntoSpinner();
 
-        btnLogoff.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                Intent intent = new Intent(CrudMainActivityUsers.this, AdminMainActivity.class);
-                startActivity(intent);
-             }
-         });
-        btnGoToObjects.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class);
-                startActivity(intent);
-            }
+        btnLogoff.setOnClickListener(v -> {
+           Intent intent = new Intent(CrudMainActivityUsers.this, AdminMainActivity.class);
+           startActivity(intent);
+        });
+        btnGoToObjects.setOnClickListener(v -> {
+            Intent intent = new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class);
+            startActivity(intent);
         });
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-                String role = spinnerRole.getSelectedItem().toString();
+        btnCreate.setOnClickListener(v -> {
+            String username = etUsername.getText().toString();
+            String password = etPassword.getText().toString();
+            String role = spinnerRole.getSelectedItem().toString();
 
-                Map<String, Object> user = new HashMap<>();
-                user.put("username", username);
-                user.put("password", password);
-                user.put("role", role);
+            Map<String, Object> user = new HashMap<>();
+            user.put("username", username);
+            user.put("password", password);
+            user.put("role", role);
 
-                db.collection("users")
-                        .document(username)
-                        .set(user)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(CrudMainActivityUsers.this, "Gebruiker succesvol aangemaakt", Toast.LENGTH_SHORT).show();
-                            loadUsersIntoSpinner();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(CrudMainActivityUsers.this, "Fout bij het aanmaken van gebruiker", Toast.LENGTH_SHORT).show();
-                        });
-            }
+            db.collection("users")
+                    .document(username)
+                    .set(user)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(CrudMainActivityUsers.this, "Gebruiker succesvol aangemaakt", Toast.LENGTH_SHORT).show();
+                        loadUsersIntoSpinner();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(CrudMainActivityUsers.this, "Fout bij het aanmaken van gebruiker", Toast.LENGTH_SHORT).show();
+                    });
         });
 
         btnDelete.setOnClickListener(new View.OnClickListener() {

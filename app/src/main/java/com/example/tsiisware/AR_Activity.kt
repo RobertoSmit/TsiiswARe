@@ -2,6 +2,7 @@ package com.example.tsiisware
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.CameraCaptureSession
@@ -54,9 +55,10 @@ class AR_Activity : AppCompatActivity() {
         get_permission()
 
         val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
-        btnLogoffAR.setOnClickListener(View.OnClickListener {
-                setContentView(R.layout.activity_main_user)
-        });
+        btnLogoffAR.setOnClickListener {
+            val intent = Intent(this, UserMainActivity::class.java)
+            startActivity(intent)
+        }
 
         labels = FileUtil.loadLabels(this, "labels.txt")
         imageProcessor = ImageProcessor.Builder().add(ResizeOp(300, 300, ResizeOp.ResizeMethod.BILINEAR)).build()

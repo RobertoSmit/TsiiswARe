@@ -68,6 +68,7 @@
         android:backgroundTint="@color/yellow"
         android:text="Login"
         android:textColor="@android:color/black"
+        android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/startRedirect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

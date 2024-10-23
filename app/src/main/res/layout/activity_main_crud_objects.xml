@@ -28,8 +28,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="702dp"
-        android:layout_height="547dp"
+        android:layout_width="747dp"
+        android:layout_height="595dp"
         android:layout_marginTop="184dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.642"
@@ -49,11 +49,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <Button
             android:id="@+id/btnCreateObjects"
             android:layout_width="500dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/yellow"
             android:text="Object aanmaken"
             android:textColor="@android:color/black"
@@ -61,7 +62,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent" />
-
 
         <EditText
             android:id="@+id/etAnswer3"
@@ -169,6 +169,19 @@
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etCorrectAnswer"
+            android:layout_width="500dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="456dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Goed antwoord"
+            android:padding="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

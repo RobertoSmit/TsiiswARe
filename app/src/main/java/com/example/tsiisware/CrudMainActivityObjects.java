@@ -1,9 +1,12 @@
 package com.example.tsiisware;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,10 +24,11 @@ import java.util.Map;
 
 public class CrudMainActivityObjects extends AppCompatActivity {
     FirebaseFirestore db;
-    EditText etObjectName, etObjectDescription, etObjectVideoURL, etQuestion, etAnswer1, etAnswer2, etAnswer3, etAnswer4, etCorrectAnswer;
-    Spinner spinnerObjects;
+    EditText etObjectName, etObjectDescription, etObjectVideoURL, etQuestion, etAnswer1, etAnswer2, etAnswer3, etAnswer4;
+    Spinner spinnerObjects, spinnerAnswers;
     Button btnCreateObjects, btnDeleteObjects, btnGoToUsers, btnLogoffObjects;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +44,7 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         etAnswer2 = findViewById(R.id.etAnswer2);
         etAnswer3 = findViewById(R.id.etAnswer3);
         etAnswer4 = findViewById(R.id.etAnswer4);
-        etCorrectAnswer = findViewById(R.id.etCorrectAnswer);
+        spinnerAnswers = findViewById(R.id.spinnerAnswers);
         spinnerObjects = findViewById(R.id.spinnerObjects);
         btnCreateObjects = findViewById(R.id.btnCreateObjects);
         btnDeleteObjects = findViewById(R.id.btnDeleteObjects);
@@ -49,25 +53,22 @@ public class CrudMainActivityObjects extends AppCompatActivity {
 
         loadObjectsIntoSpinner();
 
-        btnCreateObjects.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String objectName = etObjectName.getText().toString();
-                String objectDescription = etObjectDescription.getText().toString();
-                String videoURL = etObjectVideoURL.getText().toString();
-                String question = etQuestion.getText().toString();
-                String answer1 = etAnswer1.getText().toString();
-                String answer2 = etAnswer2.getText().toString();
-                String answer3 = etAnswer3.getText().toString();
-                String answer4 = etAnswer4.getText().toString();
-                String correctAnswer = etCorrectAnswer.getText().toString();
+        btnCreateObjects.setOnClickListener(v -> {
+            String objectName = etObjectName.getText().toString();
+            String objectDescription = etObjectDescription.getText().toString();
+            String videoURL = etObjectVideoURL.getText().toString();
+            String question = etQuestion.getText().toString();
+            String answer1 = etAnswer1.getText().toString();
+            String answer2 = etAnswer2.getText().toString();
+            String answer3 = etAnswer3.getText().toString();
+            String answer4 = etAnswer4.getText().toString();
+            String correctAnswer = spinnerAnswers.getSelectedItem().toString();
 
-                if (objectName.isEmpty() || objectDescription.isEmpty() || videoURL.isEmpty() || question.isEmpty() ||
-                        answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty() || answer4.isEmpty() || correctAnswer.isEmpty()) {
-                    Toast.makeText(CrudMainActivityObjects.this, "Alle velden moeten worden ingevuld", Toast.LENGTH_SHORT).show();
-                } else {
-                    addObjectToDatabase(objectName, objectDescription, videoURL, question, new String[]{answer1, answer2, answer3, answer4}, correctAnswer);
-                }
+            if (objectName.isEmpty() || objectDescription.isEmpty() || videoURL.isEmpty() || question.isEmpty() ||
+                    answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty() || answer4.isEmpty() || correctAnswer.isEmpty()) {
+                Toast.makeText(CrudMainActivityObjects.this, "Alle velden moeten worden ingevuld", Toast.LENGTH_SHORT).show();
+            } else {
+                addObjectToDatabase(objectName, objectDescription, videoURL, question, new String[]{answer1, answer2, answer3, answer4}, correctAnswer);
             }
         });
 
@@ -84,6 +85,24 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         btnGoToUsers.setOnClickListener(v -> {
             Intent intent = new Intent(CrudMainActivityObjects.this, CrudMainActivityUsers.class);
             startActivity(intent);
+        });
+
+
+        View mainLayout = findViewById(R.id.crudLayoutObjects);
+        mainLayout.setOnTouchListener((v, event) -> {
+            updateSpinnerAnswers(new String[]{
+                    etAnswer1.getText().toString(),
+                    etAnswer2.getText().toString(),
+                    etAnswer3.getText().toString(),
+                    etAnswer4.getText().toString()
+            });
+
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (isKeyboardOpen()) {
+                    hideKeyboard(v);
+                }
+            }
+            return true;
         });
     }
 
@@ -104,7 +123,6 @@ public class CrudMainActivityObjects extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(CrudMainActivityObjects.this, "Fout bij toevoegen object", Toast.LENGTH_SHORT).show());
     }
 
-
     private void deleteObjectFromDatabase(String objectName) {
         db.collection("objects").document(objectName).delete()
                 .addOnSuccessListener(aVoid -> {
@@ -117,11 +135,11 @@ public class CrudMainActivityObjects extends AppCompatActivity {
     private void loadObjectsIntoSpinner() {
         db.collection("objects").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(CrudMainActivityObjects.this, android.R.layout.simple_spinner_item);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(CrudMainActivityObjects.this, android.R.layout.simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 for (DocumentSnapshot document : task.getResult()) {
-                    String objectName = document.getString("name");
+                    String objectName = document.getString("label");
                     if (objectName != null) {
                         adapter.add(objectName);
                     } else {
@@ -134,5 +152,26 @@ public class CrudMainActivityObjects extends AppCompatActivity {
                 Toast.makeText(CrudMainActivityObjects.this, "Fout bij het laden van objecten", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateSpinnerAnswers(String[] answers) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, answers);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAnswers.setAdapter(adapter);
+    }
+    private boolean isKeyboardOpen() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        return imm != null && imm.isAcceptingText();
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            View currentFocus = getCurrentFocus();
+            if (currentFocus != null) {
+                imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+                currentFocus.clearFocus();
+            }
+        }
     }
 }

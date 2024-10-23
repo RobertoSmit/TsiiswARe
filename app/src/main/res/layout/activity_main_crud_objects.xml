@@ -172,18 +172,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/etCorrectAnswer"
+        <Spinner
+            android:id="@+id/spinnerAnswers"
             android:layout_width="500dp"
             android:layout_height="58dp"
-            android:layout_marginTop="456dp"
+            android:layout_margin="16dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="18dp"
             android:background="@drawable/rounded_edittext_background"
-            android:hint="Goed antwoord"
-            android:padding="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnCreateObjects"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/etAnswer2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -94,11 +94,11 @@ public class UserMainActivity extends AppCompatActivity {
         String category = spinnerCategories.getSelectedItem().toString();
 
         Map<String, Object> userData = new HashMap<>();
-        userData.put("Name", name);
-        userData.put("Category", category);
-        userData.put("CreatedDate", System.currentTimeMillis());
+        userData.put("name", name);
+        userData.put("category", category);
+        userData.put("created_date", System.currentTimeMillis());
 
-        db.collection("bezoekers")
+        db.collection("visitors")
                 .add(userData)
                 .addOnSuccessListener(documentReference -> {
                     Intent intent = new Intent(UserMainActivity.this, AR_Activity.class);

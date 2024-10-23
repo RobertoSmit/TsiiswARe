@@ -47,9 +47,15 @@ public class CrudMainActivityUsers extends AppCompatActivity {
         btnLogoff.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
-
+                                            setContentView(R.layout.activity_main_admin);
                                          }
                                      });
+        btnGoToObjects.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.activity_main_crud_objects);
+            }
+        });
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override

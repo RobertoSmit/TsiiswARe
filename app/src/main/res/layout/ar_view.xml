@@ -10,11 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-    
+
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000"
-        android:id="@+id/imageView"/>
+        android:background="#000" />
+
+    <Button
+        android:id="@+id/btnLogoffAR"
+        android:layout_width="157dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="1110dp"
+        android:layout_marginBottom="725dp"
+        android:backgroundTint="#FF0000"
+        android:text="Ga terug"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
 </RelativeLayout>

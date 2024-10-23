@@ -13,6 +13,8 @@ import android.os.HandlerThread
 import android.os.Looper
 import android.view.Surface
 import android.view.TextureView
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,10 +32,6 @@ import java.io.IOException
 class AR_Activity : AppCompatActivity() {
 
     lateinit var labels: List<String>
-    var colors = listOf(
-        Color.BLUE, Color.GREEN, Color.RED, Color.CYAN, Color.GRAY, Color.BLACK,
-        Color.DKGRAY, Color.MAGENTA, Color.YELLOW, Color.RED
-    )
     val paint = Paint()
     lateinit var imageProcessor: ImageProcessor
     lateinit var bitmap: Bitmap
@@ -54,6 +52,11 @@ class AR_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ar_view)
         get_permission()
+
+        val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
+        btnLogoffAR.setOnClickListener(View.OnClickListener {
+                setContentView(R.layout.activity_main_user)
+        });
 
         labels = FileUtil.loadLabels(this, "labels.txt")
         imageProcessor = ImageProcessor.Builder().add(ResizeOp(300, 300, ResizeOp.ResizeMethod.BILINEAR)).build()

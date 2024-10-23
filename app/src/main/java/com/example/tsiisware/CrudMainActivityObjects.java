@@ -18,93 +18,82 @@ import java.util.Map;
 
 public class CrudMainActivityObjects extends AppCompatActivity {
     FirebaseFirestore db;
-    EditText etObjectName, etObjectDescription, etObjectVideoURL;
-    Spinner spinnerObjects;
-    Button btnCreateObjects, btnDeleteObjects, btnGoToUsers;
+    EditText etUsername, etPassword;
+    Spinner spinnerRole, spinnerUsers;
+    Button btnCreate, btnDelete, btnGoToObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_crud_objects);
 
+
         db = FirebaseFirestore.getInstance();
 
-        etObjectName = findViewById(R.id.etObjectName);
-        etObjectDescription = findViewById(R.id.etObjectDescription);
-        etObjectVideoURL = findViewById(R.id.etObjectVideoURL);
-        spinnerObjects = findViewById(R.id.spinnerObjects);
-        btnCreateObjects = findViewById(R.id.btnCreateObjects);
-        btnDeleteObjects = findViewById(R.id.btnDeleteObjects);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.roles_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRole.setAdapter(adapter);
 
-        loadObjectsIntoSpinner();
+        loadUsersIntoSpinner();
 
-        btnCreateObjects.setOnClickListener(new View.OnClickListener() {
+        btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String objectName = etObjectName.getText().toString();
-                String objectDescription = etObjectDescription.getText().toString();
-                String videoURL = etObjectVideoURL.getText().toString();
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                String role = spinnerRole.getSelectedItem().toString();
 
-                if (objectName.isEmpty() || objectDescription.isEmpty() || videoURL.isEmpty()) {
-                    Toast.makeText(CrudMainActivityObjects.this, "Alle velden moeten worden ingevuld", Toast.LENGTH_SHORT).show();
-                } else {
-                    addObjectToDatabase(objectName, objectDescription, videoURL);
-                }
+                Map<String, Object> user = new HashMap<>();
+                user.put("username", username);
+                user.put("password", password);
+                user.put("role", role);
+
+                db.collection("users")
+                        .document(username)
+                        .set(user)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(CrudMainActivityObjects.this, "Gebruiker succesvol aangemaakt", Toast.LENGTH_SHORT).show();
+                            loadUsersIntoSpinner();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(CrudMainActivityObjects.this, "Fout bij het aanmaken van gebruiker", Toast.LENGTH_SHORT).show();
+                        });
             }
         });
 
-        btnDeleteObjects.setOnClickListener(new View.OnClickListener() {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedObject = spinnerObjects.getSelectedItem().toString();
-                deleteObjectFromDatabase(selectedObject);
+                String selectedUser = spinnerUsers.getSelectedItem().toString();
+
+                db.collection("users").document(selectedUser)
+                        .delete()
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(CrudMainActivityObjects.this, "Gebruiker succesvol verwijderd", Toast.LENGTH_SHORT).show();
+                            loadUsersIntoSpinner();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(CrudMainActivityObjects.this, "Fout bij het verwijderen van gebruiker", Toast.LENGTH_SHORT).show();
+                        });
             }
         });
-
-        btnGoToUsers = findViewById(R.id.btnGoToUsers);
-        btnGoToUsers.setOnClickListener(v -> {
-            // Intent intent = new Intent(CrudMainActivityObjects.this, CrudMainActivityUsers.class);
-            // startActivity(intent);
-        });
     }
 
-    private void addObjectToDatabase(String objectName, String objectDescription, String videoURL) {
-        Map<String, Object> object = new HashMap<>();
-        object.put("name", objectName);
-        object.put("description", objectDescription);
-        object.put("videoURL", videoURL);
-
-        db.collection("objects").document(objectName).set(object)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(CrudMainActivityObjects.this, "Object toegevoegd", Toast.LENGTH_SHORT).show();
-                    loadObjectsIntoSpinner();
-                })
-                .addOnFailureListener(e -> Toast.makeText(CrudMainActivityObjects.this, "Fout bij toevoegen object", Toast.LENGTH_SHORT).show());
-    }
-
-    private void deleteObjectFromDatabase(String objectName) {
-        db.collection("objects").document(objectName).delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(CrudMainActivityObjects.this, "Object verwijderd", Toast.LENGTH_SHORT).show();
-                    loadObjectsIntoSpinner();
-                })
-                .addOnFailureListener(e -> Toast.makeText(CrudMainActivityObjects.this, "Fout bij verwijderen object", Toast.LENGTH_SHORT).show());
-    }
-
-    private void loadObjectsIntoSpinner() {
-        db.collection("objects").get().addOnCompleteListener(task -> {
+    private void loadUsersIntoSpinner() {
+        db.collection("users").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(CrudMainActivityObjects.this, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                ArrayAdapter<String> usersAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+                usersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 for (DocumentSnapshot document : task.getResult()) {
-                    String objectName = document.getString("name");
-                    adapter.add(objectName);
+                    String username = document.getString("username");
+                    usersAdapter.add(username);
                 }
 
-                spinnerObjects.setAdapter(adapter);
+                spinnerUsers.setAdapter(usersAdapter);
             } else {
-                Toast.makeText(CrudMainActivityObjects.this, "Fout bij het laden van objecten", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CrudMainActivityObjects.this, "Fout bij het ophalen van gebruikers", Toast.LENGTH_SHORT).show();
             }
         });
     }

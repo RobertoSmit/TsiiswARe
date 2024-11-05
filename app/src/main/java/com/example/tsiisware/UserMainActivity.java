@@ -37,7 +37,7 @@ public class UserMainActivity extends AppCompatActivity {
         spinnerCategories = findViewById(R.id.spinnerCategories);
         Button proceedButton = findViewById(R.id.proceedButton);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategories.setAdapter(adapter);
 

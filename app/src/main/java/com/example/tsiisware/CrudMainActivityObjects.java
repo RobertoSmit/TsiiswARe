@@ -109,11 +109,11 @@ public class CrudMainActivityObjects extends AppCompatActivity {
     private void addObjectToDatabase(String objectName, String objectDescription, String videoURL, String question, String[] answers, String correctAnswer) {
         Map<String, Object> object = new HashMap<>();
         object.put("label", objectName);
-        object.put("text", objectDescription);
+        object.put("description", objectDescription);
         object.put("video_url", videoURL);
-        object.put("vraag", question);
-        object.put("antwoorden", Arrays.asList(answers));
-        object.put("correct_antwoord", correctAnswer);
+        object.put("question", question);
+        object.put("answers", Arrays.asList(answers));
+        object.put("correct_answer", correctAnswer);
 
         db.collection("objects").document(objectName).set(object)
                 .addOnSuccessListener(aVoid -> {

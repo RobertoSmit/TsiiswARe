@@ -12,13 +12,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.PopupWindow
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.tsiisware.ml.SsdMobilenetV11Metadata1
 import okhttp3.*
@@ -46,13 +52,17 @@ class AR_Activity : AppCompatActivity() {
     private val client = OkHttpClient()
 
     private val interval: Long = 500 // 500 milliseconds
+    private var category: String? = null;
     private var currentDetectionIndex: Int = 0
     private var detectionCount: Int = 0
+    private var popupVisible: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ar_view)
         get_permission()
+
+        category = intent.getStringExtra("category")
 
         val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
         btnLogoffAR.setOnClickListener {
@@ -144,6 +154,32 @@ class AR_Activity : AppCompatActivity() {
         }
     }
 
+    private fun showPopup(label: String) {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_ar, null)
+        val popupWidth = 800
+        val popupHeight = 400
+
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+        popupWindow.showAtLocation(findViewById(R.id.arView), Gravity.CENTER, 0, 0)
+
+        val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
+        popupText.text = popupText.text.toString() + " " + label
+
+        val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
+        val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
+        popupClose.setOnClickListener {
+            popupWindow.dismiss()
+            popupVisible = false
+        }
+        popupGo.setOnClickListener {
+            val intent = Intent(this, InformationActivity::class.java)
+            intent.putExtra("label", label)
+            intent.putExtra("category", category)
+            startActivity(intent)
+        }
+
+    }
     private fun startImageUpload() {
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
@@ -209,6 +245,7 @@ class AR_Activity : AppCompatActivity() {
 
         val h = mutable.height
         val w = mutable.width
+        paint.textSize = h / 20f
         paint.strokeWidth = h / 100f
 
         // Ensure the index is within bounds
@@ -217,15 +254,14 @@ class AR_Activity : AppCompatActivity() {
 
         if (scores[index] > 0.5) {
             paint.color = Color.YELLOW
-            paint.style = Paint.Style.STROKE // Set the paint style to STROKE to draw only the borders
-            // Draw bounding box without labels
-            canvas.drawRect(
-                locations[x + 1] * w,
-                locations[x] * h,
-                locations[x + 3] * w,
-                locations[x + 2] * h,
-                paint
-            )
+            paint.style = Paint.Style.STROKE
+            canvas.drawRect(RectF(locations.get(x+1)*w, locations.get(x)*h, locations.get(x+3)*w, locations.get(x+2)*h), paint)
+            paint.style = Paint.Style.FILL
+            canvas.drawText(labels.get(classes.get(index).toInt()), locations.get(x+1)*w, locations.get(x)*h, paint)
+            if (!popupVisible) {
+                showPopup(labels.get(classes.get(index).toInt()))
+                popupVisible = true
+            }
         }
 
         imageView.setImageBitmap(mutable)

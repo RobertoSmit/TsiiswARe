@@ -23,16 +23,18 @@
         <activity
             android:name=".AdminMainActivity"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".UserMainActivity"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UserMainActivity"
-            android:exported="true"
-            />
 
         <activity
             android:name=".CrudMainActivityUsers"
@@ -43,6 +45,11 @@
 
         <activity
             android:name=".AR_Activity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".InformationActivity"
             android:exported="true">
         </activity>
     </application>

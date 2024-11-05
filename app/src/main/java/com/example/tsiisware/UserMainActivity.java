@@ -102,6 +102,7 @@ public class UserMainActivity extends AppCompatActivity {
                 .add(userData)
                 .addOnSuccessListener(documentReference -> {
                     Intent intent = new Intent(UserMainActivity.this, AR_Activity.class);
+                    intent.putExtra("category", category);
                     startActivity(intent);
                     finish();
                 })

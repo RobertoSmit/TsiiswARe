@@ -118,10 +118,22 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         db.collection("objects").document(objectName).set(object)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(CrudMainActivityObjects.this, "Object toegevoegd", Toast.LENGTH_SHORT).show();
+
+                    etObjectName.setText("");
+                    etObjectDescription.setText("");
+                    etObjectVideoURL.setText("");
+                    etQuestion.setText("");
+                    etAnswer1.setText("");
+                    etAnswer2.setText("");
+                    etAnswer3.setText("");
+                    etAnswer4.setText("");
+                    spinnerAnswers.setSelection(0);
+
                     loadObjectsIntoSpinner();
                 })
                 .addOnFailureListener(e -> Toast.makeText(CrudMainActivityObjects.this, "Fout bij toevoegen object", Toast.LENGTH_SHORT).show());
     }
+
 
     private void deleteObjectFromDatabase(String objectName) {
         db.collection("objects").document(objectName).delete()

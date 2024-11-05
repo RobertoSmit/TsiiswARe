@@ -127,8 +127,8 @@ public class CrudMainActivityObjects extends AppCompatActivity {
                     etAnswer2.setText("");
                     etAnswer3.setText("");
                     etAnswer4.setText("");
-                    spinnerAnswers.setSelection(0);
-
+//                    spinnerAnswers.setSelection(0);
+                    updateSpinnerAnswers(new String[]{});
                     loadObjectsIntoSpinner();
                 })
                 .addOnFailureListener(e -> Toast.makeText(CrudMainActivityObjects.this, "Fout bij toevoegen object", Toast.LENGTH_SHORT).show());

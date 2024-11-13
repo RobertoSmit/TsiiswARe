@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".InformationActivity">
 
+    <!-- Background Image -->
     <ImageView
         android:id="@+id/backgroundImageVideo"
         android:layout_width="match_parent"
@@ -13,33 +15,68 @@
         android:scaleType="centerCrop"
         android:src="@drawable/background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Title Logo Image -->
     <ImageView
         android:id="@+id/titleImageVideo"
         android:layout_width="382dp"
         android:layout_height="214dp"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.035" />
 
+    <!-- Title Text -->
     <TextView
         android:id="@+id/videoText"
-        android:layout_width="397dp"
-        android:layout_height="105dp"
-        android:layout_marginTop="191dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Video"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.558"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintTop_toBottomOf="@id/titleImageVideo" />
+
+    <!-- Yellow Bordered Box with White Fill for the Video Section -->
+    <FrameLayout
+        android:id="@+id/roundedBoxContainer"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_edittext_background"
+        app:layout_constraintTop_toBottomOf="@id/videoText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Placeholder for Video (can be replaced with VideoView) -->
+        <ImageView
+            android:id="@+id/videoThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/video_placeholder"
+            android:scaleType="centerInside"
+            android:contentDescription="Video thumbnail" />
+
+        <!-- Back Button within the Yellow Box -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_gravity="bottom|start"
+            android:padding="8dp"
+            android:contentDescription="Back button" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

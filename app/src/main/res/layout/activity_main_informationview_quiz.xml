@@ -30,21 +30,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/quizText"
-        android:layout_width="214dp"
-        android:layout_height="87dp"
-        android:layout_marginTop="191dp"
-        android:text="Quiz"
-        android:textColor="#FFFFFF"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.539"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.044" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardViewQuiz"
         android:layout_width="698dp"
@@ -55,16 +40,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="854px"
-            android:layout_height="480px"
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="389dp"
+            android:layout_height="293dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.581"
+            app:layout_constraintHorizontal_bias="0.472"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.03" />
+            app:layout_constraintVertical_bias="0.064" />
 
         <TextView
             android:id="@+id/question"

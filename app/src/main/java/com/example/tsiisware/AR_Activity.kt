@@ -16,15 +16,11 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.TextureView
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.tsiisware.ml.SsdMobilenetV11Metadata1
 import okhttp3.*

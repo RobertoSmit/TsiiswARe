@@ -37,18 +37,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.639">
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="409dp"
-            android:layout_height="576dp"
+            android:layout_width="328dp"
+            android:layout_height="386dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.426"
+            app:layout_constraintHorizontal_bias="0.74"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.37"
             app:srcCompat="@drawable/happy_mouse" />
 
         <TextView
@@ -73,21 +74,34 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.57"
+            app:layout_constraintHorizontal_bias="0.263"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.179" />
+            app:layout_constraintVertical_bias="0.175" />
+
+        <TextView
+            android:id="@+id/eindeQuizEmailText"
+            android:layout_width="592dp"
+            android:layout_height="67dp"
+            android:text="Krijg uw resultaten in uw email:"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.729" />
 
         <TextView
             android:id="@+id/eindeQuizGoedText"
             android:layout_width="136dp"
             android:layout_height="69dp"
-            android:layout_marginTop="280dp"
+            android:layout_marginTop="268dp"
             android:text="Goed:"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.266"
+            app:layout_constraintHorizontal_bias="0.129"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,12 +109,12 @@
             android:id="@+id/eindeQuizFoutText"
             android:layout_width="134dp"
             android:layout_height="60dp"
-            android:layout_marginTop="348dp"
+            android:layout_marginTop="356dp"
             android:text="Fout:"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.264"
+            app:layout_constraintHorizontal_bias="0.129"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -118,6 +132,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.998" />
 
+        <Button
+            android:id="@+id/btnSendEmail"
+            android:layout_width="201dp"
+            android:layout_height="74dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Verstuur email"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.979"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.819" />
+
         <View
             android:id="@+id/divider"
             android:layout_width="400dp"
@@ -127,6 +156,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eindQuizText" />
+
+        <EditText
+            android:id="@+id/visitorsEmailAdress"
+            android:layout_width="433dp"
+            android:layout_height="69dp"
+            android:ems="10"
+            android:hint="uw email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.203"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.815" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

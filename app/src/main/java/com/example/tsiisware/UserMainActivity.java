@@ -104,7 +104,6 @@ public class UserMainActivity extends AppCompatActivity {
                     Intent intent = new Intent(UserMainActivity.this, AR_Activity.class);
                     intent.putExtra("category", category);
                     startActivity(intent);
-                    finish();
                 })
                 .addOnFailureListener(e -> {
                     System.out.println("Error adding document: " + e.getMessage());

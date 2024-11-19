@@ -24,6 +24,7 @@ public class InformationActivity extends AppCompatActivity {
     TextView quizQuestion;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4;
+    Integer correctQuestions, wrongQuestions;
 
     String correctAnswer;
 
@@ -33,6 +34,8 @@ public class InformationActivity extends AppCompatActivity {
 
         label = getIntent().getStringExtra("label");
         category = getIntent().getStringExtra("category");
+        correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
+        wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
 
         switch (category) {
             case "Quiz":
@@ -71,9 +74,12 @@ public class InformationActivity extends AppCompatActivity {
                 if (correctAnswer.equals(answer1.getText().toString())) {
                     // Correct answer
                     answer1.setBackgroundColor(Color.GREEN);
+                    correctQuestions++;
+                    goBackToARView();
                 } else {
                     // Wrong answer
                     answer1.setBackgroundColor(Color.RED);
+                    wrongQuestions++;
                 }
             }
         });
@@ -177,6 +183,12 @@ public class InformationActivity extends AppCompatActivity {
 
     private void goBackToARView() {
         Intent intent = new Intent(this, AR_Activity.class);
+        intent.putExtra("label", label);
+        intent.putExtra("category", category);
+        if (category.equals("Quiz")) {
+            intent.putExtra("correctQuestions", correctQuestions);
+            intent.putExtra("wrongQuestions", wrongQuestions);
+        }
         startActivity(intent);
     }
 }

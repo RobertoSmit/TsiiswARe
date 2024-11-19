@@ -44,6 +44,8 @@ class AR_Activity : AppCompatActivity() {
     lateinit var cameraManager: CameraManager
     lateinit var textureView: TextureView
     lateinit var model: SsdMobilenetV11Metadata1
+    lateinit var correctQuestions: Number
+    lateinit var wrongQuestions: Number
 
     private val client = OkHttpClient()
 
@@ -58,6 +60,11 @@ class AR_Activity : AppCompatActivity() {
         setContentView(R.layout.ar_view)
 
         category = intent.getStringExtra("category")
+
+        if (category == "quiz") {
+            correctQuestions = intent.getIntExtra("correctQuestions", 0)
+            wrongQuestions = intent.getIntExtra("wrongQuestions", 0)
+        }
 
         val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
         btnLogoffAR.setOnClickListener {
@@ -158,6 +165,10 @@ class AR_Activity : AppCompatActivity() {
             val intent = Intent(this, InformationActivity::class.java)
             intent.putExtra("label", label)
             intent.putExtra("category", category)
+            if (category == "quiz") {
+                intent.putExtra("correctQuestions", correctQuestions)
+                intent.putExtra("wrongQuestions", wrongQuestions)
+            }
             startActivity(intent)
         }
 

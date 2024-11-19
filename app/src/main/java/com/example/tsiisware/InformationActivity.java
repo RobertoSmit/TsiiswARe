@@ -2,12 +2,15 @@ package com.example.tsiisware;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,11 +23,10 @@ public class InformationActivity extends AppCompatActivity {
     String label = null;
     String category = null;
     TextView quizQuestion;
-    VideoView videoView;
+    WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4;
 
     String correctAnswer;
-    private static final String YOUTUBE_API_KEY = "YOUR_API_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,7 @@ public class InformationActivity extends AppCompatActivity {
         answer3 = findViewById(R.id.answer_3);
         answer4 = findViewById(R.id.answer_4);
         quizQuestion = findViewById(R.id.question);
-        videoView = findViewById(R.id.videoView);
-
+        webView = findViewById(R.id.webView);
         getObjectInformation(label, category);
 
         gobackButton.setOnClickListener(new View.OnClickListener() {
@@ -124,18 +125,44 @@ public class InformationActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    Uri videoURL = Uri.parse(document.getString("video_url"));
+//                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"%s\" frameborder=\"0\" allowfullscreen></iframe>", document.getString("video_url"));
                     ARObject arobject = new ARObject(
                             document.getString("name"),
                             document.getString("description"),
-                            videoURL,
+                            document.getString("video"),
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer")
                     );
 
                     if (category.equals("Quiz")) {
-                        videoView.setVideoURI(arobject.getVideoURL());
+                        webView.getSettings().setJavaScriptEnabled(true);
+                        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                        webView.setWebViewClient(new WebViewClient());
+                        webView.setWebChromeClient(new WebChromeClient());
+                        webView.loadData(arobject.getVideoURL(), "text/html", "utf-8");
+
+                        // Disable user interaction
+                        webView.setOnTouchListener((v, event) -> {
+                            int width = webView.getWidth();
+                            int height = webView.getHeight();
+                            float x = event.getX();
+                            float y = event.getY();
+
+                            // Define the middle area (e.g., 20% of the width and height)
+                            float middleAreaWidth = width * 0.75f;
+                            float middleAreaHeight = height * 0.75f;
+                            float middleXStart = (width - middleAreaWidth) / 2;
+                            float middleYStart = (height - middleAreaHeight) / 2;
+
+                            if (x >= middleXStart && x <= (middleXStart + middleAreaWidth) &&
+                                    y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
+                                return false; // Allow touch event
+                            } else {
+                                return true; // Ignore touch event
+                            }
+                        });
+
                         quizQuestion.setText(arobject.getQuestion());
                         answer1.setText(arobject.getAnswers().get(0));
                         answer2.setText(arobject.getAnswers().get(1));

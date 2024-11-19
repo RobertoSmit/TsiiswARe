@@ -42,21 +42,20 @@
 
         <WebView
             android:id="@+id/webView"
-            android:layout_width="389dp"
-            android:layout_height="293dp"
+            android:layout_width="560dp"
+            android:layout_height="315dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.472"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.064" />
+            app:layout_constraintVertical_bias="0.029" />
 
         <TextView
             android:id="@+id/question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vraag"
-            android:textSize="48sp"
+            android:textSize="38sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

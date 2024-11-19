@@ -6,7 +6,7 @@ import java.util.List;
 public class ARObject {
     private String name;
     private String description;
-    private Uri videoURL;
+    private String video;
     private String question;
     private List<String> answers;
     private String correctAnswer;
@@ -15,10 +15,10 @@ public class ARObject {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public ARObject(String name, String description, Uri videoURL, String question, List<String> answers, String correctAnswer) {
+    public ARObject(String name, String description, String video, String question, List<String> answers, String correctAnswer) {
         this.name = name;
         this.description = description;
-        this.videoURL = videoURL;
+        this.video = video;
         this.question = question;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
@@ -32,8 +32,8 @@ public class ARObject {
         return description;
     }
 
-    public Uri getVideoURL() {
-        return videoURL;
+    public String getVideoURL() {
+        return video;
     }
 
     public String getQuestion() {

@@ -56,7 +56,6 @@ class AR_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ar_view)
-        get_permission()
 
         category = intent.getStringExtra("category")
 
@@ -135,19 +134,6 @@ class AR_Activity : AppCompatActivity() {
             override fun onDisconnected(p0: CameraDevice) {}
             override fun onError(p0: CameraDevice, p1: Int) {}
         }, handler)
-    }
-
-    fun get_permission() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 101)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            get_permission()
-        }
     }
 
     private fun showPopup(label: String) {

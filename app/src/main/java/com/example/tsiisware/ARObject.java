@@ -1,6 +1,5 @@
 package com.example.tsiisware;
 
-import android.net.Uri;
 import java.util.List;
 
 public class ARObject {

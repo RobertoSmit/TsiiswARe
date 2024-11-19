@@ -265,8 +265,14 @@ class AR_Activity : AppCompatActivity() {
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        return stream.toByteArray()
+        // Reduce image size before compressing
+        val options = BitmapFactory.Options()
+        options.inSampleSize = 2 // Downsample by a factor of 2
+        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, false)
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // Adjust quality as needed
+        val byteArray = stream.toByteArray()
+        resizedBitmap.recycle() // Recycle the resized bitmap
+        return byteArray
     }
 }
 

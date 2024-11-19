@@ -30,19 +30,121 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/quizText"
-        android:layout_width="214dp"
-        android:layout_height="87dp"
-        android:layout_marginTop="191dp"
-        android:text="Quiz"
-        android:textColor="#FFFFFF"
-        android:textSize="60sp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardViewQuiz"
+        android:layout_width="698dp"
+        android:layout_height="850dp"
+        android:background="@drawable/rounded_edittext_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.077" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="560dp"
+            android:layout_height="315dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.029" />
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vraag"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.445" />
+
+        <Button
+            android:id="@+id/answer_1"
+            android:layout_width="375dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="21dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Antwoord 1"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question" />
+
+        <Button
+            android:id="@+id/answer_2"
+            android:layout_width="375dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="1dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Antwoord 2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer_1" />
+
+        <Button
+            android:id="@+id/answer_4"
+            android:layout_width="375dp"
+            android:layout_height="75dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Antwoord 4"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer_3"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/answer_3"
+            android:layout_width="375dp"
+            android:layout_height="75dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Antwoord 3"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer_2" />
+
+        <Button
+            android:id="@+id/go_back"
+            android:layout_width="146dp"
+            android:layout_height="90dp"
+            android:backgroundTint="@color/red"
+            android:text="Ga terug"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.998" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="400dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@+id/answer_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

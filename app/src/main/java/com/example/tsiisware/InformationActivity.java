@@ -20,9 +20,8 @@ import java.util.Objects;
 
 public class InformationActivity extends AppCompatActivity {
     FirebaseFirestore db;
-    String label = null;
-    String category = null;
-    TextView quizQuestion, title;
+    String label = null, category = null;
+    TextView quizQuestion, title, information;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4;
     Integer correctQuestions, wrongQuestions;
@@ -44,77 +43,73 @@ public class InformationActivity extends AppCompatActivity {
         switch (category) {
             case "Quiz":
                 setContentView(R.layout.activity_main_informationview_quiz);
+                answer1 = findViewById(R.id.answer_1);
+                answer2 = findViewById(R.id.answer_2);
+                answer3 = findViewById(R.id.answer_3);
+                answer4 = findViewById(R.id.answer_4);
+                quizQuestion = findViewById(R.id.question);
+
+                // Answer OnClickListeners
+                answer1.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer1.getText().toString())) {
+                        // Correct answer
+                        answer1.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
+                    } else {
+                        // Wrong answer
+                        answer1.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
+                    }
+                    goBackToARView();
+                });
+
+                answer2.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer2.getText().toString())) {
+                        // Correct answer
+                        answer2.setBackgroundColor(Color.GREEN);
+                    } else {
+                        // Wrong answer
+                        answer2.setBackgroundColor(Color.RED);
+                    }
+                    goBackToARView();
+                });
+
+                answer3.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer3.getText().toString())) {
+                        // Correct answer
+                        answer3.setBackgroundColor(Color.GREEN);
+                    } else {
+                        // Wrong answer
+                        answer3.setBackgroundColor(Color.RED);
+                    }
+                    goBackToARView();
+                });
+
+                answer4.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer4.getText().toString())) {
+                        // Correct answer
+                        answer4.setBackgroundColor(Color.GREEN);
+                    } else {
+                        // Wrong answer
+                        answer4.setBackgroundColor(Color.RED);
+                    }
+                    goBackToARView();
+                });
                 break;
             case "Text + Video":
                 setContentView(R.layout.activity_main_informationview_text_video);
+                title = findViewById(R.id.titleTextVideo);
+                title.setText("Text + Video: " + label);
+                information = findViewById(R.id.informationText);
+                information.setText("Loading...");
                 break;
             case "Video":
                 setContentView(R.layout.activity_main_informationview_video);
+                title = findViewById(R.id.textViewVideo);
+                title.setText("Video: " + label);
                 break;
             default:
                 setContentView(R.layout.ar_view);
-        }
-
-        if (Objects.equals(category, "Quiz"))
-        {
-            answer1 = findViewById(R.id.answer_1);
-            answer2 = findViewById(R.id.answer_2);
-            answer3 = findViewById(R.id.answer_3);
-            answer4 = findViewById(R.id.answer_4);
-            quizQuestion = findViewById(R.id.question);
-
-            // Answer OnClickListeners
-            answer1.setOnClickListener(v -> {
-                if (correctAnswer.equals(answer1.getText().toString())) {
-                    // Correct answer
-                    answer1.setBackgroundColor(Color.GREEN);
-                    correctQuestions++;
-                } else {
-                    // Wrong answer
-                    answer1.setBackgroundColor(Color.RED);
-                    wrongQuestions++;
-                }
-                goBackToARView();
-            });
-
-            answer2.setOnClickListener(v -> {
-                if (correctAnswer.equals(answer2.getText().toString())) {
-                    // Correct answer
-                    answer2.setBackgroundColor(Color.GREEN);
-                } else {
-                    // Wrong answer
-                    answer2.setBackgroundColor(Color.RED);
-                }
-                goBackToARView();
-            });
-
-            answer3.setOnClickListener(v -> {
-                if (correctAnswer.equals(answer3.getText().toString())) {
-                    // Correct answer
-                    answer3.setBackgroundColor(Color.GREEN);
-                } else {
-                    // Wrong answer
-                    answer3.setBackgroundColor(Color.RED);
-                }
-                goBackToARView();
-            });
-
-            answer4.setOnClickListener(v -> {
-                if (correctAnswer.equals(answer4.getText().toString())) {
-                    // Correct answer
-                    answer4.setBackgroundColor(Color.GREEN);
-                } else {
-                    // Wrong answer
-                    answer4.setBackgroundColor(Color.RED);
-                }
-                goBackToARView();
-            });
-        }
-
-        if (Objects.equals(category, "Video"))
-        {
-            title = findViewById(R.id.textViewVideo);
-            title.setText("Video: " + label);
         }
 
         webView = findViewById(R.id.webView);
@@ -176,6 +171,9 @@ public class InformationActivity extends AppCompatActivity {
                             answer4.setText(arobject.getAnswers().get(3));
 
                             correctAnswer = arobject.getCorrectAnswer();
+                        }
+                        if (category.equals("Text + Video")) {
+                            information.setText(arobject.getDescription());
                         }
                     }
                 }

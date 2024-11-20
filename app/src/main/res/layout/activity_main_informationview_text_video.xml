@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/titleImageTextVideo"
-        android:layout_width="382dp"
-        android:layout_height="214dp"
+        android:layout_width="380dp"
+        android:layout_height="220dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,23 +32,25 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardViewTextVideo"
-        android:layout_width="698dp"
-        android:layout_height="850dp"
+        android:layout_width="700dp"
+        android:layout_height="1030dp"
         android:background="@drawable/rounded_edittext_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.936">
 
         <WebView
             android:id="@+id/webView"
-            android:layout_width="560dp"
-            android:layout_height="315dp"
+            android:layout_width="660dp"
+            android:layout_height="390dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.056" />
+            app:layout_constraintVertical_bias="0.025" />
 
         <TextView
             android:id="@+id/titleTextVideo"
@@ -62,20 +64,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.448" />
-
-        <Button
-            android:id="@+id/go_back"
-            android:layout_width="146dp"
-            android:layout_height="90dp"
-            android:backgroundTint="@color/red"
-            android:text="Ga terug"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.998" />
 
         <View
             android:id="@+id/divider"
@@ -92,16 +80,30 @@
 
         <TextView
             android:id="@+id/informationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="548dp"
+            android:layout_height="444dp"
             android:text="Information Text"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.281"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.549" />
+            app:layout_constraintVertical_bias="0.921" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/go_back"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/red"
+        android:text="Terug"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.013" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,6 +26,7 @@ public class AdminMainActivity extends AppCompatActivity {
         usernameInput = findViewById(R.id.username);
         passwordInput = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
+        Button goBack = findViewById(R.id.goBackBtn);
 
         db = FirebaseFirestore.getInstance();
 
@@ -48,7 +49,7 @@ public class AdminMainActivity extends AppCompatActivity {
                             QuerySnapshot result = task.getResult();
                             if (!result.isEmpty()) {
                                 Toast.makeText(AdminMainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(AdminMainActivity.this, CrudMainActivityUsers.class);
+                                Intent intent = new Intent(AdminMainActivity.this, CrudMainActivityObjects.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(AdminMainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
@@ -58,11 +59,10 @@ public class AdminMainActivity extends AppCompatActivity {
                         }
                     });
         });
-    }
 
-    public void onClickStart(View view)
-    {
-        Intent intent = new Intent(AdminMainActivity.this, UserMainActivity.class);
-        startActivity(intent);
+        goBack.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminMainActivity.this, UserMainActivity.class);
+            startActivity(intent);
+        });
     }
 }

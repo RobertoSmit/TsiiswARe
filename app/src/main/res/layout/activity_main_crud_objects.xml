@@ -20,181 +20,204 @@
 
     <ImageView
         android:id="@+id/titleImageObjects"
-        android:layout_width="382dp"
-        android:layout_height="214dp"
+        android:layout_width="380dp"
+        android:layout_height="220dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="747dp"
-        android:layout_height="595dp"
-        android:layout_marginTop="184dp"
+        android:id="@+id/constraintLayout"
+        android:layout_width="720dp"
+        android:layout_height="739dp"
+        android:layout_marginTop="220dp"
+        android:background="#54000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.642"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textViewDeleteObject2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Object aanmaken"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/etObjectName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <Button
-            android:id="@+id/btnCreateObjects"
-            android:layout_width="500dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/yellow"
-            android:text="Object aanmaken"
-            android:textColor="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/etAnswer3"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:hint="Antwoord 3"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.623"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
-
-        <EditText
-            android:id="@+id/etAnswer2"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:hint="Antwoord 2"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.383"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
-
-        <EditText
-            android:id="@+id/etAnswer4"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:hint="Antwoord 4"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.848"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
-
-        <EditText
-            android:id="@+id/etAnswer1"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:hint="Antwoord 1"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.158"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
         <EditText
             android:id="@+id/etObjectName"
             android:layout_width="500dp"
             android:layout_height="58dp"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="28dp"
+            android:layout_marginTop="28dp"
             android:background="@drawable/rounded_edittext_background"
             android:hint="Objectnaam"
             android:padding="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/etObjectDescription"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDeleteObject2" />
+
+        <TextView
+            android:id="@+id/textViewDeleteObject2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Object aanmaken"
+            android:textColor="@color/white"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/etObjectDescription"
-            android:layout_width="500dp"
-            android:layout_height="58dp"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="16dp"
+            android:id="@+id/etAnswer4"
+            android:layout_width="115dp"
+            android:layout_height="64dp"
             android:background="@drawable/rounded_edittext_background"
-            android:hint="Objectbeschrijving"
+            android:hint="Antwoord 4"
             android:padding="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/etObjectVideoURL"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.817"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.632" />
 
         <EditText
-            android:id="@+id/etObjectVideoURL"
-            android:layout_width="500dp"
-            android:layout_height="58dp"
-            android:layout_marginBottom="16dp"
+            android:id="@+id/etAnswer2"
+            android:layout_width="115dp"
+            android:layout_height="64dp"
             android:background="@drawable/rounded_edittext_background"
-            android:hint="Video URL"
+            android:hint="Antwoord 2"
             android:padding="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/etQuestion"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.388"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.632" />
+
+        <EditText
+            android:id="@+id/etAnswer3"
+            android:layout_width="115dp"
+            android:layout_height="64dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Antwoord 3"
+            android:padding="12dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.606"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.632" />
+
+        <EditText
+            android:id="@+id/etAnswer1"
+            android:layout_width="113dp"
+            android:layout_height="64dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Antwoord 1"
+            android:padding="12dp"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.632" />
 
         <EditText
             android:id="@+id/etQuestion"
             android:layout_width="500dp"
             android:layout_height="58dp"
-            android:layout_marginTop="316dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/rounded_edittext_background"
             android:hint="Vraag"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/etObjectVideoURL" />
+
+        <EditText
+            android:id="@+id/etObjectDescription"
+            android:layout_width="497dp"
+            android:layout_height="106dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Informatie Text"
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etObjectName" />
+
+        <TextView
+            android:id="@+id/correctAnswerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Correcte antwoord"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.753" />
 
         <Spinner
             android:id="@+id/spinnerAnswers"
             android:layout_width="500dp"
             android:layout_height="58dp"
-            android:layout_margin="16dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginTop="11dp"
             android:background="@drawable/rounded_edittext_background"
-            app:layout_constraintBottom_toTopOf="@+id/btnCreateObjects"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/correctAnswerText"
+            app:layout_constraintVertical_bias="0.047" />
+
+        <EditText
+            android:id="@+id/etObjectVideoURL"
+            android:layout_width="500dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Video URL"
+            android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etAnswer2" />
+            app:layout_constraintTop_toBottomOf="@+id/etObjectDescription" />
+
+        <Button
+            android:id="@+id/btnCreateObjects"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Object aanmaken"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.976" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="658dp"
-        android:layout_height="461dp"
-        android:layout_marginTop="800dp"
+        android:layout_width="723dp"
+        android:layout_height="249dp"
+        android:layout_marginTop="1dp"
+        android:background="#54000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.598"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.169">
 
         <TextView
             android:id="@+id/textViewDeleteObject"
@@ -202,64 +225,70 @@
             android:layout_height="wrap_content"
             android:text="Object verwijderen"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="48sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/spinnerObjects"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.458" />
+            app:layout_constraintVertical_bias="0.06" />
+
+        <Button
+            android:id="@+id/btnDeleteObjects"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Object verwijderen"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Spinner
             android:id="@+id/spinnerObjects"
             android:layout_width="500dp"
             android:layout_height="58dp"
             android:layout_margin="16dp"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_edittext_background"
-            app:layout_constraintBottom_toTopOf="@+id/btnDeleteObjects"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btnDeleteObjects"
-            android:layout_width="500dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="232dp"
-            android:backgroundTint="@color/yellow"
-            android:text="Object verwijderen"
-            android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.497" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnLogoffObjects"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
         android:backgroundTint="#E41F1F"
         android:text="Uitloggen"
+        android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.013" />
+
+    <Button
+        android:id="@+id/btnGoToUsers"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/yellow"
+        android:text="Gebruikers"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.012" />
-
-    <Button
-        android:id="@+id/btnGoToUsers"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/yellow"
-        android:text="Users"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.024"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.012" />
+        app:layout_constraintVertical_bias="0.013" />
 </androidx.constraintlayout.widget.ConstraintLayout>

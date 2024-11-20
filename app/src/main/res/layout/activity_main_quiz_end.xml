@@ -19,8 +19,8 @@
 
     <ImageView
         android:id="@+id/titleImageEndQuiz"
-        android:layout_width="382dp"
-        android:layout_height="214dp"
+        android:layout_width="380dp"
+        android:layout_height="220dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardViewEndQuiz"
-        android:layout_width="698dp"
+        android:layout_width="700dp"
         android:layout_height="850dp"
         android:background="@drawable/rounded_edittext_background"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +97,7 @@
             android:layout_width="136dp"
             android:layout_height="69dp"
             android:layout_marginTop="268dp"
-            android:text="Goed:"
+            android:text="Goed: "
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -120,17 +120,16 @@
 
         <Button
             android:id="@+id/to_start_btn"
-            android:layout_width="146dp"
-            android:layout_height="90dp"
+            android:layout_width="500dp"
+            android:layout_height="80dp"
             android:backgroundTint="@color/green"
             android:text="Naar start"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.998" />
+            app:layout_constraintVertical_bias="0.978" />
 
         <Button
             android:id="@+id/btnSendEmail"
@@ -164,6 +163,7 @@
             android:ems="10"
             android:hint="uw email"
             android:inputType="textEmailAddress"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.203"

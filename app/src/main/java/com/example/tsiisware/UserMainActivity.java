@@ -22,6 +22,7 @@ import java.util.Map;
 public class UserMainActivity extends AppCompatActivity {
 
     private EditText nameInput;
+    private Button adminButton;
     private Spinner spinnerCategories;
     private FirebaseFirestore db;
     private boolean isQuizSelected = false;
@@ -33,6 +34,7 @@ public class UserMainActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        adminButton = findViewById(R.id.adminRedirect);
         nameInput = findViewById(R.id.nameInput);
         spinnerCategories = findViewById(R.id.spinnerCategories);
         Button proceedButton = findViewById(R.id.proceedButton);
@@ -56,36 +58,35 @@ public class UserMainActivity extends AppCompatActivity {
         });
 
 
-        proceedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = nameInput.getText().toString().trim();
+        adminButton.setOnClickListener(v -> {
+            Intent intent = new Intent(UserMainActivity.this, AdminMainActivity.class);
+            startActivity(intent);
+        });
 
-                if (name.length() < 2) {
-                    Toast.makeText(UserMainActivity.this, "Geef een geldige naam op!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        proceedButton.setOnClickListener(v -> {
+            String name = nameInput.getText().toString().trim();
 
-                if (!isQuizSelected) {
-                    Toast.makeText(UserMainActivity.this, "Selecteer een geldige categorie!", Toast.LENGTH_SHORT).show();
-                } else {
-                    sendDataToFirestore();
-                }
+            if (name.length() < 2) {
+                Toast.makeText(UserMainActivity.this, "Geef een geldige naam op!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!isQuizSelected) {
+                Toast.makeText(UserMainActivity.this, "Selecteer een geldige categorie!", Toast.LENGTH_SHORT).show();
+            } else {
+                sendDataToFirestore();
             }
         });
 
 
         View mainLayout = findViewById(R.id.main);
-        mainLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (isKeyboardOpen()) {
-                        hideKeyboard(v);
-                    }
+        mainLayout.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (isKeyboardOpen()) {
+                    hideKeyboard(v);
                 }
-                return true;
             }
+            return true;
         });
     }
 
@@ -124,10 +125,5 @@ public class UserMainActivity extends AppCompatActivity {
                 currentFocus.clearFocus();
             }
         }
-    }
-
-    public void onClickAdmin(View view) {
-        Intent intent = new Intent(UserMainActivity.this, AdminMainActivity.class);
-        startActivity(intent);
     }
 }

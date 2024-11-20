@@ -110,7 +110,7 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         Map<String, Object> object = new HashMap<>();
         object.put("label", objectName);
         object.put("description", objectDescription);
-        object.put("video_url", videoURL);
+        object.put("video_url", convertToEmbedUrl(videoURL));
         object.put("question", question);
         object.put("answers", Arrays.asList(answers));
         object.put("correct_answer", correctAnswer);
@@ -187,4 +187,18 @@ public class CrudMainActivityObjects extends AppCompatActivity {
             }
         }
     }
+
+        public String convertToEmbedUrl(String url) {
+            if (url == null || !url.contains("youtube.com/watch?v=") && !url.contains("youtu.be/")) {
+                throw new IllegalArgumentException("Invalid YouTube URL");
+            }
+            if (url.contains("youtu.be/")) {
+                String videoId = url.split("youtu.be/")[1];
+                return "https://www.youtube.com/embed/" + videoId + "?autoplay=0&controls=0";
+            }
+            else {
+                String videoId = url.split("v=")[1];
+                return "https://www.youtube.com/embed/" + videoId + "?autoplay=0&controls=0";
+            }
+        }
 }

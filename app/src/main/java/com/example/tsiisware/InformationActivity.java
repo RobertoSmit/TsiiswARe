@@ -3,7 +3,7 @@ package com.example.tsiisware;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MotionEvent;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -23,9 +23,9 @@ public class InformationActivity extends AppCompatActivity {
     String label = null, category = null;
     TextView quizQuestion, title, information;
     WebView webView;
-    Button gobackButton, answer1, answer2, answer3, answer4;
+    Button gobackButton, answer1, answer2, answer3, answer4, reloadButton;
     Integer correctQuestions, wrongQuestions;
-
+    Boolean isClicked = false;
     String correctAnswer;
 
     @Override
@@ -37,7 +37,6 @@ public class InformationActivity extends AppCompatActivity {
         if (Objects.equals(category, "Quiz")) {
             correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
             wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
-
         }
 
         switch (category) {
@@ -114,10 +113,17 @@ public class InformationActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webView);
         gobackButton = findViewById(R.id.go_back);
+        reloadButton = findViewById(R.id.resetVideobtn); // Ensure this is in the correct layout file
+
         getObjectInformation(label, category);
 
         gobackButton.setOnClickListener(v -> goBackToARView());
+        reloadButton.setOnClickListener(v -> reloadVideo());
+    }
 
+    private void reloadVideo() {
+        getObjectInformation(label, category);
+        isClicked = false;
     }
 
     private void getObjectInformation(String label, String category) {
@@ -126,7 +132,7 @@ public class InformationActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-//                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"%s\" frameborder=\"0\" allowfullscreen></iframe>", document.getString("video_url"));
+                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"%s?rel=0&autoplay=1&showinfo=0&controls=0\" frameborder=\"0\" allowfullscreen></iframe>", document.getString("video_url"));
                     ARObject arobject = new ARObject(
                             document.getString("name"),
                             document.getString("description"),
@@ -140,28 +146,33 @@ public class InformationActivity extends AppCompatActivity {
                         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                         webView.setWebViewClient(new WebViewClient());
                         webView.setWebChromeClient(new WebChromeClient());
-                        webView.loadData(arobject.getVideoURL(), "text/html", "utf-8");
+                        webView.loadData(iframeStructure, "text/html", "utf-8");
 
-                        // Disable user interaction
-                        webView.setOnTouchListener((v, event) -> {
-                            int width = webView.getWidth();
-                            int height = webView.getHeight();
-                            float x = event.getX();
-                            float y = event.getY();
+                        // The user can only click once in the middle of the screen then the touch event is ignored
 
-                            // Define the middle area (e.g., 20% of the width and height)
-                            float middleAreaWidth = width * 0.75f;
-                            float middleAreaHeight = height * 0.75f;
-                            float middleXStart = (width - middleAreaWidth) / 2;
-                            float middleYStart = (height - middleAreaHeight) / 2;
+                    webView.setOnTouchListener((v, event) -> {
+                        if (isClicked) {
+                            return true;
+                        }
+                        int width = webView.getWidth();
+                        int height = webView.getHeight();
+                        float x = event.getX();
+                        float y = event.getY();
 
-                            if (x >= middleXStart && x <= (middleXStart + middleAreaWidth) &&
-                                    y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
-                                return false; // Allow touch event
-                            } else {
-                                return true; // Ignore touch event
-                            }
-                        });
+                        // Define the middle area (e.g., 75% of the width and height)
+                        float middleAreaWidth = width * 0.20f;
+                        float middleAreaHeight = height * 0.25f;
+                        float middleXStart = (width - middleAreaWidth) / 2;
+                        float middleYStart = (height - middleAreaHeight) / 2;
+
+                        if (x >= middleXStart && x <= (middleXStart + middleAreaWidth) &&
+                                y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
+                            return false; // Allow touch event
+                        } else {
+                            isClicked = true;
+                            return true; // Ignore touch event
+                        }
+                    });
 
                         if (category.equals("Quiz")) {
                             quizQuestion.setText(arobject.getQuestion());

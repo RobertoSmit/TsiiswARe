@@ -48,7 +48,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.029" />
+            app:layout_constraintVertical_bias="0.029">
+
+        </WebView>
+
+        <Button
+            android:id="@+id/resetVideobtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="536dp"
+            android:layout_marginBottom="342dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Reset Video"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/webView"
+            app:layout_constraintEnd_toEndOf="@+id/webView" />
 
         <Button
             android:id="@+id/answer_1"

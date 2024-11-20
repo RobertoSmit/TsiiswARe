@@ -38,6 +38,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.341">
 
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="660dp"
+            android:layout_height="390dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.555"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.29" />
+
+        <Button
+            android:id="@+id/resetVideobtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="536dp"
+            android:layout_marginBottom="342dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Reset Video"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/webView"
+            app:layout_constraintEnd_toEndOf="@+id/webView" />
+
         <TextView
             android:id="@+id/textViewVideo"
             android:layout_width="wrap_content"
@@ -50,17 +73,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.988" />
-
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="660dp"
-            android:layout_height="390dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.555"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.29" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

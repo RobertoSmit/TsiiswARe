@@ -16,12 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
+import java.util.Objects;
 
 public class InformationActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String label = null;
     String category = null;
-    TextView quizQuestion;
+    TextView quizQuestion, title;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4;
     Integer correctQuestions, wrongQuestions;
@@ -34,8 +35,11 @@ public class InformationActivity extends AppCompatActivity {
 
         label = getIntent().getStringExtra("label");
         category = getIntent().getStringExtra("category");
-        correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
-        wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
+        if (Objects.equals(category, "Quiz")) {
+            correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
+            wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
+
+        }
 
         switch (category) {
             case "Quiz":
@@ -51,42 +55,29 @@ public class InformationActivity extends AppCompatActivity {
                 setContentView(R.layout.ar_view);
         }
 
-        gobackButton = findViewById(R.id.go_back);
-        answer1 = findViewById(R.id.answer_1);
-        answer2 = findViewById(R.id.answer_2);
-        answer3 = findViewById(R.id.answer_3);
-        answer4 = findViewById(R.id.answer_4);
-        quizQuestion = findViewById(R.id.question);
-        webView = findViewById(R.id.webView);
-        getObjectInformation(label, category);
+        if (Objects.equals(category, "Quiz"))
+        {
+            answer1 = findViewById(R.id.answer_1);
+            answer2 = findViewById(R.id.answer_2);
+            answer3 = findViewById(R.id.answer_3);
+            answer4 = findViewById(R.id.answer_4);
+            quizQuestion = findViewById(R.id.question);
 
-        gobackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goBackToARView();
-            }
-        });
-
-        // Answer OnClickListeners
-        answer1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            // Answer OnClickListeners
+            answer1.setOnClickListener(v -> {
                 if (correctAnswer.equals(answer1.getText().toString())) {
                     // Correct answer
                     answer1.setBackgroundColor(Color.GREEN);
                     correctQuestions++;
-                    goBackToARView();
                 } else {
                     // Wrong answer
                     answer1.setBackgroundColor(Color.RED);
                     wrongQuestions++;
                 }
-            }
-        });
+                goBackToARView();
+            });
 
-        answer2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            answer2.setOnClickListener(v -> {
                 if (correctAnswer.equals(answer2.getText().toString())) {
                     // Correct answer
                     answer2.setBackgroundColor(Color.GREEN);
@@ -94,12 +85,10 @@ public class InformationActivity extends AppCompatActivity {
                     // Wrong answer
                     answer2.setBackgroundColor(Color.RED);
                 }
-            }
-        });
+                goBackToARView();
+            });
 
-        answer3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            answer3.setOnClickListener(v -> {
                 if (correctAnswer.equals(answer3.getText().toString())) {
                     // Correct answer
                     answer3.setBackgroundColor(Color.GREEN);
@@ -107,12 +96,10 @@ public class InformationActivity extends AppCompatActivity {
                     // Wrong answer
                     answer3.setBackgroundColor(Color.RED);
                 }
-            }
-        });
+                goBackToARView();
+            });
 
-        answer4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            answer4.setOnClickListener(v -> {
                 if (correctAnswer.equals(answer4.getText().toString())) {
                     // Correct answer
                     answer4.setBackgroundColor(Color.GREEN);
@@ -120,8 +107,22 @@ public class InformationActivity extends AppCompatActivity {
                     // Wrong answer
                     answer4.setBackgroundColor(Color.RED);
                 }
-            }
-        });
+                goBackToARView();
+            });
+        }
+
+        if (Objects.equals(category, "Video"))
+        {
+            title = findViewById(R.id.textViewVideo);
+            title.setText("Video: " + label);
+        }
+
+        webView = findViewById(R.id.webView);
+        gobackButton = findViewById(R.id.go_back);
+        getObjectInformation(label, category);
+
+        gobackButton.setOnClickListener(v -> goBackToARView());
+
     }
 
     private void getObjectInformation(String label, String category) {
@@ -140,7 +141,6 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("correct_answer")
                     );
 
-                    if (category.equals("Quiz")) {
                         webView.getSettings().setJavaScriptEnabled(true);
                         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                         webView.setWebViewClient(new WebViewClient());
@@ -168,16 +168,17 @@ public class InformationActivity extends AppCompatActivity {
                             }
                         });
 
-                        quizQuestion.setText(arobject.getQuestion());
-                        answer1.setText(arobject.getAnswers().get(0));
-                        answer2.setText(arobject.getAnswers().get(1));
-                        answer3.setText(arobject.getAnswers().get(2));
-                        answer4.setText(arobject.getAnswers().get(3));
+                        if (category.equals("Quiz")) {
+                            quizQuestion.setText(arobject.getQuestion());
+                            answer1.setText(arobject.getAnswers().get(0));
+                            answer2.setText(arobject.getAnswers().get(1));
+                            answer3.setText(arobject.getAnswers().get(2));
+                            answer4.setText(arobject.getAnswers().get(3));
 
-                        correctAnswer = arobject.getCorrectAnswer();
+                            correctAnswer = arobject.getCorrectAnswer();
+                        }
                     }
                 }
-            }
         });
     }
 

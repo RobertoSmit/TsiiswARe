@@ -10,10 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Objects;
+
 public class AdminMainActivity extends AppCompatActivity {
 
     private EditText usernameInput, passwordInput;
-    private Button loginButton;
     private FirebaseFirestore db;
 
     @Override
@@ -24,47 +25,44 @@ public class AdminMainActivity extends AppCompatActivity {
 
         usernameInput = findViewById(R.id.username);
         passwordInput = findViewById(R.id.password);
-        loginButton = findViewById(R.id.loginButton);
+        Button loginButton = findViewById(R.id.loginButton);
+        Button goBack = findViewById(R.id.goBackBtn);
 
         db = FirebaseFirestore.getInstance();
 
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String enteredUsername = usernameInput.getText().toString().trim();
-                String enteredPassword = passwordInput.getText().toString().trim();
+        loginButton.setOnClickListener(v -> {
+            String enteredUsername = usernameInput.getText().toString().trim();
+            String enteredPassword = passwordInput.getText().toString().trim();
 
-                if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
-                    Toast.makeText(AdminMainActivity.this, "Vul alle velden in", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                db.collection("users")
-                        .whereEqualTo("username", enteredUsername)
-                        .whereEqualTo("password", enteredPassword)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                QuerySnapshot result = task.getResult();
-                                if (!result.isEmpty()) {
-                                    Toast.makeText(AdminMainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(AdminMainActivity.this, CrudMainActivityUsers.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(AdminMainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(AdminMainActivity.this, "Fout bij het inloggen: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+            if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
+                Toast.makeText(AdminMainActivity.this, "Vul alle velden in", Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
-    }
 
-    public void onClickStart(View view)
-    {
-        Intent intent = new Intent(AdminMainActivity.this, UserMainActivity.class);
-        startActivity(intent);
+            db.collection("users")
+                    .whereEqualTo("username", enteredUsername)
+                    .whereEqualTo("password", enteredPassword)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot result = task.getResult();
+                            if (!result.isEmpty()) {
+                                Toast.makeText(AdminMainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AdminMainActivity.this, CrudMainActivityObjects.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(AdminMainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(AdminMainActivity.this, "Fout bij het inloggen: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+
+        goBack.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminMainActivity.this, UserMainActivity.class);
+            startActivity(intent);
+        });
     }
 }

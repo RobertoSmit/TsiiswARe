@@ -44,6 +44,8 @@ class AR_Activity : AppCompatActivity() {
     lateinit var cameraManager: CameraManager
     lateinit var textureView: TextureView
     lateinit var model: SsdMobilenetV11Metadata1
+    lateinit var correctQuestions: Number
+    lateinit var wrongQuestions: Number
 
     private val client = OkHttpClient()
 
@@ -56,9 +58,13 @@ class AR_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ar_view)
-        get_permission()
 
         category = intent.getStringExtra("category")
+
+        if (category == "quiz") {
+            correctQuestions = intent.getIntExtra("correctQuestions", 0)
+            wrongQuestions = intent.getIntExtra("wrongQuestions", 0)
+        }
 
         val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
         btnLogoffAR.setOnClickListener {
@@ -137,19 +143,6 @@ class AR_Activity : AppCompatActivity() {
         }, handler)
     }
 
-    fun get_permission() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 101)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            get_permission()
-        }
-    }
-
     private fun showPopup(label: String) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_ar, null)
@@ -172,6 +165,10 @@ class AR_Activity : AppCompatActivity() {
             val intent = Intent(this, InformationActivity::class.java)
             intent.putExtra("label", label)
             intent.putExtra("category", category)
+            if (category == "quiz") {
+                intent.putExtra("correctQuestions", correctQuestions)
+                intent.putExtra("wrongQuestions", wrongQuestions)
+            }
             startActivity(intent)
         }
 

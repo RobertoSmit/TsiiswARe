@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -30,15 +28,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InformationActivity extends AppCompatActivity {
     ProgressBar pb;
     FirebaseFirestore db;
     String label = null;
     String category = null;
-    TextView quizQuestion, progressNum, progressMax;
+    TextView quizQuestion, title, information, progressNum, progressMax;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4;
+    Integer correctQuestions, wrongQuestions;
 
     String correctAnswer;
     Integer totalQuestions;
@@ -61,16 +61,87 @@ public class InformationActivity extends AppCompatActivity {
 
         label = getIntent().getStringExtra("label");
         category = getIntent().getStringExtra("category");
+        if (Objects.equals(category, "Quiz")) {
+            correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
+            wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
+
+        }
 
         switch (category) {
             case "Quiz":
                 setContentView(R.layout.activity_main_informationview_quiz);
+                answer1 = findViewById(R.id.answer_1);
+                answer2 = findViewById(R.id.answer_2);
+                answer3 = findViewById(R.id.answer_3);
+                answer4 = findViewById(R.id.answer_4);
+                quizQuestion = findViewById(R.id.question);
+
+                // Answer OnClickListeners
+                answer1.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer1.getText().toString())) {
+                        // Correct answer
+                        answer1.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
+                        questionProgress += 1;
+                        progressBar(questionProgress);
+                    } else {
+                        // Wrong answer
+                        answer1.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
+                    }
+                    goBackToARView();
+                });
+
+                answer2.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer2.getText().toString())) {
+                        // Correct answer
+                        answer2.setBackgroundColor(Color.GREEN);
+                        questionProgress += 1;
+                        progressBar(questionProgress);
+                    } else {
+                        // Wrong answer
+                        answer2.setBackgroundColor(Color.RED);
+                    }
+                    goBackToARView();
+                });
+
+                answer3.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer3.getText().toString())) {
+                        // Correct answer
+                        answer3.setBackgroundColor(Color.GREEN);
+                        questionProgress += 1;
+                        progressBar(questionProgress);
+                    } else {
+                        // Wrong answer
+                        answer3.setBackgroundColor(Color.RED);
+                    }
+                    goBackToARView();
+                });
+
+                answer4.setOnClickListener(v -> {
+                    if (correctAnswer.equals(answer4.getText().toString())) {
+                        // Correct answer
+                        answer4.setBackgroundColor(Color.GREEN);
+                        questionProgress += 1;
+                        progressBar(questionProgress);
+                    } else {
+                        // Wrong answer
+                        answer4.setBackgroundColor(Color.RED);
+                    }
+                    goBackToARView();
+                });
                 break;
             case "Text + Video":
                 setContentView(R.layout.activity_main_informationview_text_video);
+                title = findViewById(R.id.titleTextVideo);
+                title.setText("Text + Video: " + label);
+                information = findViewById(R.id.informationText);
+                information.setText("Loading...");
                 break;
             case "Video":
                 setContentView(R.layout.activity_main_informationview_video);
+                title = findViewById(R.id.textViewVideo);
+                title.setText("Video: " + label);
                 break;
             default:
                 setContentView(R.layout.ar_view);
@@ -80,82 +151,16 @@ public class InformationActivity extends AppCompatActivity {
         progressNum = findViewById(R.id.progressNumber);
         progressMax = findViewById(R.id.progressMax);
         gobackButton = findViewById(R.id.go_back);
-        answer1 = findViewById(R.id.answer_1);
-        answer2 = findViewById(R.id.answer_2);
-        answer3 = findViewById(R.id.answer_3);
-        answer4 = findViewById(R.id.answer_4);
-        quizQuestion = findViewById(R.id.question);
         webView = findViewById(R.id.webView);
+        gobackButton = findViewById(R.id.go_back);
         getObjectInformation(label, category);
 
-        //setQuizProgress();
+        gobackButton.setOnClickListener(v -> goBackToARView());
 
         gobackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goBackToARView();
-            }
-        });
-
-        // Answer OnClickListeners
-        answer1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (correctAnswer.equals(answer1.getText().toString())) {
-                    // Correct answer
-                    answer1.setBackgroundColor(Color.GREEN);
-                    questionProgress += 1;
-                    progressBar(questionProgress);
-
-                } else {
-                    // Wrong answer
-                    answer1.setBackgroundColor(Color.RED);
-                }
-            }
-        });
-
-        answer2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (correctAnswer.equals(answer2.getText().toString())) {
-                    // Correct answer
-                    answer2.setBackgroundColor(Color.GREEN);
-                    questionProgress += 1;
-                    progressBar(questionProgress);
-                } else {
-                    // Wrong answer
-                    answer2.setBackgroundColor(Color.RED);
-                }
-            }
-        });
-
-        answer3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (correctAnswer.equals(answer3.getText().toString())) {
-                    // Correct answer
-                    answer3.setBackgroundColor(Color.GREEN);
-                    questionProgress += 1;
-                    progressBar(questionProgress);
-                } else {
-                    // Wrong answer
-                    answer3.setBackgroundColor(Color.RED);
-                }
-            }
-        });
-
-        answer4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (correctAnswer.equals(answer4.getText().toString())) {
-                    // Correct answer
-                    answer4.setBackgroundColor(Color.GREEN);
-                    questionProgress += 1;
-                    progressBar(questionProgress);
-                } else {
-                    // Wrong answer
-                    answer4.setBackgroundColor(Color.RED);
-                }
             }
         });
     }
@@ -177,7 +182,6 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("correct_answer")
                     );
 
-                    if (category.equals("Quiz")) {
                         webView.getSettings().setJavaScriptEnabled(true);
                         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                         webView.setWebViewClient(new WebViewClient());
@@ -205,30 +209,20 @@ public class InformationActivity extends AppCompatActivity {
                             }
                         });
 
-                        quizQuestion.setText(arobject.getQuestion());
-                        answer1.setText(arobject.getAnswers().get(0));
-                        answer2.setText(arobject.getAnswers().get(1));
-                        answer3.setText(arobject.getAnswers().get(2));
-                        answer4.setText(arobject.getAnswers().get(3));
+                        if (category.equals("Quiz")) {
+                            quizQuestion.setText(arobject.getQuestion());
+                            answer1.setText(arobject.getAnswers().get(0));
+                            answer2.setText(arobject.getAnswers().get(1));
+                            answer3.setText(arobject.getAnswers().get(2));
+                            answer4.setText(arobject.getAnswers().get(3));
 
-                        correctAnswer = arobject.getCorrectAnswer();
-
-                        // Counts how many records are in the object table.
-                        AggregateQuery queryCount = objectItems.count();
-                        queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
-                                if(task.isSuccessful())
-                                {
-                                    AggregateQuerySnapshot snapshot = task.getResult();
-                                    totalQuestions = Integer.parseInt(String.valueOf(snapshot.getCount()));
-                                    progressMax.setText(String.valueOf(totalQuestions));
-                                }
-                            }
-                        });
+                            correctAnswer = arobject.getCorrectAnswer();
+                        }
+                        if (category.equals("Text + Video")) {
+                            information.setText(arobject.getDescription());
+                        }
                     }
                 }
-            }
         });
     }
 
@@ -256,6 +250,12 @@ public class InformationActivity extends AppCompatActivity {
 
     private void goBackToARView() {
         Intent intent = new Intent(this, AR_Activity.class);
+        intent.putExtra("label", label);
+        intent.putExtra("category", category);
+        if (category.equals("Quiz")) {
+            intent.putExtra("correctQuestions", correctQuestions);
+            intent.putExtra("wrongQuestions", wrongQuestions);
+        }
         startActivity(intent);
     }
 }

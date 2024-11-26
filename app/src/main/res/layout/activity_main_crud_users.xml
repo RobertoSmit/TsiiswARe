@@ -21,30 +21,32 @@
 
     <ImageView
         android:id="@+id/titleImageUsers"
-        android:layout_width="382dp"
-        android:layout_height="214dp"
+        android:layout_width="380dp"
+        android:layout_height="220dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="663dp"
+        android:layout_width="720dp"
         android:layout_height="381dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="212dp"
+        android:background="#54000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/btnCreateUsers"
             android:layout_width="500dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/yellow"
             android:text="Gebruiker aanmaken"
             android:textColor="@android:color/black"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
@@ -56,7 +58,6 @@
             android:layout_height="58dp"
             android:layout_margin="16dp"
             android:background="@drawable/rounded_edittext_background"
-            android:drawableStart="@drawable/userr"
             android:drawablePadding="8dp"
             android:hint="Gebruikersnaam"
             android:padding="12dp"
@@ -71,7 +72,6 @@
             android:layout_margin="16dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_edittext_background"
-            android:drawableStart="@drawable/lockr"
             android:drawablePadding="8dp"
             android:hint="Wachtwoord"
             android:inputType="textPassword"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:text="Gebruiker aanmaken"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="48sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/etUsername"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,11 +108,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="658dp"
-        android:layout_height="461dp"
-        android:layout_marginTop="628dp"
+        android:layout_width="720dp"
+        android:layout_height="305dp"
+        android:layout_marginTop="604dp"
+        android:background="#54000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.387"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -123,7 +124,7 @@
             android:text="Gebruiker verwijderen"
             android:textAlignment="textStart"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="48sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/spinnerUsers"
             app:layout_constraintEnd_toEndOf="parent"
@@ -145,41 +146,45 @@
         <Button
             android:id="@+id/btnDeleteUsers"
             android:layout_width="500dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:backgroundTint="@color/yellow"
             android:text="Verwijder gebruiker"
             android:textColor="@android:color/black"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.512"
+            app:layout_constraintHorizontal_bias="0.514"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.844" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnLogoffUsers"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
         android:backgroundTint="#E41F1F"
         android:text="Uitloggen"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintHorizontal_bias="0.024"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.012" />
 
     <Button
         android:id="@+id/btnGoToObject"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
         android:backgroundTint="@color/yellow"
         android:text="Object"
         android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.038"
+        app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.012" />

@@ -18,43 +18,44 @@
 
     <ImageView
         android:id="@+id/titleImageVideo"
-        android:layout_width="380dp"
-        android:layout_height="220dp"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.013" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardViewVideo"
-        android:layout_width="700dp"
-        android:layout_height="460dp"
+        android:layout_width="497dp"
+        android:layout_height="344dp"
         android:background="@drawable/rounded_edittext_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.341">
+        app:layout_constraintVertical_bias="0.499">
 
         <WebView
             android:id="@+id/webView"
-            android:layout_width="660dp"
-            android:layout_height="390dp"
+            android:layout_width="474dp"
+            android:layout_height="272dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.555"
+            app:layout_constraintHorizontal_bias="0.489"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.29" />
+            app:layout_constraintVertical_bias="0.768" />
 
         <Button
             android:id="@+id/resetVideobtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="536dp"
-            android:layout_marginBottom="342dp"
+            android:layout_marginEnd="356dp"
+            android:layout_marginBottom="276dp"
             android:backgroundTint="@color/yellow"
             android:text="Reset Video"
             android:textColor="@color/black"
@@ -72,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.988" />
+            app:layout_constraintVertical_bias="0.013" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,9 +86,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.013" />
+        app:layout_constraintVertical_bias="0.031" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

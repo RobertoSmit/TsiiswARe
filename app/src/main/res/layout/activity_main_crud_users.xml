@@ -23,24 +23,26 @@
         android:id="@+id/titleImageUsers"
         android:layout_width="380dp"
         android:layout_height="220dp"
+        android:layout_marginTop="56dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="720dp"
-        android:layout_height="381dp"
-        android:layout_marginTop="212dp"
+        android:layout_width="576dp"
+        android:layout_height="375dp"
+        android:layout_marginTop="364dp"
         android:background="#54000000"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/btnCreateUsers"
-            android:layout_width="500dp"
+            android:layout_width="380dp"
             android:layout_height="60dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/yellow"
@@ -54,7 +56,7 @@
 
         <EditText
             android:id="@+id/etUsername"
-            android:layout_width="500dp"
+            android:layout_width="380dp"
             android:layout_height="58dp"
             android:layout_margin="16dp"
             android:background="@drawable/rounded_edittext_background"
@@ -67,7 +69,7 @@
 
         <EditText
             android:id="@+id/etPassword"
-            android:layout_width="500dp"
+            android:layout_width="380dp"
             android:layout_height="58dp"
             android:layout_margin="16dp"
             android:layout_marginBottom="10dp"
@@ -82,7 +84,7 @@
 
         <Spinner
             android:id="@+id/spinnerRole"
-            android:layout_width="500dp"
+            android:layout_width="380dp"
             android:layout_height="58dp"
             android:layout_margin="16dp"
             android:layout_marginBottom="30dp"
@@ -108,12 +110,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="720dp"
-        android:layout_height="305dp"
-        android:layout_marginTop="604dp"
+        android:layout_width="576dp"
+        android:layout_height="301dp"
+        android:layout_marginTop="756dp"
         android:background="#54000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

@@ -34,25 +34,27 @@
 
     <ImageView
         android:id="@+id/titleImageUsers"
-        android:layout_width="380dp"
-        android:layout_height="220dp"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.033" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="714dp"
+        android:layout_width="487dp"
         android:layout_height="415dp"
         android:background="#54000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.353">
+        app:layout_constraintVertical_bias="0.527">
 
         <TextView
             android:id="@+id/textView"
@@ -70,7 +72,7 @@
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="500dp"
+            android:layout_width="431dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:background="@drawable/rounded_edittext_background"
@@ -87,7 +89,7 @@
 
         <EditText
             android:id="@+id/username"
-            android:layout_width="500dp"
+            android:layout_width="431dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:background="@drawable/rounded_edittext_background"
@@ -103,7 +105,7 @@
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="500dp"
+            android:layout_width="431dp"
             android:layout_height="60dp"
             android:backgroundTint="@color/yellow"
             android:text="Login"

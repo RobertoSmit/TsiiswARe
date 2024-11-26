@@ -19,37 +19,36 @@
 
     <ImageView
         android:id="@+id/titleImageEndQuiz"
-        android:layout_width="380dp"
-        android:layout_height="220dp"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardViewEndQuiz"
-        android:layout_width="700dp"
-        android:layout_height="850dp"
+        android:layout_width="487dp"
+        android:layout_height="670dp"
         android:background="@drawable/rounded_edittext_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639">
+        app:layout_constraintVertical_bias="0.786">
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="328dp"
-            android:layout_height="386dp"
+            android:layout_width="222dp"
+            android:layout_height="259dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.74"
+            app:layout_constraintHorizontal_bias="0.732"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.37"
+            app:layout_constraintVertical_bias="0.391"
             app:srcCompat="@drawable/happy_mouse" />
 
         <TextView
@@ -81,27 +80,28 @@
 
         <TextView
             android:id="@+id/eindeQuizEmailText"
-            android:layout_width="592dp"
-            android:layout_height="67dp"
+            android:layout_width="458dp"
+            android:layout_height="54dp"
             android:text="Krijg uw resultaten in uw email:"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.275"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.729" />
+            app:layout_constraintVertical_bias="0.73" />
 
         <TextView
             android:id="@+id/eindeQuizGoedText"
             android:layout_width="136dp"
             android:layout_height="69dp"
-            android:layout_marginTop="268dp"
+            android:layout_marginTop="224dp"
             android:text="Goed: "
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.129"
+            app:layout_constraintHorizontal_bias="0.051"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,22 +109,22 @@
             android:id="@+id/eindeQuizFoutText"
             android:layout_width="134dp"
             android:layout_height="60dp"
-            android:layout_marginTop="356dp"
+            android:layout_marginTop="304dp"
             android:text="Fout:"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.129"
+            app:layout_constraintHorizontal_bias="0.045"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/to_start_btn"
-            android:layout_width="500dp"
-            android:layout_height="80dp"
+            android:layout_width="362dp"
+            android:layout_height="75dp"
             android:backgroundTint="@color/green"
             android:text="Naar start"
-            android:textSize="20sp"
+            android:textSize="26sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -133,18 +133,18 @@
 
         <Button
             android:id="@+id/btnSendEmail"
-            android:layout_width="201dp"
-            android:layout_height="74dp"
+            android:layout_width="132dp"
+            android:layout_height="56dp"
             android:backgroundTint="@color/yellow"
-            android:text="Verstuur email"
+            android:text="Verstuur"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.979"
+            app:layout_constraintHorizontal_bias="0.954"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.819" />
+            app:layout_constraintVertical_bias="0.82" />
 
         <View
             android:id="@+id/divider"
@@ -158,15 +158,15 @@
 
         <EditText
             android:id="@+id/visitorsEmailAdress"
-            android:layout_width="433dp"
-            android:layout_height="69dp"
+            android:layout_width="334dp"
+            android:layout_height="52dp"
             android:ems="10"
             android:hint="uw email"
             android:inputType="textEmailAddress"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.203"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.815" />

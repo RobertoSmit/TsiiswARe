@@ -46,6 +46,7 @@ class AR_Activity : AppCompatActivity() {
     lateinit var model: SsdMobilenetV11Metadata1
     lateinit var correctQuestions: Number
     lateinit var wrongQuestions: Number
+    lateinit var questionProgress: Number
 
     private val client = OkHttpClient()
 
@@ -64,6 +65,7 @@ class AR_Activity : AppCompatActivity() {
         if (category == "quiz") {
             correctQuestions = intent.getIntExtra("correctQuestions", 0)
             wrongQuestions = intent.getIntExtra("wrongQuestions", 0)
+            questionProgress = intent.getIntExtra("questionProgress", 0);
         }
 
         val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
@@ -168,6 +170,7 @@ class AR_Activity : AppCompatActivity() {
             if (category == "quiz") {
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
+                intent.putExtra("questionProgress", questionProgress)
             }
             startActivity(intent)
         }

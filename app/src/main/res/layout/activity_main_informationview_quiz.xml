@@ -30,13 +30,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardViewQuiz"
         android:layout_width="700dp"
-        android:layout_height="937dp"
+        android:layout_height="925dp"
         android:background="@drawable/rounded_edittext_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.844">
+        app:layout_constraintVertical_bias="0.5">
 
         <WebView
             android:id="@+id/webView"
@@ -133,7 +133,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.522" />
-
+        <Button
+            android:id="@+id/go_back"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/red"
+            android:text="Terug"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.025"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.975" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="wrap_content"
@@ -253,18 +265,3 @@
         </ProgressBar>
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <Button
-        android:id="@+id/go_back"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/red"
-        android:text="Terug"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.013" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>

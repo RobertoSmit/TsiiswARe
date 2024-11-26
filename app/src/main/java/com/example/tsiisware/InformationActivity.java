@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -35,25 +37,14 @@ public class InformationActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String label = null;
     String category = null;
-    TextView quizQuestion, title, information, progressNum, progressMax;
+    TextView quizQuestion, progressNum, progressMax, title, information;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4;
-    Integer correctQuestions, wrongQuestions;
-
     String correctAnswer;
-    Integer totalQuestions;
-    Integer questionProgress;
+    Integer totalQuestions, questionProgress, correctQuestions, wrongQuestions;
     Float progress;
     Float progressPercentage;
-
-    private final int quizEndDelay = 2500; //2.5 seconds delay. The delay indicates the time the splashscreen is visible.
-
-   /* public final void setQuizProgress()
-    {
-        int progress = (questionProgress / totalQuestions) * 100;
-        pb.setProgress(progress);
-
-    }*/
+    private final int quizEndDelay = 3000; //3 seconds delay. The delay indicates the time the splashscreen is visible.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +55,7 @@ public class InformationActivity extends AppCompatActivity {
         if (Objects.equals(category, "Quiz")) {
             correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
             wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
-
+            questionProgress = getIntent().getIntExtra("questionProgress", 0);
         }
 
         switch (category) {
@@ -75,6 +66,9 @@ public class InformationActivity extends AppCompatActivity {
                 answer3 = findViewById(R.id.answer_3);
                 answer4 = findViewById(R.id.answer_4);
                 quizQuestion = findViewById(R.id.question);
+                pb = findViewById(R.id.progressBar);
+                progressNum = findViewById(R.id.progressNumber);
+                progressMax = findViewById(R.id.progressMax);
 
                 // Answer OnClickListeners
                 answer1.setOnClickListener(v -> {
@@ -82,12 +76,14 @@ public class InformationActivity extends AppCompatActivity {
                         // Correct answer
                         answer1.setBackgroundColor(Color.GREEN);
                         correctQuestions++;
-                        questionProgress += 1;
+                        questionProgress++;
                         progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer1.setBackgroundColor(Color.RED);
                         wrongQuestions++;
+                        questionProgress++;
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -96,11 +92,13 @@ public class InformationActivity extends AppCompatActivity {
                     if (correctAnswer.equals(answer2.getText().toString())) {
                         // Correct answer
                         answer2.setBackgroundColor(Color.GREEN);
-                        questionProgress += 1;
+                        questionProgress++;
                         progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer2.setBackgroundColor(Color.RED);
+                        questionProgress++;
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -109,11 +107,13 @@ public class InformationActivity extends AppCompatActivity {
                     if (correctAnswer.equals(answer3.getText().toString())) {
                         // Correct answer
                         answer3.setBackgroundColor(Color.GREEN);
-                        questionProgress += 1;
+                        questionProgress++;
                         progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer3.setBackgroundColor(Color.RED);
+                        questionProgress++;
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -127,6 +127,8 @@ public class InformationActivity extends AppCompatActivity {
                     } else {
                         // Wrong answer
                         answer4.setBackgroundColor(Color.RED);
+                        questionProgress++;
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -147,22 +149,12 @@ public class InformationActivity extends AppCompatActivity {
                 setContentView(R.layout.ar_view);
         }
 
-        pb = findViewById(R.id.progressBar);
-        progressNum = findViewById(R.id.progressNumber);
-        progressMax = findViewById(R.id.progressMax);
         gobackButton = findViewById(R.id.go_back);
         webView = findViewById(R.id.webView);
         gobackButton = findViewById(R.id.go_back);
         getObjectInformation(label, category);
 
         gobackButton.setOnClickListener(v -> goBackToARView());
-
-        gobackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goBackToARView();
-            }
-        });
     }
 
     private void getObjectInformation(String label, String category) {
@@ -217,25 +209,43 @@ public class InformationActivity extends AppCompatActivity {
                             answer4.setText(arobject.getAnswers().get(3));
 
                             correctAnswer = arobject.getCorrectAnswer();
+
+                            // Counts how many records are in the object table.
+                            AggregateQuery queryCount = objectItems.count();
+                            queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AggregateQuerySnapshot> task1) {
+                                    if(task1.isSuccessful())
+                                    {
+                                        AggregateQuerySnapshot snapshot = task1.getResult();
+                                        if (snapshot != null) {
+                                            totalQuestions = (int) snapshot.getCount();
+                                            progressMax.setText(String.valueOf(totalQuestions));
+                                        }
+                                    }
+                                    else {
+                                        Log.e("Error", "Task failed: ", task1.getException());
+                                    }
+                                }
+                            });
                         }
                         if (category.equals("Text + Video")) {
                             information.setText(arobject.getDescription());
                         }
                     }
                 }
-        });
-    }
-
+            });
+        }
     private void progressBar(Integer questionProgress)
     {
         progressNum.setText(String.valueOf(questionProgress));
 
         // Calculates the percentage of the progress
-        progress = (float) questionProgress/ (float) totalQuestions;
+        progress = (float) questionProgress / (float) totalQuestions;
         progressPercentage = progress * 100;
         Integer roundedPercentage = Math.round(progressPercentage); //Rounds the percentage to a whole number.
         pb.setProgress(roundedPercentage);
-        if(questionProgress == totalQuestions)
+        if(questionProgress.equals(totalQuestions))
         {
             // Executes delayed code without affecting the content view
             new Handler().postDelayed(new Runnable() {
@@ -255,6 +265,7 @@ public class InformationActivity extends AppCompatActivity {
         if (category.equals("Quiz")) {
             intent.putExtra("correctQuestions", correctQuestions);
             intent.putExtra("wrongQuestions", wrongQuestions);
+            intent.putExtra("questionProgress", 1);
         }
         startActivity(intent);
     }

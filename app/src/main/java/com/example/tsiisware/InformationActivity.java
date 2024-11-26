@@ -1,6 +1,8 @@
 package com.example.tsiisware;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,9 +55,10 @@ public class InformationActivity extends AppCompatActivity {
         label = getIntent().getStringExtra("label");
         category = getIntent().getStringExtra("category");
         if (Objects.equals(category, "Quiz")) {
+            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
             correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
             wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
-            questionProgress = getIntent().getIntExtra("questionProgress", 0);
+            questionProgress = sharedPreferences.getInt("questionProgress", 0);
         }
 
         switch (category) {
@@ -69,6 +72,29 @@ public class InformationActivity extends AppCompatActivity {
                 pb = findViewById(R.id.progressBar);
                 progressNum = findViewById(R.id.progressNumber);
                 progressMax = findViewById(R.id.progressMax);
+
+                db = FirebaseFirestore.getInstance();
+                CollectionReference objectItems =  db.collection("objects");
+                // Counts how many records are in the object table.
+                AggregateQuery queryCount = objectItems.count();
+                queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AggregateQuerySnapshot> task1) {
+                        if(task1.isSuccessful())
+                        {
+                            AggregateQuerySnapshot snapshot = task1.getResult();
+                            if (snapshot != null) {
+                                totalQuestions = (int) snapshot.getCount();
+                                progressMax.setText(String.valueOf(totalQuestions));
+
+                                progressBar(questionProgress);
+                            }
+                        }
+                        else {
+                            Log.e("Error", "Task failed: ", task1.getException());
+                        }
+                    }
+                });
 
                 // Answer OnClickListeners
                 answer1.setOnClickListener(v -> {
@@ -85,7 +111,7 @@ public class InformationActivity extends AppCompatActivity {
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    goBackToARView();
+                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
                 });
 
                 answer2.setOnClickListener(v -> {
@@ -100,7 +126,7 @@ public class InformationActivity extends AppCompatActivity {
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    goBackToARView();
+                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
                 });
 
                 answer3.setOnClickListener(v -> {
@@ -115,7 +141,7 @@ public class InformationActivity extends AppCompatActivity {
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    goBackToARView();
+                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
                 });
 
                 answer4.setOnClickListener(v -> {
@@ -130,7 +156,7 @@ public class InformationActivity extends AppCompatActivity {
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    goBackToARView();
+                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
                 });
                 break;
             case "Text + Video":
@@ -209,25 +235,6 @@ public class InformationActivity extends AppCompatActivity {
                             answer4.setText(arobject.getAnswers().get(3));
 
                             correctAnswer = arobject.getCorrectAnswer();
-
-                            // Counts how many records are in the object table.
-                            AggregateQuery queryCount = objectItems.count();
-                            queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AggregateQuerySnapshot> task1) {
-                                    if(task1.isSuccessful())
-                                    {
-                                        AggregateQuerySnapshot snapshot = task1.getResult();
-                                        if (snapshot != null) {
-                                            totalQuestions = (int) snapshot.getCount();
-                                            progressMax.setText(String.valueOf(totalQuestions));
-                                        }
-                                    }
-                                    else {
-                                        Log.e("Error", "Task failed: ", task1.getException());
-                                    }
-                                }
-                            });
                         }
                         if (category.equals("Text + Video")) {
                             information.setText(arobject.getDescription());
@@ -243,10 +250,15 @@ public class InformationActivity extends AppCompatActivity {
         // Calculates the percentage of the progress
         progress = (float) questionProgress / (float) totalQuestions;
         progressPercentage = progress * 100;
-        Integer roundedPercentage = Math.round(progressPercentage); //Rounds the percentage to a whole number.
+        int roundedPercentage = Math.round(progressPercentage); //Rounds the percentage to a whole number.
         pb.setProgress(roundedPercentage);
         if(questionProgress.equals(totalQuestions))
         {
+//            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putInt("questionProgress", 0);
+//            editor.apply();
+
             // Executes delayed code without affecting the content view
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -259,13 +271,16 @@ public class InformationActivity extends AppCompatActivity {
     }
 
     private void goBackToARView() {
-        Intent intent = new Intent(this, AR_Activity.class);
+        Intent intent = new Intent(InformationActivity.this, AR_Activity.class);
         intent.putExtra("label", label);
         intent.putExtra("category", category);
         if (category.equals("Quiz")) {
+            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
             intent.putExtra("correctQuestions", correctQuestions);
             intent.putExtra("wrongQuestions", wrongQuestions);
-            intent.putExtra("questionProgress", 1);
+            editor.putInt("questionProgress", questionProgress);
+            editor.apply();
         }
         startActivity(intent);
     }

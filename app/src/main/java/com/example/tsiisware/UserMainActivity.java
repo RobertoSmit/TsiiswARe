@@ -1,6 +1,8 @@
 package com.example.tsiisware;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -104,6 +106,10 @@ public class UserMainActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     Intent intent = new Intent(UserMainActivity.this, AR_Activity.class);
                     intent.putExtra("category", category);
+                    SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("questionProgress", 0);
+                    editor.apply();
                     startActivity(intent);
                 })
                 .addOnFailureListener(e -> {

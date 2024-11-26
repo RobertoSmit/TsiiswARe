@@ -3,8 +3,13 @@ package com.example.tsiisware
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
@@ -21,10 +26,15 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.tsiisware.ml.SsdMobilenetV11Metadata1
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
@@ -65,7 +75,6 @@ class AR_Activity : AppCompatActivity() {
         if (category == "quiz") {
             correctQuestions = intent.getIntExtra("correctQuestions", 0)
             wrongQuestions = intent.getIntExtra("wrongQuestions", 0)
-            questionProgress = intent.getIntExtra("questionProgress", 0);
         }
 
         val btnLogoffAR = findViewById<Button>(R.id.btnLogoffAR)
@@ -164,13 +173,12 @@ class AR_Activity : AppCompatActivity() {
             popupVisible = false
         }
         popupGo.setOnClickListener {
-            val intent = Intent(this, InformationActivity::class.java)
+            val intent = Intent(this@AR_Activity, InformationActivity::class.java)
             intent.putExtra("label", label)
             intent.putExtra("category", category)
             if (category == "quiz") {
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
-                intent.putExtra("questionProgress", questionProgress)
             }
             startActivity(intent)
         }

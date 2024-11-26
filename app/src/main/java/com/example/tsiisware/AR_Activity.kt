@@ -3,15 +3,13 @@ package com.example.tsiisware
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.*
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
+import android.hardware.camera2.*
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
+import android.util.Range
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Surface
@@ -50,7 +48,7 @@ class AR_Activity : AppCompatActivity() {
     private val client = OkHttpClient()
 
     private val interval: Long = 500 // 500 milliseconds
-    private var category: String? = null;
+    private var category: String? = null
     private var currentDetectionIndex: Int = 0
     private var detectionCount: Int = 0
     private var popupVisible: Boolean = false
@@ -94,7 +92,7 @@ class AR_Activity : AppCompatActivity() {
             }
 
             override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
-                detectAndDraw()
+                    handler.post { detectAndDraw() } // Run detection on a background thread
             }
         }
 
@@ -128,6 +126,7 @@ class AR_Activity : AppCompatActivity() {
 
                 val captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                 captureRequest.addTarget(surface)
+                captureRequest.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(30, 30))
 
                 cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(p0: CameraCaptureSession) {
@@ -153,7 +152,7 @@ class AR_Activity : AppCompatActivity() {
         popupWindow.showAtLocation(findViewById(R.id.arView), Gravity.CENTER, 0, 0)
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = popupText.text.toString() + " " + label
+        popupText.text = popupText.text.toString()+ "" + label
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
@@ -248,16 +247,20 @@ class AR_Activity : AppCompatActivity() {
         if (scores[index] > 0.5) {
             paint.color = Color.YELLOW
             paint.style = Paint.Style.STROKE
-            canvas.drawRect(RectF(locations.get(x+1)*w, locations.get(x)*h, locations.get(x+3)*w, locations.get(x+2)*h), paint)
+            canvas.drawRect(RectF(locations[x + 1] * w, locations[x] * h, locations[x + 3] * w, locations[x + 2] * h), paint)
             paint.style = Paint.Style.FILL
-            canvas.drawText(labels.get(classes.get(index).toInt()), locations.get(x+1)*w, locations.get(x)*h, paint)
+            canvas.drawText(labels[classes[index].toInt()], locations[x + 1] * w, locations[x] * h, paint)
             if (!popupVisible) {
-                showPopup(labels.get(classes.get(index).toInt()))
+                runOnUiThread {
+                    showPopup(labels[classes[index].toInt()])
+                }
                 popupVisible = true
             }
         }
 
-        imageView.setImageBitmap(mutable)
+        runOnUiThread {
+            imageView.setImageBitmap(mutable)
+        }
     }
 
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
@@ -272,4 +275,3 @@ class AR_Activity : AppCompatActivity() {
         return byteArray
     }
 }
-

@@ -1,14 +1,25 @@
+// AR_Activity.kt
 package com.example.tsiisware
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
-import android.hardware.camera2.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraCaptureSession
+import android.hardware.camera2.CameraDevice
+import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CaptureRequest
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
+import android.util.Log
 import android.util.Range
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,10 +30,17 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.tsiisware.ml.SsdMobilenetV11Metadata1
-import okhttp3.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
@@ -44,20 +62,43 @@ class AR_Activity : AppCompatActivity() {
     lateinit var model: SsdMobilenetV11Metadata1
     lateinit var correctQuestions: Number
     lateinit var wrongQuestions: Number
+    lateinit var scannedLabels: List<String>
+    lateinit var objects: CollectionReference
 
     private val client = OkHttpClient()
-
+    private var db: FirebaseFirestore? = null
+    private val scannedObjects = mutableListOf<String>()
     private val interval: Long = 500 // 500 milliseconds
     private var category: String? = null
     private var currentDetectionIndex: Int = 0
     private var detectionCount: Int = 0
     private var popupVisible: Boolean = false
+    private var dblabels = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ar_view)
 
+        db = FirebaseFirestore.getInstance()
+        //get all document names from the collection
+        objects = db!!.collection("objects")
+
+        getAllDocumentNames()
+
         category = intent.getStringExtra("category")
+
+        }
+
+    fun getAllDocumentNames() {
+        objects.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val documentNames = task.result?.documents?.map { it.id }
+                Log.d("FirestoreSuccess", "Document names: $documentNames")
+                documentNames?.forEach { dblabels.add(it) }
+            } else {
+                Log.w("FirestoreError", "Error getting documents.", task.exception)
+            }
+        }
 
         if (category == "quiz") {
             correctQuestions = intent.getIntExtra("correctQuestions", 0)
@@ -92,11 +133,16 @@ class AR_Activity : AppCompatActivity() {
             }
 
             override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
-                    handler.post { detectAndDraw() } // Run detection on a background thread
+                handler.post { detectAndDraw() } // Run detection on a background thread
             }
         }
 
         cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+        // Retrieve scanned objects from SharedPreferences
+        val sharedPreferences = getSharedPreferences("quizData", MODE_PRIVATE)
+        val scannedObjectsSet = sharedPreferences.getStringSet("scanned_objects", emptySet()) ?: emptySet()
+        scannedObjects.addAll(scannedObjectsSet)
 
         // Schedule detection switching
         val mainHandler = Handler(Looper.getMainLooper())
@@ -152,7 +198,7 @@ class AR_Activity : AppCompatActivity() {
         popupWindow.showAtLocation(findViewById(R.id.arView), Gravity.CENTER, 0, 0)
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = popupText.text.toString()+ "" + label
+        popupText.text = popupText.text.toString() + " " + label
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
@@ -161,17 +207,26 @@ class AR_Activity : AppCompatActivity() {
             popupVisible = false
         }
         popupGo.setOnClickListener {
+            if (!scannedObjects.contains(label)) {
+                // Save scanned objects to SharedPreferences
+                val sharedPreferences = getSharedPreferences("scanned_objects_prefs", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putStringSet("scanned_objects", scannedObjects.toSet())
+                editor.apply()
+            }
             val intent = Intent(this, InformationActivity::class.java)
             intent.putExtra("label", label)
             intent.putExtra("category", category)
             if (category == "quiz") {
+                intent.putExtra("gescandeObjecten", label)
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
+                intent.putStringArrayListExtra("scannedLabels", ArrayList(scannedObjects))
             }
             startActivity(intent)
         }
-
     }
+
     private fun startImageUpload() {
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
@@ -244,22 +299,63 @@ class AR_Activity : AppCompatActivity() {
         val index = currentDetectionIndex % scores.size
         val x = index * 4
 
-        if (scores[index] > 0.5) {
-            paint.color = Color.YELLOW
-            paint.style = Paint.Style.STROKE
-            canvas.drawRect(RectF(locations[x + 1] * w, locations[x] * h, locations[x + 3] * w, locations[x + 2] * h), paint)
-            paint.style = Paint.Style.FILL
-            canvas.drawText(labels[classes[index].toInt()], locations[x + 1] * w, locations[x] * h, paint)
-            if (!popupVisible) {
-                runOnUiThread {
-                    showPopup(labels[classes[index].toInt()])
-                }
-                popupVisible = true
-            }
-        }
 
-        runOnUiThread {
-            imageView.setImageBitmap(mutable)
+        if (scores[index] > 0.5) {
+            val detectedLabel = labels[classes[index].toInt()]
+            val isInDatabase = dblabels.contains(detectedLabel)
+            Log.d("detectedLabel", detectedLabel)
+            Log.d("Objects", dblabels.toString())
+            Log.d("isInDatabase", isInDatabase.toString())
+            if (isInDatabase) {
+                if (!scannedObjects.contains(detectedLabel)) {
+                    paint.color = Color.YELLOW
+                    paint.style = Paint.Style.STROKE
+                    canvas.drawRect(
+                        RectF(
+                            locations[x + 1] * w,
+                            locations[x] * h,
+                            locations[x + 3] * w,
+                            locations[x + 2] * h
+                        ), paint
+                    )
+                    paint.style = Paint.Style.FILL
+                    canvas.drawText(
+                        labels[classes[index].toInt()],
+                        locations[x + 1] * w,
+                        locations[x] * h,
+                        paint
+                    )
+                    if (!popupVisible) {
+                        runOnUiThread {
+                            showPopup(labels[classes[index].toInt()])
+                        }
+                        popupVisible = true
+                    }
+                } else {
+//                Add a checkmark in the box to indicate that the object has already been scanned
+                    paint.color = Color.GREEN
+                    paint.style = Paint.Style.STROKE
+                    canvas.drawRect(
+                        RectF(
+                            locations[x + 1] * w,
+                            locations[x] * h,
+                            locations[x + 3] * w,
+                            locations[x + 2] * h
+                        ), paint
+                    )
+                    paint.style = Paint.Style.FILL
+                    canvas.drawText(
+                        labels[classes[index].toInt()],
+                        locations[x + 1] * w,
+                        locations[x] * h,
+                        paint
+                    )
+                }
+            }
+
+            runOnUiThread {
+                imageView.setImageBitmap(mutable)
+            }
         }
     }
 

@@ -93,10 +93,24 @@
             app:layout_constraintVertical_bias="0.73" />
 
         <TextView
+            android:id="@+id/numGoedTxt"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="228dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.21"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/eindeQuizGoedText"
             android:layout_width="136dp"
-            android:layout_height="69dp"
-            android:layout_marginTop="224dp"
+            android:layout_height="68dp"
+            android:layout_marginTop="228dp"
             android:text="Goed: "
             android:textSize="30sp"
             android:textStyle="bold"
@@ -114,12 +128,26 @@
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.045"
+            app:layout_constraintHorizontal_bias="0.056"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/numFoutTxt"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="304dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.21"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/to_start_btn"
+            android:id="@+id/btnToStart"
             android:layout_width="362dp"
             android:layout_height="75dp"
             android:backgroundTint="@color/green"

@@ -1,32 +1,55 @@
 package com.example.tsiisware;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 
 public class InformationActivity extends AppCompatActivity {
+    ProgressBar pb;
     FirebaseFirestore db;
-    String label = null, category = null;
-    TextView quizQuestion, title, information;
+    String label = null;
+    String category = null;
+    List<String> scannedObjects = new ArrayList<>();
+    TextView quizQuestion, progressNum, progressMax, title, information;
     WebView webView;
-    Button gobackButton, answer1, answer2, answer3, answer4, reloadButton;
-    Integer correctQuestions, wrongQuestions;
-    Boolean isClicked = false;
+    Button gobackButton, answer1, answer2, answer3, answer4;
     String correctAnswer;
+    Integer totalQuestions, questionProgress, correctQuestions, wrongQuestions;
+    Float progress;
+    Float progressPercentage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +58,11 @@ public class InformationActivity extends AppCompatActivity {
         label = getIntent().getStringExtra("label");
         category = getIntent().getStringExtra("category");
         if (Objects.equals(category, "Quiz")) {
-            correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
-            wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
+            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+            correctQuestions = sharedPreferences.getInt("correctQuestions", 0);
+            wrongQuestions = sharedPreferences.getInt("wrongQuestions", 0);
+            questionProgress = sharedPreferences.getInt("questionProgress", 0);
+            scannedObjects = new ArrayList<>(sharedPreferences.getStringSet("scanned_objects", Collections.emptySet()));
         }
 
         switch (category) {
@@ -47,6 +73,30 @@ public class InformationActivity extends AppCompatActivity {
                 answer3 = findViewById(R.id.answer_3);
                 answer4 = findViewById(R.id.answer_4);
                 quizQuestion = findViewById(R.id.question);
+                pb = findViewById(R.id.progressBar);
+                progressNum = findViewById(R.id.progressNumber);
+                progressMax = findViewById(R.id.progressMax);
+
+                db = FirebaseFirestore.getInstance();
+                CollectionReference objectItems = db.collection("objects");
+                // Counts how many records are in the object table.
+                AggregateQuery queryCount = objectItems.count();
+                queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AggregateQuerySnapshot> task1) {
+                        if (task1.isSuccessful()) {
+                            AggregateQuerySnapshot snapshot = task1.getResult();
+                            if (snapshot != null) {
+                                totalQuestions = (int) snapshot.getCount();
+                                progressMax.setText(String.valueOf(totalQuestions));
+
+                                progressBar(questionProgress);
+                            }
+                        } else {
+                            Log.e("Error", "Task failed: ", task1.getException());
+                        }
+                    }
+                });
 
                 // Answer OnClickListeners
                 answer1.setOnClickListener(v -> {
@@ -54,10 +104,16 @@ public class InformationActivity extends AppCompatActivity {
                         // Correct answer
                         answer1.setBackgroundColor(Color.GREEN);
                         correctQuestions++;
+                        questionProgress++;
+                        scannedObjects.add(label);
+                        progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer1.setBackgroundColor(Color.RED);
                         wrongQuestions++;
+                        questionProgress++;
+                        scannedObjects.add(label);
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -66,9 +122,17 @@ public class InformationActivity extends AppCompatActivity {
                     if (correctAnswer.equals(answer2.getText().toString())) {
                         // Correct answer
                         answer2.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
+                        questionProgress++;
+                        scannedObjects.add(label);
+                        progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer2.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
+                        questionProgress++;
+                        scannedObjects.add(label);
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -77,9 +141,17 @@ public class InformationActivity extends AppCompatActivity {
                     if (correctAnswer.equals(answer3.getText().toString())) {
                         // Correct answer
                         answer3.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
+                        questionProgress++;
+                        scannedObjects.add(label);
+                        progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer3.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
+                        questionProgress++;
+                        scannedObjects.add(label);
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -88,9 +160,15 @@ public class InformationActivity extends AppCompatActivity {
                     if (correctAnswer.equals(answer4.getText().toString())) {
                         // Correct answer
                         answer4.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
+                        questionProgress++;
+                        progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer4.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
+                        questionProgress++;
+                        progressBar(questionProgress);
                     }
                     goBackToARView();
                 });
@@ -111,28 +189,22 @@ public class InformationActivity extends AppCompatActivity {
                 setContentView(R.layout.ar_view);
         }
 
+        gobackButton = findViewById(R.id.go_back);
         webView = findViewById(R.id.webView);
         gobackButton = findViewById(R.id.go_back);
-        reloadButton = findViewById(R.id.resetVideobtn); // Ensure this is in the correct layout file
-
         getObjectInformation(label, category);
 
         gobackButton.setOnClickListener(v -> goBackToARView());
-        reloadButton.setOnClickListener(v -> reloadVideo());
-    }
-
-    private void reloadVideo() {
-        getObjectInformation(label, category);
-        isClicked = false;
     }
 
     private void getObjectInformation(String label, String category) {
         db = FirebaseFirestore.getInstance();
-        db.collection("objects").document(label).get().addOnCompleteListener(task -> {
+        CollectionReference objectItems = db.collection("objects");
+        objectItems.document(label).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"%s?rel=0&autoplay=1&showinfo=0&controls=0\" frameborder=\"0\" allowfullscreen></iframe>", document.getString("video_url"));
+//                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"%s\" frameborder=\"0\" allowfullscreen></iframe>", document.getString("video_url"));
                     ARObject arobject = new ARObject(
                             document.getString("name"),
                             document.getString("description"),
@@ -142,26 +214,22 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("correct_answer")
                     );
 
-                        webView.getSettings().setJavaScriptEnabled(true);
-                        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                        webView.setWebViewClient(new WebViewClient());
-                        webView.setWebChromeClient(new WebChromeClient());
-                        webView.loadData(iframeStructure, "text/html", "utf-8");
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                    webView.setWebViewClient(new WebViewClient());
+                    webView.setWebChromeClient(new WebChromeClient());
+                    webView.loadData(arobject.getVideoURL(), "text/html", "utf-8");
 
-                        // The user can only click once in the middle of the screen then the touch event is ignored
-
+                    // Disable user interaction
                     webView.setOnTouchListener((v, event) -> {
-                        if (isClicked) {
-                            return true;
-                        }
                         int width = webView.getWidth();
                         int height = webView.getHeight();
                         float x = event.getX();
                         float y = event.getY();
 
-                        // Define the middle area (e.g., 75% of the width and height)
-                        float middleAreaWidth = width * 0.20f;
-                        float middleAreaHeight = height * 0.25f;
+                        // Define the middle area (e.g., 20% of the width and height)
+                        float middleAreaWidth = width * 0.75f;
+                        float middleAreaHeight = height * 0.75f;
                         float middleXStart = (width - middleAreaWidth) / 2;
                         float middleYStart = (height - middleAreaHeight) / 2;
 
@@ -169,36 +237,63 @@ public class InformationActivity extends AppCompatActivity {
                                 y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
                             return false; // Allow touch event
                         } else {
-                            isClicked = true;
                             return true; // Ignore touch event
                         }
                     });
 
-                        if (category.equals("Quiz")) {
-                            quizQuestion.setText(arobject.getQuestion());
-                            answer1.setText(arobject.getAnswers().get(0));
-                            answer2.setText(arobject.getAnswers().get(1));
-                            answer3.setText(arobject.getAnswers().get(2));
-                            answer4.setText(arobject.getAnswers().get(3));
+                    if (category.equals("Quiz")) {
+                        quizQuestion.setText(arobject.getQuestion());
+                        answer1.setText(arobject.getAnswers().get(0));
+                        answer2.setText(arobject.getAnswers().get(1));
+                        answer3.setText(arobject.getAnswers().get(2));
+                        answer4.setText(arobject.getAnswers().get(3));
 
-                            correctAnswer = arobject.getCorrectAnswer();
-                        }
-                        if (category.equals("Text + Video")) {
-                            information.setText(arobject.getDescription());
-                        }
+                        correctAnswer = arobject.getCorrectAnswer();
+                    }
+                    if (category.equals("Text + Video")) {
+                        information.setText(arobject.getDescription());
                     }
                 }
+            }
         });
     }
 
+    private void progressBar(Integer questionProgress) {
+        progressNum.setText(String.valueOf(questionProgress));
+
+        // Calculates the percentage of the progress
+        progress = (float) questionProgress / (float) totalQuestions;
+        progressPercentage = progress * 100;
+        int roundedPercentage = Math.round(progressPercentage); //Rounds the percentage to a whole number.
+        pb.setProgress(roundedPercentage);
+    }
+
     private void goBackToARView() {
-        Intent intent = new Intent(this, AR_Activity.class);
-        intent.putExtra("label", label);
-        intent.putExtra("category", category);
-        if (category.equals("Quiz")) {
-            intent.putExtra("correctQuestions", correctQuestions);
-            intent.putExtra("wrongQuestions", wrongQuestions);
+        if (!questionProgress.equals(totalQuestions))
+        {
+            Intent intent = new Intent(InformationActivity.this, AR_Activity.class);
+            intent.putExtra("label", label);
+            intent.putExtra("category", category);
+            if (category.equals("Quiz")) {
+                SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("correctQuestions", correctQuestions);
+                editor.putInt("wrongQuestions", wrongQuestions);
+                editor.putInt("questionProgress", questionProgress);
+                editor.putStringSet("scanned_objects", Set.copyOf(scannedObjects));
+                        editor.apply();
+            }
+            startActivity(intent);
         }
-        startActivity(intent);
+        else{
+            Intent endQuizView = new Intent(InformationActivity.this, EndQuizActivity.class);
+            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("correctQuestions", correctQuestions);
+            editor.putInt("wrongQuestions", wrongQuestions);
+            editor.putInt("questionProgress", questionProgress);
+            editor.apply();
+            startActivity(endQuizView);
+        }
     }
 }

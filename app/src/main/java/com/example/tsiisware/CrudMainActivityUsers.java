@@ -12,16 +12,20 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class CrudMainActivityUsers extends AppCompatActivity {
 
-    Button btnGoToObjects = findViewById(R.id.btnGoToObjects);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_crud_users);
-
+        Button btnGoToObjects = findViewById(R.id.btnGoToObjects);
+        Button btnLogout = findViewById(R.id.btnLogOutUsers);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
         viewPager.setAdapter(new ViewPagerAdapterUsers(this));
+
+        btnLogout.setOnClickListener(v -> {
+            startActivity(new Intent(CrudMainActivityUsers.this, AdminMainActivity.class));
+        });
 
         btnGoToObjects.setOnClickListener(v -> {
             startActivity(new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class));

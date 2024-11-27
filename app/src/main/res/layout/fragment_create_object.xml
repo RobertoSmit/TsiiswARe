@@ -60,17 +60,31 @@
         app:layout_constraintTop_toBottomOf="@id/etObjectVideoURL" />
 
     <EditText
-        android:id="@+id/etAnswer4"
+        android:id="@+id/etAnswer1"
+        android:layout_width="85dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:hint="Answer 1"
+        android:paddingLeft="10px"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerAnswers"
+        app:layout_constraintEnd_toStartOf="@+id/etAnswer2"
+        app:layout_constraintTop_toBottomOf="@+id/etQuestion"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/etAnswer2"
         android:layout_width="85dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/rounded_edittext_background"
-        android:hint="Answer 4"
+        android:hint="Answer 2"
         android:paddingLeft="10px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.832"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerAnswers"
+        app:layout_constraintEnd_toStartOf="@+id/etAnswer3"
         app:layout_constraintTop_toBottomOf="@+id/etQuestion"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -79,45 +93,27 @@
         android:layout_width="85dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/rounded_edittext_background"
         android:hint="Answer 3"
         android:paddingLeft="10px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.613"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerAnswers"
+        app:layout_constraintEnd_toStartOf="@+id/etAnswer4"
         app:layout_constraintTop_toBottomOf="@+id/etQuestion"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/etAnswer1"
-        android:layout_width="85dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:hint="Answer 1"
-        android:paddingLeft="10px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.191"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etQuestion"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/etAnswer2"
+        android:id="@+id/etAnswer4"
         android:layout_width="85dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_edittext_background"
-        android:hint="Answer 2"
+        android:hint="Answer 4"
         android:paddingLeft="10px"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.406"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etQuestion"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
 
     <Spinner
         android:id="@+id/spinnerAnswers"
@@ -153,6 +149,7 @@
         android:layout_marginTop="17dp"
         android:layout_marginBottom="8dp"
         android:text="Quiz"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/etQuestion"
@@ -166,6 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="9dp"
         android:text="Standaard Informatie"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/etObjectName"
@@ -180,12 +178,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
         android:text="Correcte Antwoord"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/spinnerAnswers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.212"
+        app:layout_constraintHorizontal_bias="0.121"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAnswer4" />
+        app:layout_constraintTop_toBottomOf="@+id/etAnswer4"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

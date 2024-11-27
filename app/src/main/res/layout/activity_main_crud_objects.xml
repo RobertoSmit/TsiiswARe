@@ -1,5 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/crudLayoutObjects"
@@ -19,30 +18,72 @@
 
     <ImageView
         android:id="@+id/titleImageObjects"
-        android:layout_width="178dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="380dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayoutObjects"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/btnGoToUsers"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/yellow"
+        android:text="Gebruikers"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.981"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleImageObjects" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <Button
+        android:id="@+id/btnLogOutObjects"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/red"
+        android:text="Uitloggen"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerObjects"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tabLayoutObjects"
+        android:layout_width="400dp"
+        android:layout_height="676dp"
+        android:background="#54000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayoutObjects"
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.viewpager2.widget.ViewPager2>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutObjects"
+        android:layout_width="400dp"
+        android:layout_height="46dp"
+        android:background="#54000000"
+        android:contentDescription="TabLayoutObjects"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backgroundImageObjects"
+        app:layout_constraintVertical_bias="0.224"
+        app:tabIndicatorColor="@color/yellow"
+        app:tabTextColor="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

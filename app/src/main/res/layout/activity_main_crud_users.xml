@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,6 +18,21 @@
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="0dp" />
 
+    <Button
+        android:id="@+id/btnGoToObjects"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/yellow"
+        android:text="Objects"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02" />
+
     <ImageView
         android:id="@+id/titleImageUsers"
         android:layout_width="380dp"
@@ -30,165 +44,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="576dp"
-        android:layout_height="375dp"
-        android:layout_marginTop="364dp"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="400dp"
+        android:layout_height="46dp"
         android:background="#54000000"
+        android:contentDescription="User CRUD Tab Layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/titleImageUsers"
+        app:tabIndicatorColor="@color/yellow"
+        app:tabTextColor="@color/white" />
 
-        <Button
-            android:id="@+id/btnCreateUsers"
-            android:layout_width="380dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/yellow"
-            android:text="Gebruiker aanmaken"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="380dp"
-            android:layout_height="58dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:drawablePadding="8dp"
-            android:hint="Gebruikersnaam"
-            android:padding="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/etPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="380dp"
-            android:layout_height="58dp"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:drawablePadding="8dp"
-            android:hint="Wachtwoord"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/spinnerRole"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Spinner
-            android:id="@+id/spinnerRole"
-            android:layout_width="380dp"
-            android:layout_height="58dp"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:hint="Kies een rol"
-            app:layout_constraintBottom_toTopOf="@+id/btnCreateUsers"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/textViewCreateUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gebruiker aanmaken"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/etUsername"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="576dp"
-        android:layout_height="301dp"
-        android:layout_marginTop="756dp"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="400dp"
+        android:layout_height="223dp"
         android:background="#54000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.472"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textViewDeleteUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gebruiker verwijderen"
-            android:textAlignment="textStart"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/spinnerUsers"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/spinnerUsers"
-            android:layout_width="495dp"
-            android:layout_height="66dp"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/rounded_edittext_background"
-            android:hint="Selecteer gebruiker om te verwijderen"
-            app:layout_constraintBottom_toTopOf="@+id/btnDeleteUsers"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btnDeleteUsers"
-            android:layout_width="500dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/yellow"
-            android:text="Verwijder gebruiker"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.514"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.844" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/btnLogoffUsers"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:backgroundTint="#E41F1F"
-        android:text="Uitloggen"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.024"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.012" />
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btnGoToObject"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/yellow"
-        android:text="Object"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.012" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-

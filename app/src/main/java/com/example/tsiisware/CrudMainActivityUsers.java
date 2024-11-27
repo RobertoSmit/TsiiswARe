@@ -1,115 +1,43 @@
 package com.example.tsiisware;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class CrudMainActivityUsers extends AppCompatActivity {
-    FirebaseFirestore db;
-    EditText etUsername, etPassword;
-    Spinner spinnerRole, spinnerUsers;
-    Button btnCreate, btnDelete, btnLogoff, btnGoToObjects;
 
+    Button btnGoToObjects = findViewById(R.id.btnGoToObjects);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_crud_users);
 
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
 
-        db = FirebaseFirestore.getInstance();
+        viewPager.setAdapter(new ViewPagerAdapterUsers(this));
 
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        spinnerRole = findViewById(R.id.spinnerRole);
-        spinnerUsers = findViewById(R.id.spinnerUsers);
-        btnCreate = findViewById(R.id.btnCreateUsers);
-        btnDelete = findViewById(R.id.btnDeleteUsers);
-        btnLogoff = findViewById(R.id.btnLogoffUsers);
-        btnGoToObjects = findViewById(R.id.btnGoToObject);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.roles_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRole.setAdapter(adapter);
-
-        loadUsersIntoSpinner();
-
-        btnLogoff.setOnClickListener(v -> {
-           Intent intent = new Intent(CrudMainActivityUsers.this, AdminMainActivity.class);
-           startActivity(intent);
-        });
         btnGoToObjects.setOnClickListener(v -> {
-            Intent intent = new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class);
-            startActivity(intent);
+            startActivity(new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class));
         });
 
-        btnCreate.setOnClickListener(v -> {
-            String username = etUsername.getText().toString();
-            String password = etPassword.getText().toString();
-            String role = spinnerRole.getSelectedItem().toString();
-
-            Map<String, Object> user = new HashMap<>();
-            user.put("username", username);
-            user.put("password", password);
-            user.put("role", role);
-
-            db.collection("users")
-                    .document(username)
-                    .set(user)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(CrudMainActivityUsers.this, "Gebruiker succesvol aangemaakt", Toast.LENGTH_SHORT).show();
-                        loadUsersIntoSpinner();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(CrudMainActivityUsers.this, "Fout bij het aanmaken van gebruiker", Toast.LENGTH_SHORT).show();
-                    });
-        });
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedUser = spinnerUsers.getSelectedItem().toString();
-
-                db.collection("users").document(selectedUser)
-                        .delete()
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(CrudMainActivityUsers.this, "Gebruiker succesvol verwijderd", Toast.LENGTH_SHORT).show();
-                            loadUsersIntoSpinner();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(CrudMainActivityUsers.this, "Fout bij het verwijderen van gebruiker", Toast.LENGTH_SHORT).show();
-                        });
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("Create User");
+                    tab.setContentDescription("Create User");
+                    break;
+                case 1:
+                    tab.setText("Delete User");
+                    tab.setContentDescription("Delete User");
+                    break;
             }
-        });
-    }
-
-    private void loadUsersIntoSpinner() {
-        db.collection("users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                ArrayAdapter<String> usersAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-                usersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                for (DocumentSnapshot document : task.getResult()) {
-                    String username = document.getString("username");
-                    usersAdapter.add(username);
-                }
-
-                spinnerUsers.setAdapter(usersAdapter);
-            } else {
-                Toast.makeText(CrudMainActivityUsers.this, "Fout bij het ophalen van gebruikers", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).attach();
     }
 }

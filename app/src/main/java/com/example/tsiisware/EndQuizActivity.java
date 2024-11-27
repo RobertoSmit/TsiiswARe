@@ -1,24 +1,37 @@
 package com.example.tsiisware;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class EndQuizActivity extends AppCompatActivity {
-    Integer aantal_goed = null;
-    Integer aantal_fout = null;
+    Integer correctQuestions;
+    Integer wrongQuestions;
     String visitorsEmail = null;
     Button btnSendEmail;
+
+    TextView numGoedTxt, numFoutTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_quiz_end);
+        numGoedTxt = findViewById(R.id.numGoedTxt);
+        numFoutTxt = findViewById(R.id.numFoutTxt);
 
-        aantal_goed = getIntent().getIntExtra("aantal_goed", 0);
-        aantal_fout = getIntent().getIntExtra("aantal_fout", 0);
+        SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+        correctQuestions = sharedPreferences.getInt("correctQuestions", 0);
+        wrongQuestions = sharedPreferences.getInt("wrongQuestions", 0);
+        numGoedTxt.setText(String.valueOf(correctQuestions));
+        numFoutTxt.setText(String.valueOf(wrongQuestions));
+
+
         btnSendEmail = findViewById(R.id.btnSendEmail);
         visitorsEmail = findViewById(R.id.visitorsEmailAdress).toString();
 

@@ -56,8 +56,8 @@ public class InformationActivity extends AppCompatActivity {
         category = getIntent().getStringExtra("category");
         if (Objects.equals(category, "Quiz")) {
             SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
-            correctQuestions = getIntent().getIntExtra("correctQuestions", 0);
-            wrongQuestions = getIntent().getIntExtra("wrongQuestions", 0);
+            correctQuestions = sharedPreferences.getInt("correctQuestions", 0);
+            wrongQuestions = sharedPreferences.getInt("wrongQuestions", 0);
             questionProgress = sharedPreferences.getInt("questionProgress", 0);
         }
 
@@ -74,14 +74,13 @@ public class InformationActivity extends AppCompatActivity {
                 progressMax = findViewById(R.id.progressMax);
 
                 db = FirebaseFirestore.getInstance();
-                CollectionReference objectItems =  db.collection("objects");
+                CollectionReference objectItems = db.collection("objects");
                 // Counts how many records are in the object table.
                 AggregateQuery queryCount = objectItems.count();
                 queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<AggregateQuerySnapshot> task1) {
-                        if(task1.isSuccessful())
-                        {
+                        if (task1.isSuccessful()) {
                             AggregateQuerySnapshot snapshot = task1.getResult();
                             if (snapshot != null) {
                                 totalQuestions = (int) snapshot.getCount();
@@ -89,8 +88,7 @@ public class InformationActivity extends AppCompatActivity {
 
                                 progressBar(questionProgress);
                             }
-                        }
-                        else {
+                        } else {
                             Log.e("Error", "Task failed: ", task1.getException());
                         }
                     }
@@ -111,52 +109,58 @@ public class InformationActivity extends AppCompatActivity {
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
+                    goBackToARView();
                 });
 
                 answer2.setOnClickListener(v -> {
                     if (correctAnswer.equals(answer2.getText().toString())) {
                         // Correct answer
                         answer2.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
                         questionProgress++;
                         progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer2.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
+                    goBackToARView();
                 });
 
                 answer3.setOnClickListener(v -> {
                     if (correctAnswer.equals(answer3.getText().toString())) {
                         // Correct answer
                         answer3.setBackgroundColor(Color.GREEN);
+                        correctQuestions++;
                         questionProgress++;
                         progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer3.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
+                    goBackToARView();
                 });
 
                 answer4.setOnClickListener(v -> {
                     if (correctAnswer.equals(answer4.getText().toString())) {
                         // Correct answer
                         answer4.setBackgroundColor(Color.GREEN);
-                        questionProgress += 1;
+                        correctQuestions++;
+                        questionProgress++;
                         progressBar(questionProgress);
                     } else {
                         // Wrong answer
                         answer4.setBackgroundColor(Color.RED);
+                        wrongQuestions++;
                         questionProgress++;
                         progressBar(questionProgress);
                     }
-                    if(!questionProgress.equals(totalQuestions)) { goBackToARView(); }
+                    goBackToARView();
                 });
                 break;
             case "Text + Video":
@@ -185,8 +189,8 @@ public class InformationActivity extends AppCompatActivity {
 
     private void getObjectInformation(String label, String category) {
         db = FirebaseFirestore.getInstance();
-        CollectionReference objectItems =  db.collection("objects");
-               objectItems.document(label).get().addOnCompleteListener(task -> {
+        CollectionReference objectItems = db.collection("objects");
+        objectItems.document(label).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -200,51 +204,51 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("correct_answer")
                     );
 
-                        webView.getSettings().setJavaScriptEnabled(true);
-                        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                        webView.setWebViewClient(new WebViewClient());
-                        webView.setWebChromeClient(new WebChromeClient());
-                        webView.loadData(arobject.getVideoURL(), "text/html", "utf-8");
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                    webView.setWebViewClient(new WebViewClient());
+                    webView.setWebChromeClient(new WebChromeClient());
+                    webView.loadData(arobject.getVideoURL(), "text/html", "utf-8");
 
-                        // Disable user interaction
-                        webView.setOnTouchListener((v, event) -> {
-                            int width = webView.getWidth();
-                            int height = webView.getHeight();
-                            float x = event.getX();
-                            float y = event.getY();
+                    // Disable user interaction
+                    webView.setOnTouchListener((v, event) -> {
+                        int width = webView.getWidth();
+                        int height = webView.getHeight();
+                        float x = event.getX();
+                        float y = event.getY();
 
-                            // Define the middle area (e.g., 20% of the width and height)
-                            float middleAreaWidth = width * 0.75f;
-                            float middleAreaHeight = height * 0.75f;
-                            float middleXStart = (width - middleAreaWidth) / 2;
-                            float middleYStart = (height - middleAreaHeight) / 2;
+                        // Define the middle area (e.g., 20% of the width and height)
+                        float middleAreaWidth = width * 0.75f;
+                        float middleAreaHeight = height * 0.75f;
+                        float middleXStart = (width - middleAreaWidth) / 2;
+                        float middleYStart = (height - middleAreaHeight) / 2;
 
-                            if (x >= middleXStart && x <= (middleXStart + middleAreaWidth) &&
-                                    y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
-                                return false; // Allow touch event
-                            } else {
-                                return true; // Ignore touch event
-                            }
-                        });
-
-                        if (category.equals("Quiz")) {
-                            quizQuestion.setText(arobject.getQuestion());
-                            answer1.setText(arobject.getAnswers().get(0));
-                            answer2.setText(arobject.getAnswers().get(1));
-                            answer3.setText(arobject.getAnswers().get(2));
-                            answer4.setText(arobject.getAnswers().get(3));
-
-                            correctAnswer = arobject.getCorrectAnswer();
+                        if (x >= middleXStart && x <= (middleXStart + middleAreaWidth) &&
+                                y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
+                            return false; // Allow touch event
+                        } else {
+                            return true; // Ignore touch event
                         }
-                        if (category.equals("Text + Video")) {
-                            information.setText(arobject.getDescription());
-                        }
+                    });
+
+                    if (category.equals("Quiz")) {
+                        quizQuestion.setText(arobject.getQuestion());
+                        answer1.setText(arobject.getAnswers().get(0));
+                        answer2.setText(arobject.getAnswers().get(1));
+                        answer3.setText(arobject.getAnswers().get(2));
+                        answer4.setText(arobject.getAnswers().get(3));
+
+                        correctAnswer = arobject.getCorrectAnswer();
+                    }
+                    if (category.equals("Text + Video")) {
+                        information.setText(arobject.getDescription());
                     }
                 }
-            });
-        }
-    private void progressBar(Integer questionProgress)
-    {
+            }
+        });
+    }
+
+    private void progressBar(Integer questionProgress) {
         progressNum.setText(String.valueOf(questionProgress));
 
         // Calculates the percentage of the progress
@@ -252,36 +256,33 @@ public class InformationActivity extends AppCompatActivity {
         progressPercentage = progress * 100;
         int roundedPercentage = Math.round(progressPercentage); //Rounds the percentage to a whole number.
         pb.setProgress(roundedPercentage);
-        if(questionProgress.equals(totalQuestions))
-        {
-//            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            editor.putInt("questionProgress", 0);
-//            editor.apply();
-
-            // Executes delayed code without affecting the content view
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run(){
-                    // Prepare End Quiz Activity
-                    setContentView(R.layout.activity_main_quiz_end);
-                }
-            }, quizEndDelay);
-        }
     }
 
     private void goBackToARView() {
-        Intent intent = new Intent(InformationActivity.this, AR_Activity.class);
-        intent.putExtra("label", label);
-        intent.putExtra("category", category);
-        if (category.equals("Quiz")) {
+        if (!questionProgress.equals(totalQuestions))
+        {
+            Intent intent = new Intent(InformationActivity.this, AR_Activity.class);
+            intent.putExtra("label", label);
+            intent.putExtra("category", category);
+            if (category.equals("Quiz")) {
+                SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("correctQuestions", correctQuestions);
+                editor.putInt("wrongQuestions", wrongQuestions);
+                editor.putInt("questionProgress", questionProgress);
+                editor.apply();
+            }
+            startActivity(intent);
+        }
+        else{
+            Intent endQuizView = new Intent(InformationActivity.this, EndQuizActivity.class);
             SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            intent.putExtra("correctQuestions", correctQuestions);
-            intent.putExtra("wrongQuestions", wrongQuestions);
+            editor.putInt("correctQuestions", correctQuestions);
+            editor.putInt("wrongQuestions", wrongQuestions);
             editor.putInt("questionProgress", questionProgress);
             editor.apply();
+            startActivity(endQuizView);
         }
-        startActivity(intent);
     }
 }

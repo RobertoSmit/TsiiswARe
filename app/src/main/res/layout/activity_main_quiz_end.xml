@@ -94,10 +94,35 @@
 
         <TextView
             android:id="@+id/eindeQuizGoedText"
-            android:layout_width="136dp"
-            android:layout_height="69dp"
+            android:layout_width="95dp"
+            android:layout_height="50dp"
             android:layout_marginTop="268dp"
-            android:text="Goed: "
+            android:text="@string/goed"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.129"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/numGoedTxt"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="268dp"
+            android:text="@string/zero"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.265"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/eindeQuizFoutText"
+            android:layout_width="95dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="356dp"
+            android:text="@string/fout"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -106,15 +131,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/eindeQuizFoutText"
-            android:layout_width="134dp"
-            android:layout_height="60dp"
+            android:id="@+id/numFoutTxt"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="356dp"
-            android:text="Fout:"
+            android:text="@string/zero"
+            android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.129"
+            app:layout_constraintHorizontal_bias="0.265"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -123,7 +149,7 @@
             android:layout_width="500dp"
             android:layout_height="80dp"
             android:backgroundTint="@color/green"
-            android:text="Naar start"
+            android:text="@string/naar_start"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

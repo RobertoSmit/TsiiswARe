@@ -49,7 +49,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 
 class AR_Activity : AppCompatActivity() {
-
     lateinit var labels: List<String>
     val paint = Paint()
     lateinit var imageProcessor: ImageProcessor
@@ -198,7 +197,7 @@ class AR_Activity : AppCompatActivity() {
         popupWindow.showAtLocation(findViewById(R.id.arView), Gravity.CENTER, 0, 0)
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = popupText.text.toString() + " " + label
+        popupText.text = popupText.text.toString() + label
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)

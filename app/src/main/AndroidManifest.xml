@@ -47,6 +47,9 @@
         <activity android:name=".CrudMainActivityObjects"
             android:exported="true" />
 
+        <activity android:name=".CameraCreateObjectActivity"
+            android:exported="true" />
+
         <activity
             android:name=".AR_Activity"
             android:exported="true">

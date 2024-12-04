@@ -4,6 +4,8 @@
     <string name="naar_start">Naar start</string>
     <string name="goed">Goed:</string>
     <string name="zero">0</string>
+    <string name="correctAntw">Correct geantwoord!</string>
+    <string name="foutAntw">Fout geantwoord!</string>
     <string-array name="categories">
         <item>Maak een keuze</item>
         <item>Quiz</item>

@@ -9,18 +9,20 @@ public class ARObject {
     private String question;
     private List<String> answers;
     private String correctAnswer;
+    private String explanation;
 
     public ARObject() {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public ARObject(String name, String description, String video, String question, List<String> answers, String correctAnswer) {
+    public ARObject(String name, String description, String video, String question, List<String> answers, String correctAnswer, String explanation) {
         this.name = name;
         this.description = description;
         this.video = video;
         this.question = question;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
+        this.explanation = explanation;
     }
 
     public String getName() {
@@ -43,7 +45,7 @@ public class ARObject {
         return answers;
     }
 
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
+    public String getCorrectAnswer() { return correctAnswer;}
+
+    public String getExplanation() { return explanation; }
 }

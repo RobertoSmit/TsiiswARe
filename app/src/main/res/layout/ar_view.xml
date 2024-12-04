@@ -24,7 +24,7 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:backgroundTint="@color/red"
-        android:text="Uitloggen"
+        android:text="@string/logoff"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

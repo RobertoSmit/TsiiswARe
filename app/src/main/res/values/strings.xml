@@ -1,9 +1,53 @@
 <resources>
     <string name="app_name">TsiiswARe</string>
+    <string name="visitor">Bezoeker</string>
+    <string name="admin_login">Admin Login</string>
+    <string name="password">Wachtwoord</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="login">Login</string>
+    <string name="users">Gebruikers</string>
+    <string name="logoff">Uitloggen</string>
+    <string name="tablayoutobjects">TabLayoutObjects</string>
+    <string name="go_back">Ga terug</string>
+    <string name="stop_scannen">Stop scannen</string>
+    <string name="aantal_scans">Aantal scans: 0</string>
+    <string name="objects">Objects</string>
+    <string name="user_crud_tab_layout">User CRUD Tab Layout</string>
+    <string name="answer_4">Antwoord 4</string>
+    <string name="answer_1">Antwoord 1</string>
+    <string name="answer_2">Antwoord 2</string>
+    <string name="answer_3">Antwoord 3</string>
+    <string name="question">Vraag</string>
+    <string name="reset_video">Reset Video</string>
+    <string name="progress">Progress</string>
+    <string name="title">Title</string>
+    <string name="information_text">Information Text</string>
+    <string name="video">Video:</string>
+    <string name="einde_quiz">Einde Quiz</string>
+    <string name="congrats">Gefeliciteerd u heeft alle vragen beantwoord!</string>
+    <string name="results">Krijg uw resultaten in uw email:</string>
+    <string name="good">Goed:</string>
+    <string name="wrong">Fout:</string>
+    <string name="to_start">Naar start</string>
+    <string name="send">Verstuur</string>
+    <string name="your_email">uw email</string>
+    <string name="admin">Admin</string>
+    <string name="enter_name">Vul uw naam in</string>
+    <string name="enter_choice">Maak een keuze</string>
+    <string name="continue_next">Ga verder</string>
+    <string name="login_visitor">Inloggen Bezoeker</string>
+    <string name="create_user">Create User</string>
+    <string name="select_object">Selecteer Object</string>
+    <string name="delete_object">Verwijder Object</string>
+    <string name="select_user">Selecteer Gebruiker</string>
+    <string name="delete_user">Verwijder Gebruiker</string>
+    <string name="popupObjectInfo">Meer weten over het object:</string>
+    <string name="close">Sluiten</string>
     <string-array name="categories">
         <item>Maak een keuze</item>
         <item>Quiz</item>
         <item>Video</item>
         <item>Text + Video</item>
     </string-array>
+
 </resources>

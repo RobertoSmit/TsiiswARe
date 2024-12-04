@@ -28,7 +28,7 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:backgroundTint="@color/red"
-        android:text="Ga terug"
+        android:text="@string/go_back"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +47,7 @@
         android:layout_marginEnd="187dp"
         android:layout_marginBottom="31dp"
         android:backgroundTint="@color/red"
-        android:text="Stop scannen"
+        android:text="@string/stop_scannen"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -66,7 +66,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="12dp"
-        android:text="Aantal scans: 0"
+        android:text="@string/aantal_scans"
         android:textColor="@color/green" />
 
 </RelativeLayout>

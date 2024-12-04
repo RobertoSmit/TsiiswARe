@@ -6,4 +6,10 @@
         <item>Video</item>
         <item>Text + Video</item>
     </string-array>
+    <string name="foutAntw">
+        Fout geantwoord!
+    </string>
+    <string name="goedAntw">
+        Goed geantwoord!
+    </string>
 </resources>

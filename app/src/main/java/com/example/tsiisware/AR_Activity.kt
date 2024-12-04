@@ -66,7 +66,7 @@ class AR_Activity : AppCompatActivity() {
 
     private val client = OkHttpClient()
     private var db: FirebaseFirestore? = null
-    private val scannedObjects = mutableListOf<String>()
+    private val scannedObjects = ArrayList<String>()
     private val interval: Long = 500 // 500 milliseconds
     private var category: String? = null
     private var currentDetectionIndex: Int = 0
@@ -77,7 +77,7 @@ class AR_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ar_view)
-
+        scannedLabels = intent.getStringArrayListExtra("scannedLabels") ?: emptyList()
         db = FirebaseFirestore.getInstance()
         //get all document names from the collection
         objects = db!!.collection("objects")
@@ -217,7 +217,8 @@ class AR_Activity : AppCompatActivity() {
             intent.putExtra("label", label)
             intent.putExtra("category", category)
             if (category == "quiz") {
-                intent.putExtra("gescandeObjecten", label)
+                intent.putStringArrayListExtra("gescandeObjecten", scannedObjects)
+                intent.putExtra("label", label)
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
                 intent.putStringArrayListExtra("scannedLabels", ArrayList(scannedObjects))

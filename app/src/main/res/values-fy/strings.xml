@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TsiiswARe</string>
+    <string name="visitor">Besiker</string>
+    <string name="admin_login">Admin Ynmeldje</string>
+    <string name="password">Wachtwurd</string>
+    <string name="username">Brûkersnamme</string>
+    <string name="login">Ynmeldje</string>
+    <string name="users">Brûkers</string>
+    <string name="logoff">Utmelde</string>
+    <string name="tablayoutobjects">TabLayoutObjekten</string>
+    <string name="go_back">Gean werom</string>
+    <string name="stop_scannen">Stopje mei skennen</string>
+    <string name="aantal_scans">Oantal scans: 0</string>
+    <string name="objects">Objekten</string>
+    <string name="user_crud_tab_layout">Brûker CRUD Tab Layout</string>
+    <string name="answer_4">Antwurd 4</string>
+    <string name="answer_1">Antwurd 1</string>
+    <string name="answer_2">Antwurd 2</string>
+    <string name="answer_3">Antwurd 3</string>
+    <string name="question">Fraach</string>
+    <string name="reset_video">Fideo opnij ynstelle</string>
+    <string name="progress">Progressje</string>
+    <string name="title">Titel</string>
+    <string name="information_text">Ynformaasje Tekst</string>
+    <string name="video">Fideo:</string>
+    <string name="einde_quiz">Ein Quiz</string>
+    <string name="congrats">Lokwinske, jo hawwe alle fragen beantwurde!</string>
+    <string name="results">Krij jo resultaten yn jo e-post:</string>
+    <string name="good">Goed:</string>
+    <string name="wrong">Ferkeard:</string>
+    <string name="to_start">Nei start</string>
+    <string name="send">Stjoer</string>
+    <string name="your_email">jo e-post</string>
+    <string name="admin">Admin</string>
+    <string name="enter_name">Folje jo namme yn</string>
+    <string name="enter_choice">Meitsje in kar</string>
+    <string name="continue_next">Gean fierder</string>
+    <string name="login_visitor">Ynmeldje Besiker</string>
+    <string name="create_user">Meitsje Brûker</string>
+    <string name="select_object">Selektearje Objekt</string>
+    <string name="delete_object">Wiskje Objekt</string>
+    <string name="select_user">Selektearje Brûker</string>
+    <string name="delete_user">Wiskje Brûker</string>
+    <string name="popupObjectInfo">Mear witte oer it objekt:</string>
+    <string name="close">Slute</string>
+
+</resources>

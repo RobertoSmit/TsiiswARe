@@ -3,7 +3,8 @@ package com.example.tsiisware;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,13 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class UserMainActivity extends AppCompatActivity {
@@ -41,11 +43,15 @@ public class UserMainActivity extends AppCompatActivity {
         spinnerCategories = findViewById(R.id.spinnerCategories);
         Button proceedButton = findViewById(R.id.proceedButton);
 
+        ImageButton dutchFlagButton = findViewById(R.id.btnDutchFlag);
+        ImageButton frisianFlagButton = findViewById(R.id.btnFrisianFlag);
+
+        dutchFlagButton.setOnClickListener(v -> setLocale("nl"));
+        frisianFlagButton.setOnClickListener(v -> setLocale("fy"));
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategories.setAdapter(adapter);
-
-        spinnerCategories.setBackgroundResource(R.color.white);
 
         spinnerCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -59,7 +65,6 @@ public class UserMainActivity extends AppCompatActivity {
             }
         });
 
-
         adminButton.setOnClickListener(v -> {
             Intent intent = new Intent(UserMainActivity.this, AdminMainActivity.class);
             startActivity(intent);
@@ -69,27 +74,30 @@ public class UserMainActivity extends AppCompatActivity {
             String name = nameInput.getText().toString().trim();
 
             if (name.length() < 2) {
-                Toast.makeText(UserMainActivity.this, "Geef een geldige naam op!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserMainActivity.this, R.string.enter_name, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (!isQuizSelected) {
-                Toast.makeText(UserMainActivity.this, "Selecteer een geldige categorie!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserMainActivity.this, R.string.enter_choice, Toast.LENGTH_SHORT).show();
             } else {
                 sendDataToFirestore();
             }
         });
+    }
 
+    private void setLocale(String langCode) {
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        getApplicationContext().createConfigurationContext(config);
 
-        View mainLayout = findViewById(R.id.main);
-        mainLayout.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (isKeyboardOpen()) {
-                    hideKeyboard(v);
-                }
-            }
-            return true;
-        });
+        // Herlaad de activiteit
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     private void sendDataToFirestore() {
@@ -118,21 +126,5 @@ public class UserMainActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     System.out.println("Error adding document: " + e.getMessage());
                 });
-    }
-
-    private boolean isKeyboardOpen() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        return imm != null && imm.isAcceptingText();
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            View currentFocus = getCurrentFocus();
-            if (currentFocus != null) {
-                imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
-                currentFocus.clearFocus();
-            }
-        }
     }
 }

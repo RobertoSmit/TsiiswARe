@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.firebase.firestore)
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.firebase:firebase-ml-modeldownloader")
     implementation("com.google.android.gms:play-services-base:17.6.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))

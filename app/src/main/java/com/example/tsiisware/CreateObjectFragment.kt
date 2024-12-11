@@ -68,10 +68,11 @@ class CreateObjectFragment : Fragment() {
                     "correct_answer" to correctAnswer.selectedItem.toString()
                 )
             )
-            val intent = Intent(activity, CameraCreateObjectActivity::class.java)
-            intent.putExtra("label", etObjectName.text.toString())
+            val intent = Intent(activity, this::class.java)
             startActivity(intent)
         }
+
+//        Make QR code and print it out.
 
         return view
     }

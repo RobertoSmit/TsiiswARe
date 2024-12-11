@@ -4,7 +4,9 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="true" />
+    <uses-feature android:name="android.hardware.camera.ar" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -64,6 +66,10 @@
             android:exported="true"
             >
         </activity>
+        <activity
+            android:name=".QR_Activity"
+            android:exported="true"
+            />
     </application>
 
 </manifest>

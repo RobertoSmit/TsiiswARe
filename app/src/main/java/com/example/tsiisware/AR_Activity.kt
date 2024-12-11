@@ -195,6 +195,7 @@ class AR_Activity : AppCompatActivity() {
 
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
         popupWindow.showAtLocation(findViewById(R.id.arView), Gravity.CENTER, 0, 0)
+        popupWindow.isOutsideTouchable = false
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
         popupText.text = popupText.text.toString() + label
@@ -287,7 +288,7 @@ class AR_Activity : AppCompatActivity() {
         val scores = outputs.scoresAsTensorBuffer.floatArray
         val numberOfDetections = outputs.numberOfDetectionsAsTensorBuffer.floatArray
 
-        var mutable = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val mutable = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(mutable)
 
         val h = mutable.height

@@ -51,7 +51,7 @@ public class InformationActivity extends AppCompatActivity {
     String category = null;
     TextView quizQuestion, progressNum, progressMax, title, information;
     WebView webView;
-    Button gobackButton, answer1, answer2, answer3, answer4;
+    Button gobackButton, answer1, answer2, answer3, answer4, resetVideo;
     String correctAnswer;
     Integer totalQuestions, questionProgress, correctQuestions, wrongQuestions;
     Float progress;
@@ -80,6 +80,7 @@ public class InformationActivity extends AppCompatActivity {
                 answer1 = findViewById(R.id.answer_1);
                 answer2 = findViewById(R.id.answer_2);
                 answer3 = findViewById(R.id.answer_3);
+                resetVideo = findViewById(R.id.resetVideobtn);
                 answer4 = findViewById(R.id.answer_4);
                 quizQuestion = findViewById(R.id.question);
                 pb = findViewById(R.id.progressBar);
@@ -188,12 +189,14 @@ public class InformationActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_main_informationview_text_video);
                 title = findViewById(R.id.titleTextVideo);
                 title.setText("Text + Video: " + label);
+                resetVideo = findViewById(R.id.resetVideobtn);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
                 break;
             case "Video":
                 setContentView(R.layout.activity_main_informationview_video);
                 title = findViewById(R.id.textViewVideo);
+                resetVideo = findViewById(R.id.resetVideobtn);
                 title.setText("Video: " + label);
                 break;
             default:
@@ -206,31 +209,34 @@ public class InformationActivity extends AppCompatActivity {
         getObjectInformation(label, category);
 
         gobackButton.setOnClickListener(v -> goBackToARView());
+        resetVideo.setOnClickListener(v -> {
+            webView.reload();
+        });
     }
 
     private void getObjectInformation(String label, String category) {
         db = FirebaseFirestore.getInstance();
         CollectionReference objectItems = db.collection("objects");
-        objectItems.document(label).get().addOnCompleteListener(task -> {
+        objectItems.document(label.toLowerCase()).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-//                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"%s\" frameborder=\"0\" allowfullscreen></iframe>", document.getString("video_url"));
                     ARObject arobject = new ARObject(
                             document.getString("name"),
                             document.getString("description"),
-                            document.getString("video"),
+                            document.getString("video_url"),
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
                             document.getString("explanation")
                     );
-
+                    Log.d("Video_url", arobject.getVideoURL().split("v=")[1]);
+                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", arobject.getVideoURL().split("v=")[1]);
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                     webView.setWebViewClient(new WebViewClient());
                     webView.setWebChromeClient(new WebChromeClient());
-                    webView.loadData(arobject.getVideoURL(), "text/html", "utf-8");
+                    webView.loadData(iframeStructure, "text/html", "utf-8");
 
                     // Disable user interaction
                     webView.setOnTouchListener((v, event) -> {
@@ -263,7 +269,7 @@ public class InformationActivity extends AppCompatActivity {
                         correctAnswer = arobject.getCorrectAnswer();
                         explainText = arobject.getExplanation();
                     }
-                    if (category.equals("Text + Video")) {
+                    else {
                         information.setText(arobject.getDescription());
                     }
                 }
@@ -326,7 +332,7 @@ public class InformationActivity extends AppCompatActivity {
     private void goBackToARView() {
         if (questionProgress < totalQuestions)
         {
-            Intent intent = new Intent(InformationActivity.this, AR_Activity.class);
+            Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
             intent.putExtra("label", label);
             intent.putStringArrayListExtra("selectedLabels", selectedLabels);
             intent.putExtra("category", category);

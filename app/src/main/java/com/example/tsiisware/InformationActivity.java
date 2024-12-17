@@ -245,11 +245,11 @@ public class InformationActivity extends AppCompatActivity {
                         float x = event.getX();
                         float y = event.getY();
 
-                        // Define the middle area (e.g., 20% of the width and height)
-                        float middleAreaWidth = width * 0.75f;
-                        float middleAreaHeight = height * 0.75f;
-                        float middleXStart = (width - middleAreaWidth) / 2;
-                        float middleYStart = (height - middleAreaHeight) / 2;
+                        // Define the middle area (e.g., 5% of the width and height)
+                        int middleAreaWidth = (int) (width * 0.05);
+                        int middleAreaHeight = (int) (height * 0.05);
+                        int middleXStart = (width - middleAreaWidth) / 2;
+                        int middleYStart = (height - middleAreaHeight) / 2;
 
                         if (x >= middleXStart && x <= (middleXStart + middleAreaWidth) &&
                                 y >= middleYStart && y <= (middleYStart + middleAreaHeight)) {
@@ -269,7 +269,7 @@ public class InformationActivity extends AppCompatActivity {
                         correctAnswer = arobject.getCorrectAnswer();
                         explainText = arobject.getExplanation();
                     }
-                    else {
+                    else if (category.equals("Text + Video")) {
                         information.setText(arobject.getDescription());
                     }
                 }
@@ -330,31 +330,38 @@ public class InformationActivity extends AppCompatActivity {
     }
 
     private void goBackToARView() {
-        if (questionProgress < totalQuestions)
-        {
-            Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
-            intent.putExtra("label", label);
-            intent.putStringArrayListExtra("selectedLabels", selectedLabels);
-            intent.putExtra("category", category);
-            if (category.equals("Quiz")) {
+        if (category.equals("Quiz")) {
+            if (questionProgress < totalQuestions) {
+                Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
+                intent.putExtra("label", label);
+                intent.putStringArrayListExtra("selectedLabels", selectedLabels);
+                intent.putExtra("category", category);
+                if (category.equals("Quiz")) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("correctQuestions", correctQuestions);
+                    editor.putInt("wrongQuestions", wrongQuestions);
+                    editor.putInt("questionProgress", questionProgress);
+                    editor.apply();
+                }
+                startActivity(intent);
+            } else {
+                Intent endQuizView = new Intent(InformationActivity.this, EndQuizActivity.class);
                 SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("correctQuestions", correctQuestions);
                 editor.putInt("wrongQuestions", wrongQuestions);
                 editor.putInt("questionProgress", questionProgress);
                 editor.apply();
+                startActivity(endQuizView);
             }
-            startActivity(intent);
         }
-        else{
-            Intent endQuizView = new Intent(InformationActivity.this, EndQuizActivity.class);
-            SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("correctQuestions", correctQuestions);
-            editor.putInt("wrongQuestions", wrongQuestions);
-            editor.putInt("questionProgress", questionProgress);
-            editor.apply();
-            startActivity(endQuizView);
+        else {
+            Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
+            intent.putExtra("label", label);
+            intent.putStringArrayListExtra("selectedLabels", selectedLabels);
+            intent.putExtra("category", category);
+            startActivity(intent);
         }
     }
 }

@@ -2,8 +2,7 @@
     <string name="app_name">TsiiswARe</string>
     <string-array name="categories">
         <item>Maak een keuze</item>
-        <item>Quiz</item>
-        <item>Video</item>
+<!--        <item>Quiz</item>-->
         <item>Text + Video</item>
     </string-array>
     <string name="foutAntw">

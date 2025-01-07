@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import android.util.Range
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Surface
@@ -20,7 +19,6 @@ import android.view.TextureView
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -48,7 +46,7 @@ class QR_Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ar_view)
+        setContentView(R.layout.qr_view)
 
 
         category = intent.getStringExtra("category")!!
@@ -159,7 +157,7 @@ class QR_Activity : AppCompatActivity() {
 
     private fun showPopup(label: String) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.popup_ar, null)
+        val popupView = inflater.inflate(R.layout.popup_qr, null)
 
         val popupWindow = Dialog(this)
         popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

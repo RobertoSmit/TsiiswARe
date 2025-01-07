@@ -2,7 +2,7 @@ package com.example.tsiisware;
 
 import java.util.List;
 
-public class ARObject {
+public class QRObject {
     private String name;
     private String description;
     private String video;
@@ -11,11 +11,11 @@ public class ARObject {
     private String correctAnswer;
     private String explanation;
 
-    public ARObject() {
+    public QRObject() {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public ARObject(String name, String description, String video, String question, List<String> answers, String correctAnswer, String explanation) {
+    public QRObject(String name, String description, String video, String question, List<String> answers, String correctAnswer, String explanation) {
         this.name = name;
         this.description = description;
         this.video = video;

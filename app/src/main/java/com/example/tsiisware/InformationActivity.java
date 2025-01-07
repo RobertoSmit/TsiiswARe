@@ -7,11 +7,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
@@ -19,14 +17,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,9 +33,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -193,14 +186,8 @@ public class InformationActivity extends AppCompatActivity {
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
                 break;
-            case "Video":
-                setContentView(R.layout.activity_main_informationview_video);
-                title = findViewById(R.id.textViewVideo);
-                resetVideo = findViewById(R.id.resetVideobtn);
-                title.setText("Video: " + label);
-                break;
             default:
-                setContentView(R.layout.ar_view);
+                setContentView(R.layout.qr_view);
         }
 
         gobackButton = findViewById(R.id.go_back);
@@ -221,7 +208,7 @@ public class InformationActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    ARObject arobject = new ARObject(
+                    QRObject qrobject = new QRObject(
                             document.getString("name"),
                             document.getString("description"),
                             document.getString("video_url"),
@@ -230,8 +217,8 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("correct_answer"),
                             document.getString("explanation")
                     );
-                    Log.d("Video_url", arobject.getVideoURL().split("v=")[1]);
-                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", arobject.getVideoURL().split("v=")[1]);
+                    Log.d("Video_url", qrobject.getVideoURL().split("v=")[1]);
+                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", qrobject.getVideoURL().split("v=")[1]);
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                     webView.setWebViewClient(new WebViewClient());
@@ -260,17 +247,17 @@ public class InformationActivity extends AppCompatActivity {
                     });
 
                     if (category.equals("Quiz")) {
-                        quizQuestion.setText(arobject.getQuestion());
-                        answer1.setText(arobject.getAnswers().get(0));
-                        answer2.setText(arobject.getAnswers().get(1));
-                        answer3.setText(arobject.getAnswers().get(2));
-                        answer4.setText(arobject.getAnswers().get(3));
+                        quizQuestion.setText(qrobject.getQuestion());
+                        answer1.setText(qrobject.getAnswers().get(0));
+                        answer2.setText(qrobject.getAnswers().get(1));
+                        answer3.setText(qrobject.getAnswers().get(2));
+                        answer4.setText(qrobject.getAnswers().get(3));
 
-                        correctAnswer = arobject.getCorrectAnswer();
-                        explainText = arobject.getExplanation();
+                        correctAnswer = qrobject.getCorrectAnswer();
+                        explainText = qrobject.getExplanation();
                     }
                     else if (category.equals("Text + Video")) {
-                        information.setText(arobject.getDescription());
+                        information.setText(qrobject.getDescription());
                     }
                 }
             }

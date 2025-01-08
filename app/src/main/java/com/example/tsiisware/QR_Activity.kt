@@ -182,24 +182,15 @@ class QR_Activity : AppCompatActivity() {
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
         popupClose.setOnClickListener {
             popupWindow.dismiss()
-            popupVisible = false
         }
         popupGo.setOnClickListener {
-            if (!scannedObjects.contains(label)) {
-                val sharedPreferences = getSharedPreferences("scanned_objects_prefs", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putStringSet("scanned_objects", scannedObjects.toSet())
-                editor.apply()
-            }
             val intent = Intent(this, InformationActivity::class.java)
             intent.putExtra("label", label)
             intent.putExtra("category", category)
             if (category == "quiz") {
-                intent.putStringArrayListExtra("gescandeObjecten", scannedObjects)
-                intent.putExtra("label", label.lowercase())
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
-                intent.putStringArrayListExtra("scannedLabels", ArrayList(scannedObjects))
+                intent.putStringArrayListExtra("scannedLabels", scannedObjects)
             }
             startActivity(intent)
         }

@@ -7,11 +7,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
@@ -19,14 +17,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,9 +34,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +41,8 @@ import java.util.Objects;
 public class InformationActivity extends AppCompatActivity {
     ProgressBar pb;
     FirebaseFirestore db;
+    Boolean isCurrent = false;
+    Switch switchButton;
     String label = null;
     String category = null;
     TextView quizQuestion, progressNum, progressMax, title, information;
@@ -187,6 +183,7 @@ public class InformationActivity extends AppCompatActivity {
                 break;
             case "Text + Video":
                 setContentView(R.layout.activity_main_informationview_text_video);
+                switchButton = findViewById(R.id.switch_past);
                 title = findViewById(R.id.titleTextVideo);
                 title.setText("Text + Video: " + label);
                 resetVideo = findViewById(R.id.resetVideobtn);
@@ -209,28 +206,32 @@ public class InformationActivity extends AppCompatActivity {
         getObjectInformation(label, category);
 
         gobackButton.setOnClickListener(v -> goBackToARView());
-        resetVideo.setOnClickListener(v -> {
-            webView.reload();
-        });
+        resetVideo.setOnClickListener(v -> webView.reload());
+        switchButton.setOnClickListener(v -> {
+            isCurrent = switchButton.isChecked();
+            getObjectInformation(label, category);
+        }
+        );
     }
 
     private void getObjectInformation(String label, String category) {
         db = FirebaseFirestore.getInstance();
-        CollectionReference objectItems = db.collection("objects");
+        CollectionReference objectItems = db.collection("video_objects");
         objectItems.document(label.toLowerCase()).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
+                switchButton.setVisibility(Boolean.TRUE.equals(document.getBoolean("isPastPresent")) ? View.VISIBLE : View.GONE);
                 if (document.exists()) {
                     ARObject arobject = new ARObject(
                             document.getString("name"),
-                            document.getString("description"),
-                            document.getString("video_url"),
+                            isCurrent ? document.getString("description_past") : document.getString("description_present"),
+                            isCurrent ? document.getString("video_url_past") : document.getString("video_url_present"),
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
                             document.getString("explanation")
                     );
-                    Log.d("Video_url", arobject.getVideoURL().split("v=")[1]);
+//                    Log.d("Video_url", arobject.getVideoURL().split("v=")[1]);
                     String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", arobject.getVideoURL().split("v=")[1]);
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);

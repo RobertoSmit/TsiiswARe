@@ -33,8 +33,8 @@ public class EndQuizActivity extends AppCompatActivity {
         numFoutTxt.setText(String.valueOf(wrongQuestions));
 
 
-        btnSendEmail = findViewById(R.id.btnSendEmail);
-        visitorsEmail = findViewById(R.id.visitorsEmailAdress).toString();
+//        btnSendEmail = findViewById(R.id.btnSendEmail);
+//        visitorsEmail = findViewById(R.id.visitorsEmailAdress).toString();
 
         btnGoToStart = findViewById(R.id.btnToStart);
         btnGoToStart.setOnClickListener(v -> {

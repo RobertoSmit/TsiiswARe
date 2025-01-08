@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import android.util.Range
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Surface
@@ -20,7 +19,6 @@ import android.view.TextureView
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity

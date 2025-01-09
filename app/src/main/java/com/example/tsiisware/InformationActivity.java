@@ -63,6 +63,8 @@ public class InformationActivity extends AppCompatActivity {
         label = getIntent().getStringExtra("label");
         selectedLabels = getIntent().getStringArrayListExtra("selectedLabels");
         category = getIntent().getStringExtra("category");
+
+        // If the category is a quiz, retrieve the progress from the shared preferences.
         if (Objects.equals(category, "Quiz")) {
             SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
             correctQuestions = sharedPreferences.getInt("correctQuestions", 0);
@@ -70,6 +72,7 @@ public class InformationActivity extends AppCompatActivity {
             questionProgress = sharedPreferences.getInt("questionProgress", 0);
         }
 
+        // Set the layout based on the category.
         switch (category) {
             case "Quiz":
                 setContentView(R.layout.activity_main_informationview_quiz);
@@ -197,15 +200,17 @@ public class InformationActivity extends AppCompatActivity {
                 title.setText("Video: " + label);
                 break;
             default:
-                setContentView(R.layout.ar_view);
+                setContentView(R.layout.qr_view);
         }
 
+        // Set the layout for the QR view.
         gobackButton = findViewById(R.id.go_back);
         webView = findViewById(R.id.webView);
         gobackButton = findViewById(R.id.go_back);
         getObjectInformation(label, category);
 
-        gobackButton.setOnClickListener(v -> goBackToARView());
+        // OnClickListeners
+        gobackButton.setOnClickListener(v -> goBackToQRView());
         resetVideo.setOnClickListener(v -> webView.reload());
         switchButton.setOnClickListener(v -> {
             isCurrent = switchButton.isChecked();
@@ -214,6 +219,7 @@ public class InformationActivity extends AppCompatActivity {
         );
     }
 
+    // Retrieves the information of the object from the database.
     private void getObjectInformation(String label, String category) {
         db = FirebaseFirestore.getInstance();
         CollectionReference objectItems = db.collection("video_objects");
@@ -222,7 +228,7 @@ public class InformationActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 switchButton.setVisibility(Boolean.TRUE.equals(document.getBoolean("isPastPresent")) ? View.VISIBLE : View.GONE);
                 if (document.exists()) {
-                    ARObject arobject = new ARObject(
+                    QRObject qrobject = new QRObject(
                             document.getString("name"),
                             isCurrent ? document.getString("description_past") : document.getString("description_present"),
                             isCurrent ? document.getString("video_url_past") : document.getString("video_url_present"),
@@ -231,8 +237,8 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("correct_answer"),
                             document.getString("explanation")
                     );
-//                    Log.d("Video_url", arobject.getVideoURL().split("v=")[1]);
-                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", arobject.getVideoURL().split("v=")[1]);
+                    // Load the video in the WebView
+                    String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", qrobject.getVideoURL().split("v=")[1]);
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                     webView.setWebViewClient(new WebViewClient());
@@ -260,18 +266,19 @@ public class InformationActivity extends AppCompatActivity {
                         }
                     });
 
+                    // Set the information based on the category.
                     if (category.equals("Quiz")) {
-                        quizQuestion.setText(arobject.getQuestion());
-                        answer1.setText(arobject.getAnswers().get(0));
-                        answer2.setText(arobject.getAnswers().get(1));
-                        answer3.setText(arobject.getAnswers().get(2));
-                        answer4.setText(arobject.getAnswers().get(3));
+                        quizQuestion.setText(qrobject.getQuestion());
+                        answer1.setText(qrobject.getAnswers().get(0));
+                        answer2.setText(qrobject.getAnswers().get(1));
+                        answer3.setText(qrobject.getAnswers().get(2));
+                        answer4.setText(qrobject.getAnswers().get(3));
 
-                        correctAnswer = arobject.getCorrectAnswer();
-                        explainText = arobject.getExplanation();
+                        correctAnswer = qrobject.getCorrectAnswer();
+                        explainText = qrobject.getExplanation();
                     }
                     else if (category.equals("Text + Video")) {
-                        information.setText(arobject.getDescription());
+                        information.setText(qrobject.getDescription());
                     }
                 }
             }
@@ -317,9 +324,10 @@ public class InformationActivity extends AppCompatActivity {
             popupTitle.setText(R.string.foutAntw);
             continueButton.setBackgroundColor(getColor(R.color.wrong));
         }
-        continueButton.setOnClickListener(v -> { goBackToARView(); });
+        continueButton.setOnClickListener(v -> { goBackToQRView(); });
     }
 
+    // Updates the progress bar.
     private void progressBar(Integer questionProgress) {
         progressNum.setText(String.valueOf(questionProgress));
 
@@ -330,9 +338,11 @@ public class InformationActivity extends AppCompatActivity {
         pb.setProgress(roundedPercentage);
     }
 
-    private void goBackToARView() {
+    // Returns to the AR view.
+    private void goBackToQRView() {
         if (category.equals("Quiz")) {
             if (questionProgress < totalQuestions) {
+                // Go back to the QR view
                 Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
                 intent.putExtra("label", label);
                 intent.putStringArrayListExtra("selectedLabels", selectedLabels);
@@ -347,6 +357,7 @@ public class InformationActivity extends AppCompatActivity {
                 }
                 startActivity(intent);
             } else {
+                // Go to the end quiz view
                 Intent endQuizView = new Intent(InformationActivity.this, EndQuizActivity.class);
                 SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -358,6 +369,7 @@ public class InformationActivity extends AppCompatActivity {
             }
         }
         else {
+            // Go back to the QR view
             Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
             intent.putExtra("label", label);
             intent.putStringArrayListExtra("selectedLabels", selectedLabels);

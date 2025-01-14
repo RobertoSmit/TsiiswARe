@@ -33,10 +33,14 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Create Object");
-                    tab.setContentDescription("Create Object Tab");
+                    tab.setText("Create Video Object");
+                    tab.setContentDescription("Create Video Object Tab");
                     break;
                 case 1:
+                    tab.setText("Create Quiz Object");
+                    tab.setContentDescription("Create Quiz Object Tab");
+                    break;
+                case 2:
                     tab.setText("Delete Object");
                     tab.setContentDescription("Delete Object Tab");
                     break;

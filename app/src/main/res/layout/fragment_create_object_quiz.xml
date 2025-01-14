@@ -13,7 +13,7 @@
         android:layout_marginTop="64dp"
         android:background="@drawable/rounded_edittext_background"
         android:hint="Object Name"
-        android:paddingLeft="15px"
+        android:paddingLeft="20px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,58 +30,114 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etObjectDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/etObjectName" />
 
     <EditText
-        android:id="@+id/etObjectImageURL"
+        android:id="@+id/etQuestion"
         android:layout_width="360dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext_background"
-        android:hint="Image URL"
+        android:hint="Question"
         android:paddingLeft="15px"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectVideoURL" />
-
-    <EditText
-        android:id="@+id/etObjectDescription"
-        android:layout_width="360dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:hint="Object Informatie"
-        android:paddingLeft="15px"
-        android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectName" />
+        app:layout_constraintTop_toBottomOf="@id/etObjectVideoURL" />
 
     <EditText
-        android:id="@+id/etVroeger"
-        android:layout_width="359dp"
-        android:layout_height="85dp"
+        android:id="@+id/etUitleg"
+        android:layout_width="360dp"
+        android:layout_height="120dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext_background"
-        android:hint="Informatie vroeger"
-        android:paddingLeft="15px"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PastPresentCheck" />
-
-    <EditText
-        android:id="@+id/etNu"
-        android:layout_width="359dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:hint="Informatie nu"
+        android:hint="Uitleg"
         android:paddingLeft="15px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etVroeger" />
+        app:layout_constraintTop_toBottomOf="@+id/etCorrectAnswer" />
+
+    <EditText
+        android:id="@+id/etAnswer3"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:hint="Answer 3"
+        android:paddingLeft="10px"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/etAnswer4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/etAnswer2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+    <EditText
+        android:id="@+id/etAnswer1"
+        android:layout_width="85dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:hint="Answer 1"
+        android:paddingLeft="10px"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/etAnswer2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+    <EditText
+        android:id="@+id/etAnswer2"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:hint="Answer 2"
+        android:paddingLeft="10px"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/etAnswer3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/etAnswer1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+    <EditText
+        android:id="@+id/etAnswer4"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:hint="Answer 4"
+        android:paddingLeft="10px"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/etAnswer3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etQuestion" />
+
+    <Spinner
+        android:id="@+id/etCorrectAnswer"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:paddingLeft="15px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.964"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAnswer1" />
 
     <Button
         android:id="@+id/btnCreateObject"
@@ -93,6 +149,7 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -114,31 +171,15 @@
         android:id="@+id/tvGoodAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:text="Vroeger en Nu aanzetten:"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="7dp"
+        android:text="Goed Antwoord:"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintEnd_toStartOf="@+id/etCorrectAnswer"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectImageURL"
-        tools:layout_constraintStart_toStartOf="parent" />
-
-    <CheckBox
-        android:id="@+id/PastPresentCheck"
-        android:layout_width="101dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="245dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
-        android:buttonTint="@color/white"
-        android:text="Enable"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tvGoodAnswer"
-        app:layout_constraintStart_toStartOf="@+id/tvGoodAnswer"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectImageURL" />
+        app:layout_constraintTop_toBottomOf="@+id/etAnswer1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

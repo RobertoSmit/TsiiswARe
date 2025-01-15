@@ -54,14 +54,14 @@ public class InformationActivity extends AppCompatActivity {
     Float progressPercentage;
     Boolean isCorrect;
     String explainText;
-    ArrayList<String> selectedLabels;
+    ArrayList<String> scannedLabels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         label = getIntent().getStringExtra("label");
-        selectedLabels = getIntent().getStringArrayListExtra("selectedLabels");
+        scannedLabels = getIntent().getStringArrayListExtra("scannedLabels");
         category = getIntent().getStringExtra("category");
 
         // If the category is a quiz, retrieve the progress from the shared preferences.
@@ -87,7 +87,7 @@ public class InformationActivity extends AppCompatActivity {
                 progressMax = findViewById(R.id.progressMax);
 
                 db = FirebaseFirestore.getInstance();
-                CollectionReference objectItems = db.collection("objects");
+                CollectionReference objectItems = db.collection("video");
                 // Counts how many records are in the object table.
                 AggregateQuery queryCount = objectItems.count();
                 queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
@@ -345,7 +345,7 @@ public class InformationActivity extends AppCompatActivity {
                 // Go back to the QR view
                 Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
                 intent.putExtra("label", label);
-                intent.putStringArrayListExtra("selectedLabels", selectedLabels);
+                intent.putStringArrayListExtra("scannedLabels", scannedLabels);
                 intent.putExtra("category", category);
                 if (category.equals("Quiz")) {
                     SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
@@ -372,7 +372,7 @@ public class InformationActivity extends AppCompatActivity {
             // Go back to the QR view
             Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
             intent.putExtra("label", label);
-            intent.putStringArrayListExtra("selectedLabels", selectedLabels);
+            intent.putStringArrayListExtra("scannedLabels", scannedLabels);
             intent.putExtra("category", category);
             startActivity(intent);
         }

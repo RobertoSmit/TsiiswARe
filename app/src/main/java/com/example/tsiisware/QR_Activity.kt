@@ -12,21 +12,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.TextureView
-import android.view.WindowManager
+import android.view.*
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.barcode.Barcode
+import androidx.core.app.ActivityCompat
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.ImageView
 
 class QR_Activity : AppCompatActivity() {
     private lateinit var textureView: TextureView
@@ -136,15 +135,27 @@ class QR_Activity : AppCompatActivity() {
 
         imageView.setImageBitmap(bitmap)
 
+
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
                     if (barcode.valueType == Barcode.TYPE_TEXT) {
                         val label = barcode.displayValue ?: continue
                         Log.d("QR_Activity", "Scanne QR code: $label")
-                        if (dblabels.contains(label.lowercase()) && !scannedObjects.contains(label.lowercase()) && !popupVisible) {
-                            scannedObjects.add(label)
+
+                        if (!scannedObjects.contains(label.lowercase()) && !popupVisible) {
+                            scannedObjects.add(label.lowercase())
+
+                            val sharedPreferences = getSharedPreferences("scanned_objects_prefs", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putStringSet("scanned_objects", scannedObjects.toSet())
+                            editor.apply()
+
                             showPopup(label)
+                            popupVisible = true
+                            scanner.close()
+                        } else if (scannedObjects.contains(label.lowercase()) && !popupVisible) {
+                            showPopupAlreadyScanned()
                             popupVisible = true
                         }
                     }
@@ -176,21 +187,29 @@ class QR_Activity : AppCompatActivity() {
         popupWindow.window?.attributes = layoutParams
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = popupText.text.toString() + label
+        popupText.text = getString(R.string.popup_text) + label  // Gebruik de string uit strings.xml
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
+
         popupClose.setOnClickListener {
             popupWindow.dismiss()
             popupVisible = false
+            if (!textureView.isAvailable) {
+                textureView.surfaceTextureListener = surfaceTextureListener
+            }
         }
+
         popupGo.setOnClickListener {
             if (!scannedObjects.contains(label)) {
+                scannedObjects.add(label)
+
                 val sharedPreferences = getSharedPreferences("scanned_objects_prefs", Context.MODE_PRIVATE)
                 val editor = sharedPreferences.edit()
                 editor.putStringSet("scanned_objects", scannedObjects.toSet())
                 editor.apply()
             }
+
             val intent = Intent(this, InformationActivity::class.java)
             intent.putExtra("label", label)
             intent.putExtra("category", category)
@@ -204,6 +223,39 @@ class QR_Activity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    private fun showPopupAlreadyScanned() {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_qr_already_scanned, null)
+
+        val popupWindow = Dialog(this)
+        popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popupWindow.setContentView(popupView)
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(popupWindow.window?.attributes)
+        layoutParams.width = 800
+        layoutParams.height = 500
+        layoutParams.gravity = Gravity.TOP
+        layoutParams.x = 0
+        layoutParams.y = 350
+
+        popupWindow.setCancelable(false)
+        popupWindow.show()
+        popupWindow.window?.attributes = layoutParams
+
+        val popupText = popupView.findViewById<TextView>(R.id.popupAlreadyScannedText)
+        popupText.text = getString(R.string.already_scanned_text)  // Gebruik de string uit strings.xml
+
+        val popupClose = popupView.findViewById<Button>(R.id.btnClosePopupAlreadyScanned)
+
+        popupClose.setOnClickListener {
+            popupWindow.dismiss()
+            popupVisible = false
+        }
+    }
+
+
 
     private fun getAllDocumentNames() {
         objects.get().addOnCompleteListener { task ->

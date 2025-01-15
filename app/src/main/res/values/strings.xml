@@ -2,8 +2,8 @@
     <string name="app_name">TsiiswARe</string>
     <string-array name="categories">
         <item>Maak een keuze</item>
-<!--        <item>Quiz</item>-->
-<!--        <item>Video</item>-->
+        <!--        <item>Quiz</item>-->
+        <!--        <item>Video</item>-->
         <item>Text + Video</item>
     </string-array>
     <string name="foutAntw">
@@ -12,4 +12,6 @@
     <string name="goedAntw">
         Goed geantwoord!
     </string>
+    <string name="popup_text">Nieuwe QR-code gescand: </string>
+    <string name="already_scanned_text">De QR-code is al gescand.</string>
 </resources>

@@ -11,4 +11,6 @@
     <string name="goedAntw">
         Goed geantwoord!
     </string>
+    <string name="select_image">Select Image</string>
+    <string name="informatie_vroeger">Informatie vroeger</string>
 </resources>

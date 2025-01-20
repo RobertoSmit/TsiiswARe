@@ -32,17 +32,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etObjectDescription" />
 
-    <EditText
-        android:id="@+id/etObjectImageURL"
+
+    <RelativeLayout
+        android:id="@+id/imageSection"
         android:layout_width="360dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:hint="Image URL"
-        android:paddingLeft="15px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectVideoURL" />
+        app:layout_constraintTop_toBottomOf="@+id/etObjectVideoURL"
+        tools:context=".MainActivity"
+        tools:ignore="HardcodedText">
+
+        <EditText
+            android:id="@+id/etObjectImageURL"
+            android:layout_width="400dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Image URL"
+            android:paddingLeft="15dp" />
+
+        <Button
+            android:id="@+id/imageSelectButton"
+            android:layout_width="110dp"
+            android:layout_height="75dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="2dp"
+            android:backgroundTint="@color/yellow"
+            android:padding="5dp"
+            android:text="@string/select_image"
+            android:textColor="@android:color/black"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/etObjectDescription"
@@ -64,8 +86,8 @@
         android:layout_height="85dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext_background"
-        android:hint="Informatie vroeger"
-        android:paddingLeft="15px"
+        android:hint="@string/informatie_vroeger"
+        android:paddingLeft="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,7 +144,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectImageURL"
+        app:layout_constraintTop_toBottomOf="@+id/imageSection"
         tools:layout_constraintStart_toStartOf="parent" />
 
     <CheckBox
@@ -139,6 +161,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvGoodAnswer"
         app:layout_constraintStart_toStartOf="@+id/tvGoodAnswer"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectImageURL" />
+        app:layout_constraintTop_toBottomOf="@+id/imageSection" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

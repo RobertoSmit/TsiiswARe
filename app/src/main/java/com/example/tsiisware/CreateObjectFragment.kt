@@ -1,14 +1,21 @@
 // CreateObjectFragment.kt
 package com.example.tsiisware
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.text.set
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
 
 class CreateObjectFragment : Fragment() {
     override fun onCreateView(
@@ -21,12 +28,14 @@ class CreateObjectFragment : Fragment() {
         val etObjectName = view.findViewById<EditText>(R.id.etObjectName)
         val etObjectVideoURL = view.findViewById<EditText>(R.id.etObjectVideoURL)
         val etObjectImageURL = view.findViewById<EditText>(R.id.etObjectImageURL)
+        val imageSelectBtn = view.findViewById<Button>(R.id.imageSelectButton)
         val etObjectDescription = view.findViewById<EditText>(R.id.etObjectDescription)
         val etUitlegVroeger = view.findViewById<EditText>(R.id.etVroeger)
         val etUitlegNu = view.findViewById<EditText>(R.id.etNu)
         val btnCreateObject = view.findViewById<Button>(R.id.btnCreateObject)
         val pastPresenCheck = view.findViewById<CheckBox>(R.id.PastPresentCheck)
         var selectStatus = false
+        val SELECT_PICTURE = 200
 
         //List of all input fields
         val inputFields = listOf(etObjectName, etObjectDescription, etObjectVideoURL, etObjectImageURL, etUitlegVroeger, etUitlegNu)
@@ -34,9 +43,9 @@ class CreateObjectFragment : Fragment() {
         val setBool =
         {
             if (pastPresenCheck.isChecked()) {
-                selectStatus = true
+                selectStatus = true //Checkbox is selected
             } else {
-                selectStatus = false
+                selectStatus = false //Checkbox is not selected
             }
         }
 
@@ -55,11 +64,31 @@ class CreateObjectFragment : Fragment() {
             }
         }
 
+        val changeImage = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ){
+            //
+            if (it.resultCode == Activity.RESULT_OK)
+            {
+                val data = it.data //Retrieves all data of the Intent
+                val imgUri = data?.data //Retrieve URI data
+                etObjectImageURL.setText(imgUri.toString()) //Sets the image Uri as text in the ImageURL input field
+            }
+        }
+
+        val selectFromGallery = {
+            //Setup the gallery
+            val galleryIntent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            changeImage.launch(galleryIntent); //Launch the gallery
+        }
+
         btnCreateObject.setOnClickListener {
             try {
                 setBool()
+                //Database setup
                 db.collection("video_objects").document(etObjectName.text.toString()).set(
                     hashMapOf(
+                        //Takes the form data and links it to the database variables.
                         "label" to etObjectName.text.toString(),
                         "video_url" to etObjectVideoURL.text.toString(),
                         "image_url" to etObjectImageURL.text.toString(),
@@ -80,6 +109,12 @@ class CreateObjectFragment : Fragment() {
                 System.out.println("Error occurred: $e")
             }
         }
+
+        imageSelectBtn.setOnClickListener {
+            selectFromGallery()
+        }
+
+
 
 //        Make QR code and print it out.
 

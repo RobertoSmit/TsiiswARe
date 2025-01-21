@@ -14,4 +14,7 @@
     </string>
     <string name="popup_text">Nieuwe QR-code gescand: </string>
     <string name="already_scanned_text">De QR-code is al gescand.</string>
+    <string name="select_image">Select Image</string>
+    <string name="informatie_vroeger">Informatie Vroeger</string>
+    <string name="informatie_nu">Informatie Nu</string>
 </resources>

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.MediaStore.Audio.Media
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,18 +68,20 @@ class CreateObjectFragment : Fragment() {
         val changeImage = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ){
-            //
-            if (it.resultCode == Activity.RESULT_OK)
+            result->
+            if (result.resultCode == Activity.RESULT_OK)
             {
-                val data = it.data //Retrieves all data of the Intent
+                val data = result.data //Retrieves all data of the Intent
                 val imgUri = data?.data //Retrieve URI data
-                etObjectImageURL.setText(imgUri.toString()) //Sets the image Uri as text in the ImageURL input field
+                val filePath = File(imgUri.toString())
+                etObjectImageURL.setText(filePath.toString()) //Sets the image Uri as text in the ImageURL input field
             }
         }
 
         val selectFromGallery = {
             //Setup the gallery
             val galleryIntent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            galleryIntent.type = "image/*"
             changeImage.launch(galleryIntent); //Launch the gallery
         }
 

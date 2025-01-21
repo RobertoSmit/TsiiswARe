@@ -9,10 +9,11 @@
         android:id="@+id/webView"
         android:layout_width="445dp"
         android:layout_height="232dp"
-        android:layout_marginBottom="7dp"
         app:layout_constraintBottom_toTopOf="@+id/titleTextVideoPast"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </WebView>
 
@@ -20,13 +21,13 @@
         android:id="@+id/titleTextVideoPast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:text="Title"
         android:textSize="38sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/webView" />
 
     <View
         android:id="@+id/divider"
@@ -36,19 +37,19 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toTopOf="@+id/informationTextPast"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextVideoPast" />
 
     <TextView
         android:id="@+id/informationTextPast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="628dp"
         android:text="Information Text"
         android:textAlignment="viewStart"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button

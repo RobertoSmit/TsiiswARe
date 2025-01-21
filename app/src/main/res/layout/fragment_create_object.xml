@@ -99,7 +99,7 @@
         android:layout_height="85dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext_background"
-        android:hint="Informatie nu"
+        android:hint="@string/informatie_nu"
         android:paddingLeft="15px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

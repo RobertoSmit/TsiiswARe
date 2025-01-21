@@ -54,7 +54,7 @@ class InformationViewCurrentFragment : Fragment() {
     }
 
     private fun loadInformation() {
-        db.collection("objects").document(label.lowercase()).get().addOnSuccessListener { document ->
+        db.collection("video_objects").document(label.lowercase()).get().addOnSuccessListener { document ->
             if (document != null) {
                 val videoUrl = document.getString("video_url")
                 val iframeHtml = """

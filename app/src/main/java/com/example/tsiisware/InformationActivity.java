@@ -1,13 +1,19 @@
 package com.example.tsiisware;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +23,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,6 +41,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +55,7 @@ public class InformationActivity extends AppCompatActivity {
     Switch switchButton;
     String label = null;
     String category = null;
+    ImageView imageObject;
     TextView quizQuestion, progressNum, progressMax, title, information;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4, resetVideo;
@@ -87,7 +98,7 @@ public class InformationActivity extends AppCompatActivity {
                 progressMax = findViewById(R.id.progressMax);
 
                 db = FirebaseFirestore.getInstance();
-                CollectionReference objectItems = db.collection("video");
+                CollectionReference objectItems = db.collection("quiz_objects");
                 // Counts how many records are in the object table.
                 AggregateQuery queryCount = objectItems.count();
                 queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
@@ -192,12 +203,7 @@ public class InformationActivity extends AppCompatActivity {
                 resetVideo = findViewById(R.id.resetVideobtn);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
-                break;
-            case "Video":
-                setContentView(R.layout.activity_main_informationview_video);
-                title = findViewById(R.id.textViewVideo);
-                resetVideo = findViewById(R.id.resetVideobtn);
-                title.setText("Video: " + label);
+                imageObject = findViewById(R.id.ImageObject);
                 break;
             default:
                 setContentView(R.layout.qr_view);
@@ -235,7 +241,8 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
-                            document.getString("explanation")
+                            document.getString("explanation"),
+                            document.getString("image_url")
                     );
                     // Load the video in the WebView
                     String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", qrobject.getVideoURL().split("v=")[1]);
@@ -279,6 +286,17 @@ public class InformationActivity extends AppCompatActivity {
                     }
                     else if (category.equals("Text + Video")) {
                         information.setText(qrobject.getDescription());
+                        String imagePath = qrobject.getImageURL();
+                        Uri imageUri = Uri.parse(imagePath);
+                            try {
+//                                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+//                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                ContentResolver contentResolver = getApplicationContext().getContentResolver();
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri);
+                                imageObject.setImageBitmap(bitmap);
+                            } catch (IOException e) {
+                            Log.e("ImageError", "Failed to decode the image from content URI.", e);
+                        }
                     }
                 }
             }

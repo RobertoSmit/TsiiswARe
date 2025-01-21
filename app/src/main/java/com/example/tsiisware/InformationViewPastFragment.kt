@@ -55,7 +55,7 @@ class InformationViewPastFragment : Fragment() {
     }
 
     private fun loadInformation() {
-        db.collection("objects").document(label.lowercase()).get().addOnSuccessListener { document ->
+        db.collection("video_objects").document(label.lowercase()).get().addOnSuccessListener { document ->
             if (document != null) {
                 val videoUrl = document.getString("video_url")
                 val iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", videoUrl?.split("v=")!![1]);

@@ -24,6 +24,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.barcode.Barcode
 import android.os.Looper
 import android.widget.ImageView
+import android.widget.ProgressBar
 
 class QR_Activity : AppCompatActivity() {
     private lateinit var textureView: TextureView
@@ -88,7 +89,7 @@ class QR_Activity : AppCompatActivity() {
         }
 
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-            if (!popupVisible) scanQRCode()
+            if (!popupVisible && !scanning) scanQRCode()
         }
     }
 
@@ -154,10 +155,10 @@ class QR_Activity : AppCompatActivity() {
         if (scanning) return
 
         scanning = true
-        Toast.makeText(this, "Scanning QR code", Toast.LENGTH_LONG).show()
         val bitmap = textureView.bitmap ?: return
         val image = InputImage.fromBitmap(bitmap, 0)
         val imageView = findViewById<ImageView>(R.id.imageView)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         val scanner = BarcodeScanning.getClient()
 
         imageView.setImageBitmap(bitmap)
@@ -165,24 +166,35 @@ class QR_Activity : AppCompatActivity() {
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
                     if (barcode.valueType == Barcode.TYPE_TEXT) {
+                        progressBar.visibility = View.VISIBLE
+                        progressBar.progress = 100
                         val label = barcode.displayValue ?: continue
-
-                        if (!scannedObjects.contains(label) && !popupVisible) {
-                            Log.d("Not_Scanned", "New QR code scanned: $label")
-                            showPopup(label)
-                            popupVisible = true
-                        } else if (scannedObjects.contains(label) && !popupVisible) {
-                            Log.d("Already_Scanned", "QR code already scanned: $label")
-                            showPopupAlreadyScanned()
-                            popupVisible = true
-                        }
+                        Toast.makeText(this, "QR code scanned: $label", Toast.LENGTH_SHORT).show()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (!scannedObjects.contains(label) && !popupVisible) {
+                                Log.d("Not_Scanned", "New QR code scanned: $label")
+                                showPopup(label)
+                                popupVisible = true
+                            } else if (scannedObjects.contains(label) && !popupVisible) {
+                                Log.d("Already_Scanned", "QR code already scanned: $label")
+                                showPopupAlreadyScanned()
+                                popupVisible = true
+                            }
+                        }, 3000) // 1 second delay
                     }
                 }
+                progressBar.visibility = View.GONE
+                scanning = false
+                // Introduce a delay before allowing the next scan
+                Handler(Looper.getMainLooper()).postDelayed({
+                    scanning = false
+                }, 2000) // 2 seconds delay
             }
             .addOnFailureListener {
                 Log.e("QR_Activity", "QR code scanning failed", it)
+                progressBar.visibility = View.GONE
+                scanning = false
             }
-        scanning = false
     }
 
     private fun showPopup(label: String) {

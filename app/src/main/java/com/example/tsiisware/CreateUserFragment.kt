@@ -12,7 +12,7 @@ class CreateUserFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
-    private lateinit var spinnerRole: Spinner
+//    private lateinit var spinnerRole: Spinner
     private lateinit var btnCreateUser: Button
 
     override fun onCreateView(
@@ -27,13 +27,13 @@ class CreateUserFragment : Fragment() {
         etPassword = view.findViewById(R.id.passwordEditText)
         btnCreateUser = view.findViewById(R.id.createUserButton)
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.roles_array,
-            android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerRole.adapter = adapter
+//        val adapter = ArrayAdapter.createFromResource(
+//            requireContext(),
+//            R.array.roles_array,
+//            android.R.layout.simple_spinner_item
+//        )
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        spinnerRole.adapter = adapter
 
         btnCreateUser.setOnClickListener {
             val username = etUsername.text.toString()

@@ -50,6 +50,7 @@ public class AdminMainActivity extends AppCompatActivity {
                             if (!result.isEmpty()) {
                                 Toast.makeText(AdminMainActivity.this, "Inloggen geslaagd", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AdminMainActivity.this, CrudMainActivityObjects.class);
+                                intent.putExtra("username", enteredUsername);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(AdminMainActivity.this, "Onjuiste gebruikersnaam of wachtwoord", Toast.LENGTH_SHORT).show();

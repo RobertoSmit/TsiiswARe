@@ -27,7 +27,9 @@ public class CrudMainActivityObjects extends AppCompatActivity {
         });
 
         btnGoToUsers.setOnClickListener(v -> {
-            startActivity(new Intent(CrudMainActivityObjects.this, CrudMainActivityUsers.class));
+            Intent intent = new Intent(CrudMainActivityObjects.this, CrudMainActivityUsers.class);
+            intent.putExtra("username", getIntent().getStringExtra("username"));
+            startActivity(intent);
         });
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {

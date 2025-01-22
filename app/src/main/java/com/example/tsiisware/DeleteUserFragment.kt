@@ -12,6 +12,7 @@ class DeleteUserFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var spinnerUsers: Spinner
     private lateinit var btnDeleteUser: Button
+    private var currentUsername: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,11 +25,12 @@ class DeleteUserFragment : Fragment() {
         spinnerUsers = view.findViewById(R.id.userSpinner)
         btnDeleteUser = view.findViewById(R.id.btnDeleteUser)
 
+        currentUsername = arguments?.getString("currentUsername")
+
         loadUsersIntoSpinner()
 
         btnDeleteUser.setOnClickListener {
             val selectedUser = spinnerUsers.selectedItem.toString()
-
 
             db.collection("users").document(selectedUser).delete()
                 .addOnSuccessListener {
@@ -49,7 +51,10 @@ class DeleteUserFragment : Fragment() {
                 if (task.isSuccessful) {
                     val users = mutableListOf<String>()
                     for (document in task.result!!) {
-                        users.add(document.getString("username") ?: "")
+                        val username = document.getString("username") ?: ""
+                        if (username != currentUsername) {
+                            users.add(username)
+                        }
                     }
 
                     val adapter = ArrayAdapter(

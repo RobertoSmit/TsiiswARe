@@ -4,6 +4,7 @@ package com.example.tsiisware
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,7 +17,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.text.set
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
 
 class CreateObjectFragment : Fragment() {
     override fun onCreateView(
@@ -28,6 +31,8 @@ class CreateObjectFragment : Fragment() {
 
         val etObjectName = view.findViewById<EditText>(R.id.etObjectName)
         val etObjectVideoURL = view.findViewById<EditText>(R.id.etObjectVideoURL)
+        val etObtjectVideoURLPast = view.findViewById<EditText>(R.id.etObjectVideoURLPast)
+        val etObtjectVideoURLPresent = view.findViewById<EditText>(R.id.etObjectVideoURLPresent)
         val etObjectImageURL = view.findViewById<EditText>(R.id.etObjectImageURL)
         val imageSelectBtn = view.findViewById<Button>(R.id.imageSelectButton)
         val etObjectDescription = view.findViewById<EditText>(R.id.etObjectDescription)
@@ -65,16 +70,35 @@ class CreateObjectFragment : Fragment() {
             }
         }
 
+        // Function to get the real file path from the content URI
+        fun getRealPathFromURI(contentUri: Uri): String? {
+            var filePath: String? = null
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = context?.contentResolver?.query(contentUri, proj, null, null, null)
+
+            cursor?.let {
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                if (it.moveToFirst()) {
+                    filePath = it.getString(columnIndex)
+                }
+                it.close()
+            }
+            return filePath
+        }
+
         val changeImage = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ){
             result->
             if (result.resultCode == Activity.RESULT_OK)
             {
+                val context: Context
                 val data = result.data //Retrieves all data of the Intent
                 val imgUri = data?.data //Retrieve URI data
-                val filePath = File(imgUri.toString())
-                etObjectImageURL.setText(filePath.toString()) //Sets the image Uri as text in the ImageURL input field
+                imgUri?.let {
+                    val imagePath = getRealPathFromURI(it)
+                    etObjectImageURL.setText(imgUri.toString()) //Sets the image Uri as text in the ImageURL input field
+                }
             }
         }
 
@@ -94,6 +118,8 @@ class CreateObjectFragment : Fragment() {
                         //Takes the form data and links it to the database variables.
                         "label" to etObjectName.text.toString(),
                         "video_url" to etObjectVideoURL.text.toString(),
+                        "video_url_past" to etObtjectVideoURLPast.text.toString(),
+                        "video_url_present" to etObtjectVideoURLPresent.text.toString(),
                         "image_url" to etObjectImageURL.text.toString(),
                         "isPastPresent" to selectStatus,
                         "description" to etObjectDescription.text.toString(),

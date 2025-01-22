@@ -66,6 +66,7 @@ public class InformationActivity extends AppCompatActivity {
     Boolean isCorrect;
     String explainText;
     ArrayList<String> scannedLabels;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,15 +289,18 @@ public class InformationActivity extends AppCompatActivity {
                         information.setText(qrobject.getDescription());
                         String imagePath = qrobject.getImageURL();
                         Uri imageUri = Uri.parse(imagePath);
+                        Log.e("imageUri", String.valueOf(imageUri));
                             try {
-//                                InputStream inputStream = getContentResolver().openInputStream(imageUri);
-//                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                ContentResolver contentResolver = getApplicationContext().getContentResolver();
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri);
+                                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                 imageObject.setImageBitmap(bitmap);
                             } catch (IOException e) {
                             Log.e("ImageError", "Failed to decode the image from content URI.", e);
                         }
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.setType("image/*");  // Filter to select images
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);  // Grant permission to read the selected file
+                        startActivityForResult(intent, PICK_IMAGE_REQUEST);  // You can define PICK_IMAGE_REQUEST as a constant
                     }
                 }
             }

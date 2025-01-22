@@ -40,6 +40,7 @@ class QR_Activity : AppCompatActivity() {
     private val dblabels = mutableListOf<String>()
     private var correctQuestions: Int = 0
     private var wrongQuestions: Int = 0
+    private var scanning: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,6 +151,10 @@ class QR_Activity : AppCompatActivity() {
     }
 
     private fun scanQRCode() {
+        if (scanning) return
+
+        scanning = true
+        Toast.makeText(this, "Scanning QR code", Toast.LENGTH_LONG).show()
         val bitmap = textureView.bitmap ?: return
         val image = InputImage.fromBitmap(bitmap, 0)
         val imageView = findViewById<ImageView>(R.id.imageView)
@@ -177,6 +182,7 @@ class QR_Activity : AppCompatActivity() {
             .addOnFailureListener {
                 Log.e("QR_Activity", "QR code scanning failed", it)
             }
+        scanning = false
     }
 
     private fun showPopup(label: String) {

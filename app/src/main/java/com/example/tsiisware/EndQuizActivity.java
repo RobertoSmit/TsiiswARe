@@ -40,7 +40,7 @@ public class EndQuizActivity extends AppCompatActivity {
         btnGoToStart.setOnClickListener(v -> {
             startActivity(new Intent(EndQuizActivity.this, UserMainActivity.class));
         });
-        btnSendEmail.setOnClickListener(this::sendEmail);
+//        btnSendEmail.setOnClickListener(this::sendEmail);
     }
 
     public void sendEmail(View view) {

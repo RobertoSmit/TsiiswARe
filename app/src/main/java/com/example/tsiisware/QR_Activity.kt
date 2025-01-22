@@ -22,13 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.barcode.Barcode
-import androidx.core.app.ActivityCompat
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Looper
 import android.widget.ImageView
-import kotlinx.coroutines.withTimeout
-import okio.Timeout
 
 class QR_Activity : AppCompatActivity() {
     private lateinit var textureView: TextureView
@@ -36,8 +31,8 @@ class QR_Activity : AppCompatActivity() {
     private lateinit var handler: Handler
     private lateinit var category: String
     private lateinit var logoff: Button
-    private lateinit var cameraDevice: CameraDevice
-    private lateinit var captureSession: CameraCaptureSession
+    private var cameraDevice: CameraDevice? = null
+    private var captureSession: CameraCaptureSession? = null
     private var db: FirebaseFirestore? = null
     private lateinit var objects: CollectionReference
     private var scannedObjects = ArrayList<String>()
@@ -58,8 +53,7 @@ class QR_Activity : AppCompatActivity() {
             correctQuestions = intent.getIntExtra("correctQuestions", 0)
             wrongQuestions = intent.getIntExtra("wrongQuestions", 0)
             objects = db!!.collection("quiz_objects")
-        }
-        else {
+        } else {
             objects = db!!.collection("video_objects")
         }
 
@@ -86,7 +80,12 @@ class QR_Activity : AppCompatActivity() {
         }
 
         override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
-        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = false
+
+        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+            closeCamera()
+            return true
+        }
+
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
             if (!popupVisible) scanQRCode()
         }
@@ -94,48 +93,63 @@ class QR_Activity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun openCamera() {
-        cameraManager.openCamera(cameraManager.cameraIdList[0], object : CameraDevice.StateCallback() {
-            override fun onOpened(camera: CameraDevice) {
-                cameraDevice = camera
-                createCameraPreviewSession()
-            }
+        try {
+            cameraManager.openCamera(cameraManager.cameraIdList[0], object : CameraDevice.StateCallback() {
+                override fun onOpened(camera: CameraDevice) {
+                    cameraDevice = camera
+                    createCameraPreviewSession()
+                }
 
-            override fun onDisconnected(camera: CameraDevice) {
-                camera.close()
-            }
+                override fun onDisconnected(camera: CameraDevice) {
+                    camera.close()
+                    cameraDevice = null
+                }
 
-            override fun onError(camera: CameraDevice, error: Int) {
-                camera.close()
-            }
-        }, handler)
+                override fun onError(camera: CameraDevice, error: Int) {
+                    camera.close()
+                    cameraDevice = null
+                }
+            }, handler)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
     }
 
     private fun createCameraPreviewSession() {
-        val surfaceTexture = textureView.surfaceTexture
-        surfaceTexture?.setDefaultBufferSize(textureView.width, textureView.height)
-        val surface = Surface(surfaceTexture)
+        try {
+            val surfaceTexture = textureView.surfaceTexture
+            surfaceTexture?.setDefaultBufferSize(textureView.width, textureView.height)
+            val surface = Surface(surfaceTexture)
 
-        val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        captureRequestBuilder.addTarget(surface)
+            val captureRequestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder.addTarget(surface)
 
-        cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                captureSession = session
-                captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
-                captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, handler)
-            }
+            cameraDevice!!.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
+                override fun onConfigured(session: CameraCaptureSession) {
+                    captureSession = session
+                    captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+                    captureSession!!.setRepeatingRequest(captureRequestBuilder.build(), null, handler)
+                }
 
-            override fun onConfigureFailed(session: CameraCaptureSession) {
-                Toast.makeText(this@QR_Activity, "Camera configuration failed", Toast.LENGTH_SHORT).show()
-                captureSession.close()
-            }
+                override fun onConfigureFailed(session: CameraCaptureSession) {
+                    Toast.makeText(this@QR_Activity, "Camera configuration failed", Toast.LENGTH_SHORT).show()
+                    captureSession?.close()
+                    captureSession = null
+                }
+            }, handler)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
 
-        }, handler)
+    private fun closeCamera() {
+        captureSession?.close()
+        captureSession = null
+        cameraDevice?.close()
+        cameraDevice = null
     }
 
     private fun scanQRCode() {
-        val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        captureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
         val bitmap = textureView.bitmap ?: return
         val image = InputImage.fromBitmap(bitmap, 0)
         val imageView = findViewById<ImageView>(R.id.imageView)
@@ -194,7 +208,7 @@ class QR_Activity : AppCompatActivity() {
         //If the popup closes it needs to wait 2 seconds before it can be opened again
         popupClose.setOnClickListener {
             popupWindow.dismiss()
-                popupVisible = false
+            popupVisible = false
             if (!textureView.isAvailable) {
                 textureView.surfaceTextureListener = surfaceTextureListener
             }
@@ -212,7 +226,7 @@ class QR_Activity : AppCompatActivity() {
             intent.putExtra("label", label.lowercase())
             intent.putExtra("category", category)
             intent.putStringArrayListExtra("scannedLabels", scannedObjects)
-            if (category == "quiz") {
+            if (category == "Quiz") {
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
             }
@@ -247,17 +261,15 @@ class QR_Activity : AppCompatActivity() {
 
         popupClose.setOnClickListener {
             popupWindow.dismiss()
-                popupVisible = false
+            popupVisible = false
             if (!textureView.isAvailable) {
                 textureView.surfaceTextureListener = surfaceTextureListener
             }
             Handler(Looper.getMainLooper()).postDelayed({
-            Log.d("Popup", "Popup can be opened again")
+                Log.d("Popup", "Popup can be opened again")
             }, 1000)
         }
     }
-
-
 
     private fun getAllDocumentNames() {
         objects.get().addOnCompleteListener { task ->
@@ -268,5 +280,15 @@ class QR_Activity : AppCompatActivity() {
                 Log.w("FirestoreError", "Error getting documents.", task.exception)
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        closeCamera()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        closeCamera()
     }
 }

@@ -87,7 +87,7 @@ public class InformationActivity extends AppCompatActivity {
                 progressMax = findViewById(R.id.progressMax);
 
                 db = FirebaseFirestore.getInstance();
-                CollectionReference objectItems = db.collection("video");
+                CollectionReference objectItems = db.collection("quiz_objects");
                 // Counts how many records are in the object table.
                 AggregateQuery queryCount = objectItems.count();
                 queryCount.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
@@ -192,6 +192,11 @@ public class InformationActivity extends AppCompatActivity {
                 resetVideo = findViewById(R.id.resetVideobtn);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
+                switchButton.setOnClickListener(v -> {
+                            isCurrent = switchButton.isChecked();
+                            getObjectInformation(label, category);
+                        }
+                );
                 break;
             case "Video":
                 setContentView(R.layout.activity_main_informationview_video);
@@ -212,26 +217,34 @@ public class InformationActivity extends AppCompatActivity {
         // OnClickListeners
         gobackButton.setOnClickListener(v -> goBackToQRView());
         resetVideo.setOnClickListener(v -> webView.reload());
-        switchButton.setOnClickListener(v -> {
-            isCurrent = switchButton.isChecked();
-            getObjectInformation(label, category);
-        }
-        );
     }
 
     // Retrieves the information of the object from the database.
     private void getObjectInformation(String label, String category) {
         db = FirebaseFirestore.getInstance();
-        CollectionReference objectItems = db.collection("video_objects");
+        CollectionReference objectItems = category.equals("Text + Video") ? db.collection("video_objects") : db.collection("quiz_objects");
         objectItems.document(label.toLowerCase()).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                switchButton.setVisibility(Boolean.TRUE.equals(document.getBoolean("isPastPresent")) ? View.VISIBLE : View.GONE);
+                if (category.equals("Text + Video")) {
+                    switchButton.setVisibility(Boolean.TRUE.equals(document.getBoolean("isPastPresent")) ? View.VISIBLE : View.GONE);
+                }
                 if (document.exists()) {
+                    String description;
+                    String videoUrl;
+
+                    if (category.equals("Text & Video")) {
+                        description = isCurrent ? document.getString("description_past") : document.getString("description_present");
+                        videoUrl = isCurrent ? document.getString("video_url_past") : document.getString("video_url_present");
+                    } else {
+                        description = document.getString("description");
+                        videoUrl = document.getString("video_url");
+                    }
+
                     QRObject qrobject = new QRObject(
                             document.getString("name"),
-                            isCurrent ? document.getString("description_past") : document.getString("description_present"),
-                            isCurrent ? document.getString("video_url_past") : document.getString("video_url_present"),
+                            description,
+                            videoUrl,
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
@@ -269,15 +282,19 @@ public class InformationActivity extends AppCompatActivity {
                     // Set the information based on the category.
                     if (category.equals("Quiz")) {
                         quizQuestion.setText(qrobject.getQuestion());
-                        answer1.setText(qrobject.getAnswers().get(0));
-                        answer2.setText(qrobject.getAnswers().get(1));
-                        answer3.setText(qrobject.getAnswers().get(2));
-                        answer4.setText(qrobject.getAnswers().get(3));
+                        List<String> answers = qrobject.getAnswers();
+                        if (answers != null && answers.size() >= 4) {
+                            answer1.setText(answers.get(0));
+                            answer2.setText(answers.get(1));
+                            answer3.setText(answers.get(2));
+                            answer4.setText(answers.get(3));
+                        } else {
+                            Log.e("Error", "Answers list is null or does not contain enough elements.");
+                        }
 
                         correctAnswer = qrobject.getCorrectAnswer();
                         explainText = qrobject.getExplanation();
-                    }
-                    else if (category.equals("Text + Video")) {
+                    } else if (category.equals("Text + Video")) {
                         information.setText(qrobject.getDescription());
                     }
                 }
@@ -341,20 +358,20 @@ public class InformationActivity extends AppCompatActivity {
     // Returns to the AR view.
     private void goBackToQRView() {
         if (category.equals("Quiz")) {
-            if (questionProgress < totalQuestions) {
+            Log.d("QuestionProgress", String.valueOf(questionProgress));
+            Log.d("TotalQuestions", String.valueOf(totalQuestions));
+            if (totalQuestions > questionProgress) {
                 // Go back to the QR view
                 Intent intent = new Intent(InformationActivity.this, QR_Activity.class);
                 intent.putExtra("label", label);
                 intent.putStringArrayListExtra("scannedLabels", scannedLabels);
                 intent.putExtra("category", category);
-                if (category.equals("Quiz")) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("correctQuestions", correctQuestions);
-                    editor.putInt("wrongQuestions", wrongQuestions);
-                    editor.putInt("questionProgress", questionProgress);
-                    editor.apply();
-                }
+                SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("correctQuestions", correctQuestions);
+                editor.putInt("wrongQuestions", wrongQuestions);
+                editor.putInt("questionProgress", questionProgress);
+                editor.apply();
                 startActivity(intent);
             } else {
                 // Go to the end quiz view

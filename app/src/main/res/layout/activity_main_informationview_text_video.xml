@@ -23,7 +23,7 @@
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.943"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.142">
+            app:layout_constraintVertical_bias="0.172">
 
         </WebView>
 
@@ -64,51 +64,50 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.55" />
+            app:layout_constraintVertical_bias="0.572" />
 
         <TextView
             android:id="@+id/informationText"
-            android:layout_width="451dp"
-            android:layout_height="265dp"
+            android:layout_width="460dp"
+            android:layout_height="242dp"
             android:layout_marginBottom="16dp"
+            android:maxHeight="265dp"
+            android:scrollbars="vertical"
             android:text="Information Text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.625"
+            app:layout_constraintHorizontal_bias="0.333"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/resetVideobtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
-            android:backgroundTint="@color/yellow"
-            android:text="Reset Video"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/webView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.054"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
 
         <Switch
             android:id="@+id/switch_past"
-            android:layout_width="133dp"
-            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:layout_height="63dp"
             android:layout_marginBottom="19dp"
-            android:scaleX="1.5"
             android:text="Zie heden"
             android:textAlignment="center"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/webView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.836"
+            app:layout_constraintHorizontal_bias="0.911"
             app:layout_constraintStart_toEndOf="@+id/resetVideobtn"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.095"
-            tools:scaleY="1.5" />
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/resetVideobtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="9dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Reset Video"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/webView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

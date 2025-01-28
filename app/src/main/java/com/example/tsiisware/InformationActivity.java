@@ -188,7 +188,7 @@ public class InformationActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_main_informationview_text_video);
                 switchButton = findViewById(R.id.switch_past);
                 title = findViewById(R.id.titleTextVideo);
-                title.setText("Text + Video: " + label);
+                title.setText(label);
                 resetVideo = findViewById(R.id.resetVideobtn);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
@@ -197,12 +197,6 @@ public class InformationActivity extends AppCompatActivity {
                             getObjectInformation(label, category);
                         }
                 );
-                break;
-            case "Video":
-                setContentView(R.layout.activity_main_informationview_video);
-                title = findViewById(R.id.textViewVideo);
-                resetVideo = findViewById(R.id.resetVideobtn);
-                title.setText("Video: " + label);
                 break;
             default:
                 setContentView(R.layout.qr_view);
@@ -266,8 +260,8 @@ public class InformationActivity extends AppCompatActivity {
                         float y = event.getY();
 
                         // Define the middle area (e.g., 5% of the width and height)
-                        int middleAreaWidth = (int) (width * 0.05);
-                        int middleAreaHeight = (int) (height * 0.05);
+                        int middleAreaWidth = (int) (width * 0.10);
+                        int middleAreaHeight = (int) (height * 0.10);
                         int middleXStart = (width - middleAreaWidth) / 2;
                         int middleYStart = (height - middleAreaHeight) / 2;
 

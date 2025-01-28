@@ -12,6 +12,7 @@
     <string name="goedAntw">
         Goed geantwoord!
     </string>
+    <string name="select_image">Select Image</string>
     <string name="popup_text">Nieuwe QR-code gescand: </string>
     <string name="already_scanned_text">De QR-code is al gescand.</string>
 </resources>

@@ -169,7 +169,7 @@ class QR_Activity : AppCompatActivity() {
                         progressBar.visibility = View.VISIBLE
                         progressBar.progress = 100
                         val label = barcode.displayValue ?: continue
-                        Toast.makeText(this, "QR code scanned: $label", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this, "QR code scanned: $label", Toast.LENGTH_SHORT).show()
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (!scannedObjects.contains(label) && !popupVisible) {
                                 Log.d("Not_Scanned", "New QR code scanned: $label")

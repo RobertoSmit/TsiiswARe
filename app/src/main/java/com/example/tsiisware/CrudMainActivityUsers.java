@@ -21,22 +21,14 @@ public class CrudMainActivityUsers extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("currentUsername", getIntent().getStringExtra("username"));
-        DeleteUserFragment deleteUserFragment = new DeleteUserFragment();
-        deleteUserFragment.setArguments(bundle);
-
         viewPager.setAdapter(new ViewPagerAdapterUsers(this));
 
         btnLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(CrudMainActivityUsers.this, AdminMainActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(CrudMainActivityUsers.this, AdminMainActivity.class));
         });
 
         btnGoToObjects.setOnClickListener(v -> {
-            Intent intent = new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class);
-            intent.putExtra("username", getIntent().getStringExtra("username"));
-            startActivity(intent);
+            startActivity(new Intent(CrudMainActivityUsers.this, CrudMainActivityObjects.class));
         });
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {

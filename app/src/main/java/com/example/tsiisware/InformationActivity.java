@@ -227,9 +227,9 @@ public class InformationActivity extends AppCompatActivity {
                     String description;
                     String videoUrl;
 
-                    if (category.equals("Text & Video")) {
-                        description = isCurrent ? document.getString("description_past") : document.getString("description_present");
-                        videoUrl = isCurrent ? document.getString("video_url_past") : document.getString("video_url_present");
+                    if (category.equals("Text + Video")) {
+                        description = !isCurrent ? document.getString("description_past") : document.getString("description_present");
+                        videoUrl = !isCurrent ? document.getString("video_url_past") : document.getString("video_url_present");
                     } else {
                         description = document.getString("description");
                         videoUrl = document.getString("video_url");
@@ -352,8 +352,6 @@ public class InformationActivity extends AppCompatActivity {
     // Returns to the AR view.
     private void goBackToQRView() {
         if (category.equals("Quiz")) {
-            Log.d("QuestionProgress", String.valueOf(questionProgress));
-            Log.d("TotalQuestions", String.valueOf(totalQuestions));
             if (totalQuestions > questionProgress) {
                 // Go back to the QR view
                 Intent intent = new Intent(InformationActivity.this, QR_Activity.class);

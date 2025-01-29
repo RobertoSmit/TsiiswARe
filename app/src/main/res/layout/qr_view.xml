@@ -17,12 +17,20 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="-12dp"
+        android:layout_marginBottom="-15dp"
         android:background="#000" />
 
     <Button
         android:id="@+id/btnLogoffAR"
         android:layout_width="160dp"
         android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="13dp"
         android:backgroundTint="@color/red"
         android:text="Uitloggen"
         android:textColor="@color/white"
@@ -40,5 +48,37 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="62dp"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="385dp"
+        android:layout_marginTop="755dp"
+        android:layout_marginEnd="86dp"
+        android:layout_marginBottom="40dp"
+        app:srcCompat="@drawable/qr_code" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="332dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="770dp"
+        android:layout_marginEnd="174dp"
+        android:layout_marginBottom="38dp"
+        android:text="Scan een QR code:"
+        android:textAlignment="center"
+        android:textColor="#FFC107"
+        android:textSize="34sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

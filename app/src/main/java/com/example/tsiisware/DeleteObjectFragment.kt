@@ -45,7 +45,7 @@ class DeleteObjectFragment : Fragment() {
     }
 
     private fun loadObjectsIntoSpinner() {
-        db.collection("objects").get()
+        db.collection("video_objects").get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val objects = mutableListOf<String>()

@@ -44,6 +44,9 @@ public class CrudMainActivityObjects extends AppCompatActivity {
                     tab.setText("Delete Object");
                     tab.setContentDescription("Delete Object Tab");
                     break;
+                case 3:
+                    tab.setText("Create QR Code");
+                    tab.setContentDescription("Create QR Code Tab");
             }
         }).attach();
     }

@@ -13,8 +13,8 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="269dp" />
+        tools:layout_editor_absoluteX="41dp"
+        tools:layout_editor_absoluteY="204dp" />
 
     <ImageView
         android:id="@+id/titleImageTextVideo"
@@ -23,7 +23,7 @@
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.943"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -43,12 +43,12 @@
         <WebView
             android:id="@+id/webView"
             android:layout_width="450dp"
-            android:layout_height="275dp"
+            android:layout_height="210dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.142">
+            app:layout_constraintVertical_bias="0.172">
 
         </WebView>
 
@@ -63,49 +63,64 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.55" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="400dp"
-            android:layout_height="2dp"
-            android:layout_marginTop="34dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.579" />
+            app:layout_constraintTop_toBottomOf="@+id/webView"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/informationText"
-            android:layout_width="465dp"
-            android:layout_height="233dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="382dp"
+            android:layout_height="145dp"
+            android:layout_marginBottom="7dp"
+            android:maxHeight="265dp"
+            android:scrollbars="vertical"
             android:text="Information Text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextVideo"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Switch
+            android:id="@+id/switch_past"
+            android:layout_width="120dp"
+            android:layout_height="63dp"
+            android:layout_marginBottom="19dp"
+            android:text="Zie heden"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/webView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.911"
+            app:layout_constraintStart_toEndOf="@+id/resetVideobtn"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/resetVideobtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="9dp"
             android:backgroundTint="@color/yellow"
             android:text="Reset Video"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/webView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.054"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/imageObject"
+            android:layout_width="375dp"
+            android:layout_height="145dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/informationText"
+            app:srcCompat="@drawable/background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">TsiiswARe</string>
     <string-array name="categories">
-        <item>Maak een keuze</item>
+        <item>--- Kies een categorie ---</item>
         <item>Quiz</item>
-        <item>Video</item>
+        <!--        <item>Video</item>-->
         <item>Text + Video</item>
     </string-array>
     <string name="foutAntw">
@@ -12,4 +12,11 @@
     <string name="goedAntw">
         Goed geantwoord!
     </string>
+    <string name="select_image">Select Image</string>
+    <string name="popup_text">Nieuwe QR-code gescand: </string>
+    <string name="already_scanned_text">De QR-code is al gescand.</string>
+    <string name="informatie_vroeger">Informatie vroeger</string>
+    <string name="informatie_nu">Informatie nu</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

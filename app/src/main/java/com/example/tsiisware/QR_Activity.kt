@@ -12,23 +12,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import android.util.Range
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.TextureView
-import android.view.WindowManager
+import android.view.*
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.barcode.Barcode
+import android.os.Looper
+import android.widget.ImageView
+import android.widget.ProgressBar
 
 class QR_Activity : AppCompatActivity() {
     private lateinit var textureView: TextureView
@@ -36,31 +32,34 @@ class QR_Activity : AppCompatActivity() {
     private lateinit var handler: Handler
     private lateinit var category: String
     private lateinit var logoff: Button
-    private lateinit var cameraDevice: CameraDevice
-    private lateinit var captureSession: CameraCaptureSession
+    private var cameraDevice: CameraDevice? = null
+    private var captureSession: CameraCaptureSession? = null
     private var db: FirebaseFirestore? = null
     private lateinit var objects: CollectionReference
-    private val scannedObjects = ArrayList<String>()
+    private var scannedObjects = ArrayList<String>()
     private var popupVisible: Boolean = false
     private val dblabels = mutableListOf<String>()
     private var correctQuestions: Int = 0
     private var wrongQuestions: Int = 0
+    private var scanning: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ar_view)
-
+        setContentView(R.layout.qr_view)
 
         category = intent.getStringExtra("category")!!
-        if (category == "quiz") {
+        db = FirebaseFirestore.getInstance()
+        scannedObjects = intent.getStringArrayListExtra("scannedLabels") ?: ArrayList()
+        Log.d("ScannedObjects", scannedObjects.toString())
+        if (category == "Quiz") {
             correctQuestions = intent.getIntExtra("correctQuestions", 0)
             wrongQuestions = intent.getIntExtra("wrongQuestions", 0)
-            scannedObjects.addAll(intent.getStringArrayListExtra("scannedLabels")!!)
+            objects = db!!.collection("quiz_objects")
+        } else {
+            objects = db!!.collection("video_objects")
         }
-        db = FirebaseFirestore.getInstance()
-        objects = db!!.collection("objects")
-        getAllDocumentNames()
 
+        getAllDocumentNames()
         textureView = findViewById(R.id.textureView)
         textureView.surfaceTextureListener = surfaceTextureListener
 
@@ -83,83 +82,125 @@ class QR_Activity : AppCompatActivity() {
         }
 
         override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {}
-        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean = false
+
+        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+            closeCamera()
+            return true
+        }
+
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-            if (!popupVisible) scanQRCode()
+            if (!popupVisible && !scanning) scanQRCode()
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun openCamera() {
-        cameraManager.openCamera(cameraManager.cameraIdList[0], object : CameraDevice.StateCallback() {
-            override fun onOpened(camera: CameraDevice) {
-                cameraDevice = camera
-                createCameraPreviewSession()
-            }
+        try {
+            cameraManager.openCamera(cameraManager.cameraIdList[0], object : CameraDevice.StateCallback() {
+                override fun onOpened(camera: CameraDevice) {
+                    cameraDevice = camera
+                    createCameraPreviewSession()
+                }
 
-            override fun onDisconnected(camera: CameraDevice) {
-                camera.close()
-            }
+                override fun onDisconnected(camera: CameraDevice) {
+                    camera.close()
+                    cameraDevice = null
+                }
 
-            override fun onError(camera: CameraDevice, error: Int) {
-                camera.close()
-            }
-        }, handler)
+                override fun onError(camera: CameraDevice, error: Int) {
+                    camera.close()
+                    cameraDevice = null
+                }
+            }, handler)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
     }
 
     private fun createCameraPreviewSession() {
-        val surfaceTexture = textureView.surfaceTexture
-        surfaceTexture?.setDefaultBufferSize(textureView.width, textureView.height)
-        val surface = Surface(surfaceTexture)
+        try {
+            val surfaceTexture = textureView.surfaceTexture
+            surfaceTexture?.setDefaultBufferSize(textureView.width, textureView.height)
+            val surface = Surface(surfaceTexture)
 
-        val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        captureRequestBuilder.addTarget(surface)
+            val captureRequestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder.addTarget(surface)
 
-        cameraDevice.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                captureSession = session
-                captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
-                captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, handler)
-            }
+            cameraDevice!!.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
+                override fun onConfigured(session: CameraCaptureSession) {
+                    captureSession = session
+                    captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+                    captureSession!!.setRepeatingRequest(captureRequestBuilder.build(), null, handler)
+                }
 
-            override fun onConfigureFailed(session: CameraCaptureSession) {
-                Toast.makeText(this@QR_Activity, "Camera configuration failed", Toast.LENGTH_SHORT).show()
-            }
-        }, handler)
+                override fun onConfigureFailed(session: CameraCaptureSession) {
+                    Toast.makeText(this@QR_Activity, "Camera configuration failed", Toast.LENGTH_SHORT).show()
+                    captureSession?.close()
+                    captureSession = null
+                }
+            }, handler)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun closeCamera() {
+        captureSession?.close()
+        captureSession = null
+        cameraDevice?.close()
+        cameraDevice = null
     }
 
     private fun scanQRCode() {
-        val captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        captureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
+        if (scanning) return
+
+        scanning = true
         val bitmap = textureView.bitmap ?: return
         val image = InputImage.fromBitmap(bitmap, 0)
         val imageView = findViewById<ImageView>(R.id.imageView)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         val scanner = BarcodeScanning.getClient()
 
         imageView.setImageBitmap(bitmap)
-
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
                     if (barcode.valueType == Barcode.TYPE_TEXT) {
+                        progressBar.visibility = View.VISIBLE
+                        progressBar.progress = 100
                         val label = barcode.displayValue ?: continue
-                        Log.d("QR_Activity", "Scanne QR code: $label")
-                        if (dblabels.contains(label.lowercase()) && !scannedObjects.contains(label.lowercase()) && !popupVisible) {
-                            scannedObjects.add(label)
-                            showPopup(label)
-                            popupVisible = true
-                        }
+//                        Toast.makeText(this, "QR code scanned: $label", Toast.LENGTH_SHORT).show()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (!scannedObjects.contains(label) && !popupVisible) {
+                                Log.d("Not_Scanned", "New QR code scanned: $label")
+                                showPopup(label)
+                                popupVisible = true
+                            } else if (scannedObjects.contains(label) && !popupVisible) {
+                                Log.d("Already_Scanned", "QR code already scanned: $label")
+                                showPopupAlreadyScanned()
+                                popupVisible = true
+                            }
+                        }, 3000) // 1 second delay
                     }
                 }
+                progressBar.visibility = View.GONE
+                scanning = false
+                // Introduce a delay before allowing the next scan
+                Handler(Looper.getMainLooper()).postDelayed({
+                    scanning = false
+                }, 2000) // 2 seconds delay
             }
             .addOnFailureListener {
                 Log.e("QR_Activity", "QR code scanning failed", it)
+                progressBar.visibility = View.GONE
+                scanning = false
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showPopup(label: String) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.popup_ar, null)
+        val popupView = inflater.inflate(R.layout.popup_qr, null)
 
         val popupWindow = Dialog(this)
         popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -178,32 +219,74 @@ class QR_Activity : AppCompatActivity() {
         popupWindow.window?.attributes = layoutParams
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = popupText.text.toString() + label
+        popupText.text = getString(R.string.popup_text) + label
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
+
+        //If the popup closes it needs to wait 2 seconds before it can be opened again
         popupClose.setOnClickListener {
             popupWindow.dismiss()
             popupVisible = false
+            if (!textureView.isAvailable) {
+                textureView.surfaceTextureListener = surfaceTextureListener
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                Log.d("Popup", "Popup can be opened again")
+            }, 1000)
         }
+
         popupGo.setOnClickListener {
             if (!scannedObjects.contains(label)) {
-                val sharedPreferences = getSharedPreferences("scanned_objects_prefs", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putStringSet("scanned_objects", scannedObjects.toSet())
-                editor.apply()
+                scannedObjects.add(label)
             }
+
             val intent = Intent(this, InformationActivity::class.java)
-            intent.putExtra("label", label)
+            intent.putExtra("label", label.lowercase())
             intent.putExtra("category", category)
-            if (category == "quiz") {
-                intent.putStringArrayListExtra("gescandeObjecten", scannedObjects)
-                intent.putExtra("label", label.lowercase())
+            intent.putStringArrayListExtra("scannedLabels", scannedObjects)
+            if (category == "Quiz") {
                 intent.putExtra("correctQuestions", correctQuestions)
                 intent.putExtra("wrongQuestions", wrongQuestions)
-                intent.putStringArrayListExtra("scannedLabels", ArrayList(scannedObjects))
             }
             startActivity(intent)
+        }
+    }
+
+    private fun showPopupAlreadyScanned() {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_qr_already_scanned, null)
+
+        val popupWindow = Dialog(this)
+        popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        popupWindow.setContentView(popupView)
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(popupWindow.window?.attributes)
+        layoutParams.width = 800
+        layoutParams.height = 500
+        layoutParams.gravity = Gravity.TOP
+        layoutParams.x = 0
+        layoutParams.y = 350
+
+        popupWindow.setCancelable(false)
+        popupWindow.show()
+        popupWindow.window?.attributes = layoutParams
+
+        val popupText = popupView.findViewById<TextView>(R.id.popupAlreadyScannedText)
+        popupText.text = getString(R.string.already_scanned_text)
+
+        val popupClose = popupView.findViewById<Button>(R.id.btnClosePopupAlreadyScanned)
+
+        popupClose.setOnClickListener {
+            popupWindow.dismiss()
+            popupVisible = false
+            if (!textureView.isAvailable) {
+                textureView.surfaceTextureListener = surfaceTextureListener
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                Log.d("Popup", "Popup can be opened again")
+            }, 1000)
         }
     }
 
@@ -216,5 +299,15 @@ class QR_Activity : AppCompatActivity() {
                 Log.w("FirestoreError", "Error getting documents.", task.exception)
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        closeCamera()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        closeCamera()
     }
 }

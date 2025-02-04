@@ -1,16 +1,21 @@
 // CreateObjectFragment.kt
 package com.example.tsiisware
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class CreateObjectFragment : Fragment() {
     override fun onCreateView(
@@ -21,59 +26,144 @@ class CreateObjectFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_create_object, container, false)
 
         val etObjectName = view.findViewById<EditText>(R.id.etObjectName)
-        val etObjectVideoURL = view.findViewById<EditText>(R.id.etObjectVideoURL)
+        val etObjectVideoURLPast = view.findViewById<EditText>(R.id.etObjectVideoURLPast)
+        val etObjectVideoURLPresent = view.findViewById<EditText>(R.id.etObjectVideoURLPresent)
+        val etObjectImageURLPast = view.findViewById<EditText>(R.id.etObjectImageURLPast)
+        val etObjectImageURLPresent = view.findViewById<EditText>(R.id.etObjectImageURLPresent)
+        val imageSelectBtnPast = view.findViewById<Button>(R.id.imageSelectButtonPast)
+        val imageSelectBtnPresent = view.findViewById<Button>(R.id.imageSelectButtonPresent)
         val etObjectDescription = view.findViewById<EditText>(R.id.etObjectDescription)
-        val etQuestion = view.findViewById<EditText>(R.id.etQuestion)
-        val etUitleg = view.findViewById<EditText>(R.id.etUitleg)
-        val etAnswer1 = view.findViewById<EditText>(R.id.etAnswer1)
-        val etAnswer2 = view.findViewById<EditText>(R.id.etAnswer2)
-        val etAnswer3 = view.findViewById<EditText>(R.id.etAnswer3)
-        val etAnswer4 = view.findViewById<EditText>(R.id.etAnswer4)
-        val correctAnswer = view.findViewById<Spinner>(R.id.etCorrectAnswer)
+        val etUitlegVroeger = view.findViewById<EditText>(R.id.etVroeger)
+        val etUitlegNu = view.findViewById<EditText>(R.id.etNu)
         val btnCreateObject = view.findViewById<Button>(R.id.btnCreateObject)
+        val pastPresenCheck = view.findViewById<CheckBox>(R.id.PastPresentCheck)
+        var selectStatus = false
+        val SELECT_PICTURE = 200
+        var currentEditText: EditText? = null
 
-        val answerFields = listOf(etAnswer1, etAnswer2, etAnswer3, etAnswer4)
+        //List of all input fields
+        val inputFields = listOf(etObjectName, etObjectDescription, etObjectVideoURLPast, etObjectVideoURLPresent, etObjectImageURLPast, etObjectImageURLPresent, etUitlegVroeger, etUitlegNu)
 
-        val updateSpinner = {
-            val answers = answerFields.map { it.text.toString() }
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, answers)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            correctAnswer.adapter = adapter
+        val setBool =
+        {
+            if (pastPresenCheck.isChecked()) {
+                selectStatus = true //Checkbox is selected
+            } else {
+                selectStatus = false //Checkbox is not selected
+            }
         }
 
-        answerFields.forEach { editText ->
-            editText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    updateSpinner()
+        //Empties the input fields
+        val emptyFields = {
+            //Goes through each list item
+            inputFields.forEach {
+                it.setText("")
+            }
+        }
+
+        //Checks whether the checkbox is checked
+        val ifChecked = {
+            if (pastPresenCheck.isChecked()) {
+                pastPresenCheck.setChecked(false)
+            }
+        }
+
+
+
+        // Function to get the real file path from the content URI
+        fun getRealPathFromURI(contentUri: Uri): String? {
+            val appDir = File(context?.filesDir, "images")
+            if (!appDir.exists()) {
+                appDir.mkdirs()
+            }
+            val fileName = "image_${System.currentTimeMillis()}.jpg"
+            val destfile = File(appDir, fileName)
+
+            try {
+                context?.contentResolver?.openInputStream(contentUri)?.use { InputStream ->
+                    FileOutputStream(destfile).use { OutputStream ->
+                        val buffer = ByteArray(1024)
+                        var bytesRead: Int
+                        while (InputStream.read(buffer).also { bytesRead = it } != -1) {
+                            OutputStream.write(buffer, 0, bytesRead)
+                        }
+                    }
                 }
-                override fun afterTextChanged(s: Editable?) {}
-            })
+                return destfile.absolutePath
+            }
+            catch (e: IOException)
+            {
+                e.printStackTrace()
+            }
+            return null
+        }
+
+        val changeImage = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ){
+                result->
+            if (result.resultCode == Activity.RESULT_OK)
+            {
+                val context: Context
+                val data = result.data //Retrieves all data of the Intent
+                val imgUri = data?.data //Retrieve URI data
+                imgUri?.let {
+                    val imagePath = getRealPathFromURI(it)
+                    currentEditText?.setText(imagePath.toString()) //Sets the image Uri as text in the ImageURL input field
+                }
+            }
+        }
+
+        fun selectFromGallery(targetEditText: EditText) {
+            //Setup the gallery
+            currentEditText = targetEditText
+            val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+            galleryIntent.type = "image/*"
+            changeImage.launch(galleryIntent); //Launch the gallery
         }
 
         btnCreateObject.setOnClickListener {
-            db.collection("objects").document(etObjectName.text.toString()).set(
-                hashMapOf(
-                    "label" to etObjectName.text.toString(),
-                    "video_url" to etObjectVideoURL.text.toString(),
-                    "description" to etObjectDescription.text.toString(),
-                    "question" to etQuestion.text.toString(),
-                    "explanation" to etUitleg.text.toString(),
-                    "answers" to arrayListOf(
-                        etAnswer1.text.toString(),
-                        etAnswer2.text.toString(),
-                        etAnswer3.text.toString(),
-                        etAnswer4.text.toString()
-                    ),
-                    "correct_answer" to correctAnswer.selectedItem.toString()
+            try {
+                setBool()
+                //Database setup
+                db.collection("video_objects").document(etObjectName.text.toString()).set(
+                    hashMapOf(
+                        //Takes the form data and links it to the database variables.
+                        "label" to etObjectName.text.toString(),
+                        "video_url_past" to etObjectVideoURLPast.text.toString(),
+                        "video_url_present" to etObjectVideoURLPresent.text.toString(),
+                        "image_url_past" to etObjectImageURLPast.text.toString(),
+                        "image_url_present" to etObjectImageURLPresent.text.toString(),
+                        "isPastPresent" to selectStatus,
+                        "description" to etObjectDescription.text.toString(),
+                        "description_past" to etUitlegVroeger.text.toString(),
+                        "description_present" to etUitlegNu.text.toString(),
+                    )
                 )
-            )
-            val intent = Intent(activity, this::class.java)
-            startActivity(intent)
+                Toast.makeText(activity, "Video object aangemaakt", Toast.LENGTH_SHORT).show()
+                emptyFields()
+                ifChecked()
+                val intent = Intent(activity, this::class.java)
+                startActivity(intent)
+            }
+            catch (e: Exception)
+            {
+                System.out.println("Error occurred: $e")
+            }
         }
+
+        imageSelectBtnPast.setOnClickListener(){
+            selectFromGallery(etObjectImageURLPast)
+        }
+
+        imageSelectBtnPresent.setOnClickListener(){
+            selectFromGallery((etObjectImageURLPresent))
+        }
+
 
 //        Make QR code and print it out.
 
         return view
     }
+
 }

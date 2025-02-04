@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
+import at.favre.lib.crypto.bcrypt.BCrypt
 
 class CreateUserFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
-    private lateinit var spinnerRole: Spinner
     private lateinit var btnCreateUser: Button
 
     override fun onCreateView(
@@ -27,21 +27,20 @@ class CreateUserFragment : Fragment() {
         etPassword = view.findViewById(R.id.passwordEditText)
         btnCreateUser = view.findViewById(R.id.createUserButton)
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.roles_array,
-            android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerRole.adapter = adapter
-
         btnCreateUser.setOnClickListener {
-            val username = etUsername.text.toString()
-            val password = etPassword.text.toString()
+            val username = etUsername.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(context, "Vul alle velden in", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
 
             val user = hashMapOf(
                 "username" to username,
-                "password" to password,
+                "password" to hashedPassword,
                 "role" to "Admin"
             )
 

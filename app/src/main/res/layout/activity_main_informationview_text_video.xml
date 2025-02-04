@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".InformationActivity">
 
-
     <ImageView
-        android:id="@+id/backgroundImageTextVideo"
+        android:id="@+id/backgroundImageQuiz"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
         tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="204dp" />
+        tools:layout_editor_absoluteY="186dp" />
 
     <ImageView
         android:id="@+id/titleImageTextVideo"
@@ -50,6 +49,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.172">
 
+            <ImageView
+                android:id="@+id/backgroundImageTextVideo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_x="-169dp"
+                android:layout_y="-581dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/background" />
         </WebView>
 
         <TextView
@@ -68,9 +75,10 @@
 
         <TextView
             android:id="@+id/informationText"
-            android:layout_width="382dp"
+            android:layout_width="450dp"
             android:layout_height="145dp"
             android:layout_marginBottom="7dp"
+            android:fadeScrollbars="true"
             android:maxHeight="265dp"
             android:scrollbars="vertical"
             android:text="Information Text"
@@ -113,7 +121,7 @@
 
         <ImageView
             android:id="@+id/imageObject"
-            android:layout_width="375dp"
+            android:layout_width="450dp"
             android:layout_height="145dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"

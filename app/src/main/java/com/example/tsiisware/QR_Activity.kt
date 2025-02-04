@@ -11,20 +11,23 @@ import android.hardware.camera2.*
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.AggregateQuerySnapshot
+import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.barcode.Barcode
-import android.os.Looper
-import android.widget.ImageView
-import android.widget.ProgressBar
 
 class QR_Activity : AppCompatActivity() {
     private lateinit var textureView: TextureView
@@ -42,6 +45,7 @@ class QR_Activity : AppCompatActivity() {
     private var correctQuestions: Int = 0
     private var wrongQuestions: Int = 0
     private var scanning: Boolean = false
+    private var tourFinished = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,6 +166,21 @@ class QR_Activity : AppCompatActivity() {
         val scanner = BarcodeScanning.getClient()
 
         imageView.setImageBitmap(bitmap)
+
+        val objectItems = db!!.collection("quiz_objects")
+        objectItems.count().get(AggregateSource.SERVER).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val totalQuestions = task.result.count.toInt()
+
+                if (scannedObjects.count() == totalQuestions && !tourFinished) {
+                    tourFinished = true
+                    popUpTourFinish()
+                }
+            } else {
+                Log.e("FirestoreError", "Failed to count documents", task.exception)
+            }
+        }
+
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
@@ -219,7 +238,8 @@ class QR_Activity : AppCompatActivity() {
         popupWindow.window?.attributes = layoutParams
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = getString(R.string.popup_text) + label
+        var labelCapitalized : String = label.substring(0,1).uppercase() + label.substring(1)
+        popupText.text = getString(R.string.popup_text) + " " + labelCapitalized
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
@@ -258,7 +278,7 @@ class QR_Activity : AppCompatActivity() {
         val popupView = inflater.inflate(R.layout.popup_qr_already_scanned, null)
 
         val popupWindow = Dialog(this)
-        popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         popupWindow.setContentView(popupView)
 
         val layoutParams = WindowManager.LayoutParams()
@@ -288,6 +308,34 @@ class QR_Activity : AppCompatActivity() {
                 Log.d("Popup", "Popup can be opened again")
             }, 1000)
         }
+    }
+
+    private fun popUpTourFinish()
+    {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.popup_qr_videotour_finish, null)
+
+        val popupWindow = Dialog(this)
+        popupWindow.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        popupWindow.setContentView(popupView)
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(popupWindow.window?.attributes)
+        layoutParams.width = 800
+        layoutParams.height = 500
+        layoutParams.gravity = Gravity.TOP
+        layoutParams.x = 0
+        layoutParams.y = 350
+
+        popupWindow.setCancelable(false)
+        popupWindow.show()
+        popupWindow.window?.attributes = layoutParams
+
+        val popupBack = popupView.findViewById<Button>(R.id.btnPopUpCloseBackHome)
+        popupBack.setOnClickListener({
+           val intent: Intent = Intent(this, UserMainActivity::class.java)
+            startActivity(intent)
+        });
     }
 
     private fun getAllDocumentNames() {

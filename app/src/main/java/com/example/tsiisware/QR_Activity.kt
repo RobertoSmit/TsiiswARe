@@ -197,6 +197,7 @@ class QR_Activity : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showPopup(label: String) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.popup_qr, null)
@@ -218,7 +219,7 @@ class QR_Activity : AppCompatActivity() {
         popupWindow.window?.attributes = layoutParams
 
         val popupText = popupView.findViewById<TextView>(R.id.popupTitle)
-        popupText.text = getString(R.string.popup_text) + label  // Gebruik de string uit strings.xml
+        popupText.text = getString(R.string.popup_text) + label
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopup)
         val popupGo = popupView.findViewById<Button>(R.id.btnGoToInformationView)
@@ -273,7 +274,7 @@ class QR_Activity : AppCompatActivity() {
         popupWindow.window?.attributes = layoutParams
 
         val popupText = popupView.findViewById<TextView>(R.id.popupAlreadyScannedText)
-        popupText.text = getString(R.string.already_scanned_text)  // Gebruik de string uit strings.xml
+        popupText.text = getString(R.string.already_scanned_text)
 
         val popupClose = popupView.findViewById<Button>(R.id.btnClosePopupAlreadyScanned)
 

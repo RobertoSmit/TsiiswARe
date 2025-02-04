@@ -43,7 +43,7 @@
         <WebView
             android:id="@+id/webView"
             android:layout_width="450dp"
-            android:layout_height="275dp"
+            android:layout_height="210dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,22 +63,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.572" />
+            app:layout_constraintTop_toBottomOf="@+id/webView"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/informationText"
-            android:layout_width="460dp"
-            android:layout_height="242dp"
-            android:layout_marginBottom="16dp"
+            android:layout_width="382dp"
+            android:layout_height="145dp"
+            android:layout_marginBottom="7dp"
             android:maxHeight="265dp"
             android:scrollbars="vertical"
             android:text="Information Text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextVideo"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Switch
             android:id="@+id/switch_past"
@@ -108,6 +110,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/imageObject"
+            android:layout_width="375dp"
+            android:layout_height="145dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/informationText"
+            app:srcCompat="@drawable/background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

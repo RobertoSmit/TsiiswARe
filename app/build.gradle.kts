@@ -60,6 +60,7 @@ dependencies {
     implementation ("com.google.mlkit:barcode-scanning:17.0.0")
     implementation("at.favre.lib:bcrypt:0.9.0")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     testImplementation(libs.junit)
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     androidTestImplementation(libs.ext.junit)

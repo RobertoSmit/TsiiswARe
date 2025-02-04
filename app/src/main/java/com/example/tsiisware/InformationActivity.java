@@ -50,6 +50,7 @@ public class InformationActivity extends AppCompatActivity {
     Switch switchButton;
     String label = null;
     String category = null;
+    String imageURL = "";
     TextView quizQuestion, progressNum, progressMax, title, information;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4, resetVideo;
@@ -232,7 +233,6 @@ public class InformationActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String description;
                     String videoUrl;
-                    String imageUrl;
 
                     if (category.equals("Text + Video")) {
                         description = !isCurrent ? document.getString("description_past") : document.getString("description_present");
@@ -241,7 +241,7 @@ public class InformationActivity extends AppCompatActivity {
                     } else {
                         description = document.getString("description");
                         videoUrl = document.getString("video_url_past");
-                        imageUrl = document.getString("image_url_past");
+                        imageURL = document.getString("image_url_past");
                     }
 
                     QRObject qrobject = new QRObject(
@@ -252,7 +252,7 @@ public class InformationActivity extends AppCompatActivity {
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
                             document.getString("explanation"),
-                            imageUrl
+                            imageURL
 
                     );
                     // Load the video in the WebView

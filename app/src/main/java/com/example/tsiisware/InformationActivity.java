@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ public class InformationActivity extends AppCompatActivity {
     Switch switchButton;
     String label = null;
     String category = null;
-    String imageURL = "";
     TextView quizQuestion, progressNum, progressMax, title, information;
     WebView webView;
     Button gobackButton, answer1, answer2, answer3, answer4, resetVideo;
@@ -195,10 +195,13 @@ public class InformationActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_main_informationview_text_video);
                 switchButton = findViewById(R.id.switch_past);
                 title = findViewById(R.id.titleTextVideo);
-                title.setText(label);
+                String labelCapitalized = label.substring(0,1).toUpperCase() + label.substring(1);
+                title.setText(labelCapitalized);
                 resetVideo = findViewById(R.id.resetVideobtn);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
+                information.setMovementMethod(new ScrollingMovementMethod());
+                imageObject = findViewById(R.id.imageObject);
                 switchButton.setOnClickListener(v -> {
                             isCurrent = switchButton.isChecked();
                             getObjectInformation(label, category);
@@ -233,6 +236,7 @@ public class InformationActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String description;
                     String videoUrl;
+                    String imageURL;
 
                     if (category.equals("Text + Video")) {
                         description = !isCurrent ? document.getString("description_past") : document.getString("description_present");

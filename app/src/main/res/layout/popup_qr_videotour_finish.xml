@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/popup_already_scanned"
+    android:background="@drawable/popup_tour_finish_background"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:paddingBottom="16dp"
-        android:text="De QR-code is al gescand."
+        android:text="De videotour is nu afgerond."
         android:textColor="@android:color/black"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,21 +23,22 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.407" />
+        app:layout_constraintVertical_bias="0.387" />
 
     <Button
-        android:id="@+id/btnClosePopupAlreadyScanned"
+        android:id="@+id/btnPopUpCloseBackHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="52dp"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:text="Sluiten"
-        android:textColor="@android:color/white"
+        android:width="400dp"
+        android:backgroundTint="@color/green"
+        android:text="Terug naar startscherm"
+        android:textColor="@color/white"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popupAlreadyScannedText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.075" />
 </androidx.constraintlayout.widget.ConstraintLayout>

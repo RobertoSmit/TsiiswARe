@@ -7,6 +7,7 @@ public class QRObject {
     private String description;
     private String video;
     private String question;
+    private String image;
     private List<String> answers;
     private String correctAnswer;
     private String explanation;
@@ -15,11 +16,12 @@ public class QRObject {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public QRObject(String name, String description, String video, String question, List<String> answers, String correctAnswer, String explanation) {
+    public QRObject(String name, String description, String video, String question, String image, List<String> answers, String correctAnswer, String explanation) {
         this.name = name;
         this.description = description;
         this.video = video;
         this.question = question;
+        this.image = image;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
         this.explanation = explanation;
@@ -35,6 +37,10 @@ public class QRObject {
 
     public String getVideoURL() {
         return video;
+    }
+
+    public String getImageURL() {
+        return image;
     }
 
     public String getQuestion() {

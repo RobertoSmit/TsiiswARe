@@ -20,19 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etObjectVideoURL"
-        android:layout_width="360dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:hint="Video URL"
-        android:paddingLeft="15px"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etObjectDescription" />
-
-    <EditText
         android:id="@+id/etObjectVideoURLPast"
         android:layout_width="360dp"
         android:layout_height="50dp"
@@ -43,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etObjectVideoURL" />
+        app:layout_constraintTop_toBottomOf="@id/etObjectDescription" />
 
     <EditText
         android:id="@+id/etObjectVideoURLPresent"
@@ -59,18 +46,18 @@
         app:layout_constraintTop_toBottomOf="@id/etObjectVideoURLPast" />
 
     <RelativeLayout
-        android:id="@+id/imageSection"
+        android:id="@+id/imageSectionPast"
         android:layout_width="360dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etObjectVideoURLPresent"
+        app:layout_constraintTop_toBottomOf="@id/etObjectVideoURLPresent"
         tools:context=".MainActivity"
         tools:ignore="HardcodedText">
 
         <EditText
-            android:id="@+id/etObjectImageURL"
+            android:id="@+id/etObjectImageURLPast"
             android:layout_width="400dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_edittext_background"
@@ -78,7 +65,40 @@
             android:paddingLeft="15dp" />
 
         <Button
-            android:id="@+id/imageSelectButton"
+            android:id="@+id/imageSelectButtonPast"
+            android:layout_width="110dp"
+            android:layout_height="75dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="2dp"
+            android:backgroundTint="@color/yellow"
+            android:padding="5dp"
+            android:text="@string/select_image"
+            android:textColor="@android:color/black"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/imageSectionPresent"
+        android:layout_width="360dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageSectionPast"
+        tools:context=".MainActivity"
+        tools:ignore="HardcodedText">
+
+        <EditText
+            android:id="@+id/etObjectImageURLPresent"
+            android:layout_width="400dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Image URL"
+            android:paddingLeft="15dp" />
+
+        <Button
+            android:id="@+id/imageSelectButtonPresent"
             android:layout_width="110dp"
             android:layout_height="75dp"
             android:layout_alignParentEnd="true"
@@ -172,7 +192,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageSection"
+        app:layout_constraintTop_toBottomOf="@+id/imageSectionPresent"
         tools:layout_constraintStart_toStartOf="parent" />
 
     <CheckBox
@@ -189,6 +209,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvGoodAnswer"
         app:layout_constraintStart_toStartOf="@+id/tvGoodAnswer"
-        app:layout_constraintTop_toBottomOf="@+id/imageSection" />
+        app:layout_constraintTop_toBottomOf="@+id/imageSectionPresent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,7 @@ public class InformationActivity extends AppCompatActivity {
     ProgressBar pb;
     FirebaseFirestore db;
     Boolean isCurrent = false;
+    ImageView imageObject;
     Switch switchButton;
     String label = null;
     String category = null;
@@ -190,6 +195,7 @@ public class InformationActivity extends AppCompatActivity {
                 title = findViewById(R.id.titleTextVideo);
                 title.setText(label);
                 resetVideo = findViewById(R.id.resetVideobtn);
+                imageObject = findViewById(R.id.imageObject);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
                 switchButton.setOnClickListener(v -> {
@@ -226,10 +232,12 @@ public class InformationActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String description;
                     String videoUrl;
+                    String imageURL = "";
 
                     if (category.equals("Text + Video")) {
                         description = !isCurrent ? document.getString("description_past") : document.getString("description_present");
                         videoUrl = !isCurrent ? document.getString("video_url_past") : document.getString("video_url_present");
+                        imageURL = !isCurrent ? document.getString("image_url_past") : document.getString("image_url_present");
                     } else {
                         description = document.getString("description");
                         videoUrl = document.getString("video_url");
@@ -239,6 +247,7 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("name"),
                             description,
                             videoUrl,
+                            imageURL,
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
@@ -290,6 +299,16 @@ public class InformationActivity extends AppCompatActivity {
                         explainText = qrobject.getExplanation();
                     } else if (category.equals("Text + Video")) {
                         information.setText(qrobject.getDescription());
+                        String imagePath = qrobject.getImageURL();
+                        try {
+                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                            Glide.with(this)
+                                    .asBitmap()
+                                    .load(bitmap)
+                                    .into(imageObject);
+                        } catch (Exception e) {
+                            Log.e("ImageError", "Failed to decode the image from content URI.", e);
+                        }
                     }
                 }
             }

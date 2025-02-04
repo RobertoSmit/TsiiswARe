@@ -28,6 +28,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.AggregateQuery;
@@ -36,8 +37,8 @@ import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +47,6 @@ public class InformationActivity extends AppCompatActivity {
     ProgressBar pb;
     FirebaseFirestore db;
     Boolean isCurrent = false;
-    ImageView imageObject;
     Switch switchButton;
     String label = null;
     String category = null;
@@ -55,6 +55,7 @@ public class InformationActivity extends AppCompatActivity {
     Button gobackButton, answer1, answer2, answer3, answer4, resetVideo;
     String correctAnswer;
     Integer totalQuestions, questionProgress, correctQuestions, wrongQuestions;
+    ImageView imageObject;
     Float progress;
     Float progressPercentage;
     Boolean isCorrect;
@@ -195,7 +196,6 @@ public class InformationActivity extends AppCompatActivity {
                 title = findViewById(R.id.titleTextVideo);
                 title.setText(label);
                 resetVideo = findViewById(R.id.resetVideobtn);
-                imageObject = findViewById(R.id.imageObject);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
                 switchButton.setOnClickListener(v -> {
@@ -232,7 +232,7 @@ public class InformationActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String description;
                     String videoUrl;
-                    String imageURL = "";
+                    String imageUrl;
 
                     if (category.equals("Text + Video")) {
                         description = !isCurrent ? document.getString("description_past") : document.getString("description_present");
@@ -240,18 +240,20 @@ public class InformationActivity extends AppCompatActivity {
                         imageURL = !isCurrent ? document.getString("image_url_past") : document.getString("image_url_present");
                     } else {
                         description = document.getString("description");
-                        videoUrl = document.getString("video_url");
+                        videoUrl = document.getString("video_url_past");
+                        imageUrl = document.getString("image_url_past");
                     }
 
                     QRObject qrobject = new QRObject(
                             document.getString("name"),
                             description,
                             videoUrl,
-                            imageURL,
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
-                            document.getString("explanation")
+                            document.getString("explanation"),
+                            imageUrl
+
                     );
                     // Load the video in the WebView
                     String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", qrobject.getVideoURL().split("v=")[1]);
@@ -371,6 +373,8 @@ public class InformationActivity extends AppCompatActivity {
     // Returns to the AR view.
     private void goBackToQRView() {
         if (category.equals("Quiz")) {
+            Log.d("QuestionProgress", String.valueOf(questionProgress));
+            Log.d("TotalQuestions", String.valueOf(totalQuestions));
             if (totalQuestions > questionProgress) {
                 // Go back to the QR view
                 Intent intent = new Intent(InformationActivity.this, QR_Activity.class);

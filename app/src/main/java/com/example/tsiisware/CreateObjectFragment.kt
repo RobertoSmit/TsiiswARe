@@ -4,18 +4,27 @@ package com.example.tsiisware
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.webkit.WebView
+import android.provider.MediaStore
+import android.provider.MediaStore.Audio.Media
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.text.set
 import androidx.fragment.app.Fragment
+import com.google.android.gms.cast.framework.media.ImagePicker
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 
 class CreateObjectFragment : Fragment() {
     override fun onCreateView(
@@ -45,13 +54,13 @@ class CreateObjectFragment : Fragment() {
         val inputFields = listOf(etObjectName, etObjectDescription, etObjectVideoURLPast, etObjectVideoURLPresent, etObjectImageURLPast, etObjectImageURLPresent, etUitlegVroeger, etUitlegNu)
 
         val setBool =
-            {
-                if (pastPresenCheck.isChecked()) {
-                    selectStatus = true //Checkbox is selected
-                } else {
-                    selectStatus = false //Checkbox is not selected
-                }
+        {
+            if (pastPresenCheck.isChecked()) {
+                selectStatus = true //Checkbox is selected
+            } else {
+                selectStatus = false //Checkbox is not selected
             }
+        }
 
         //Empties the input fields
         val emptyFields = {
@@ -159,6 +168,9 @@ class CreateObjectFragment : Fragment() {
         imageSelectBtnPresent.setOnClickListener(){
             selectFromGallery((etObjectImageURLPresent))
         }
+
+
+//        Make QR code and print it out.
 
         return view
     }

@@ -240,7 +240,7 @@ public class InformationActivity extends AppCompatActivity {
                         imageURL = !isCurrent ? document.getString("image_url_past") : document.getString("image_url_present");
                     } else {
                         description = document.getString("description");
-                        videoUrl = document.getString("video_url_past");
+                        videoUrl = document.getString("video_url");
                         imageURL = document.getString("image_url_past");
                     }
 

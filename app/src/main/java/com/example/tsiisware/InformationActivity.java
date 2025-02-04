@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.AggregateQuery;
@@ -34,6 +38,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +55,7 @@ public class InformationActivity extends AppCompatActivity {
     Button gobackButton, answer1, answer2, answer3, answer4, resetVideo;
     String correctAnswer;
     Integer totalQuestions, questionProgress, correctQuestions, wrongQuestions;
+    ImageView imageObject;
     Float progress;
     Float progressPercentage;
     Boolean isCorrect;
@@ -192,6 +198,7 @@ public class InformationActivity extends AppCompatActivity {
                 resetVideo = findViewById(R.id.resetVideobtn);
                 information = findViewById(R.id.informationText);
                 information.setText("Loading...");
+                imageObject = findViewById(R.id.imageObject);
                 switchButton.setOnClickListener(v -> {
                             isCurrent = switchButton.isChecked();
                             getObjectInformation(label, category);
@@ -226,13 +233,16 @@ public class InformationActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String description;
                     String videoUrl;
+                    String imageUrl;
 
                     if (category.equals("Text & Video")) {
                         description = isCurrent ? document.getString("description_past") : document.getString("description_present");
                         videoUrl = isCurrent ? document.getString("video_url_past") : document.getString("video_url_present");
+                        imageUrl = isCurrent ? document.getString("image_url_past") : document.getString("image_url_present");
                     } else {
                         description = document.getString("description");
-                        videoUrl = document.getString("video_url");
+                        videoUrl = document.getString("video_url_past");
+                        imageUrl = document.getString("image_url_past");
                     }
 
                     QRObject qrobject = new QRObject(
@@ -242,7 +252,9 @@ public class InformationActivity extends AppCompatActivity {
                             document.getString("question"),
                             (List<String>) document.get("answers"),
                             document.getString("correct_answer"),
-                            document.getString("explanation")
+                            document.getString("explanation"),
+                            imageUrl
+
                     );
                     // Load the video in the WebView
                     String iframeStructure = String.format("<iframe width=\"100%%\" height=\"100%%\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>", qrobject.getVideoURL().split("v=")[1]);
@@ -290,6 +302,16 @@ public class InformationActivity extends AppCompatActivity {
                         explainText = qrobject.getExplanation();
                     } else if (category.equals("Text + Video")) {
                         information.setText(qrobject.getDescription());
+                        String imagePath = qrobject.getImageURL();
+                        try {
+                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                            Glide.with(this)
+                                    .asBitmap()
+                                    .load(bitmap)
+                                    .into(imageObject);
+                        } catch (Exception e) {
+                            Log.e("ImageError", "Failed to decode the image from content URI.", e);
+                        }
                     }
                 }
             }

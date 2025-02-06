@@ -7,13 +7,15 @@
     tools:context=".InformationActivity">
 
     <ImageView
-        android:id="@+id/backgroundImageQuiz"
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="186dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/titleImageTextVideo"
@@ -71,12 +73,13 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/webView"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.02" />
 
         <TextView
             android:id="@+id/informationText"
             android:layout_width="450dp"
             android:layout_height="145dp"
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="7dp"
             android:fadeScrollbars="true"
             android:maxHeight="265dp"
@@ -85,10 +88,9 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleTextVideo"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.051" />
 
         <Switch
             android:id="@+id/switch_past"
@@ -128,6 +130,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/informationText"
+            app:layout_constraintVertical_bias="0.2"
             app:srcCompat="@drawable/background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -105,7 +105,6 @@ public class InformationActivity extends AppCompatActivity {
                             if (snapshot != null) {
                                 totalQuestions = (int) snapshot.getCount();
                                 progressMax.setText(String.valueOf(totalQuestions));
-
                                 progressBar(questionProgress);
                             }
                         } else {

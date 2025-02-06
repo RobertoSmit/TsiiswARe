@@ -37,11 +37,11 @@
 
     <Button
         android:id="@+id/createUserButton"
-        android:layout_width="148dp"
-        android:layout_height="53dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/yellow"
-        android:text="Create User"
+        android:text="Gebruiker Aanmaken"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

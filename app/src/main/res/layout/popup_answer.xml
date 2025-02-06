@@ -6,37 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/question_correct_background">
+
     <TextView
         android:id="@+id/popupTitle"
         android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:gravity="center"
         android:layout_height="50dp"
-        android:text="Wrong/Correct"
+        android:gravity="center"
+        android:text="Fout/Goed"
+        android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/questionExplanation"
-        android:layout_width="500dp"
-        android:layout_height="500dp"
-        android:text="Uitleg"
+        android:layout_width="601dp"
+        android:layout_height="495dp"
         android:gravity="center"
-        android:textSize="16sp"
+        android:maxWidth="500dp"
+        android:maxHeight="500dp"
+        android:text="Uitleg"
+        android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.575"
-        android:maxHeight="500dp"
-        android:maxWidth="500dp"/>
+        app:layout_constraintVertical_bias="0.575" />
 
     <Button
         android:id="@+id/btnContinue"

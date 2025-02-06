@@ -108,10 +108,10 @@ public class UserMainActivity extends AppCompatActivity {
                     intent.putExtra("category", category);
                     SharedPreferences sharedPreferences = getSharedPreferences("quizData", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("correctQuestions", 3);
+                    editor.putInt("correctQuestions", 0);
                     editor.putString("name", name);
-                    editor.putInt("wrongQuestions", 2);
-                    editor.putInt("questionProgress", 5);
+                    editor.putInt("wrongQuestions", 0);
+                    editor.putInt("questionProgress", 0);
                     editor.putStringSet("scanned_objects", null);
                     editor.apply();
                     startActivity(intent);
